@@ -8,7 +8,7 @@ export const hero = {
 }
 
 export const links = {
-  email: 'l.d.nealon@gmail.com',
+  email: 'luke@nealon.tech',
   linkedin: 'https://linkedin.com/in/luke-nealon',
   github: 'https://github.com/Luke-Nealon',
 }
