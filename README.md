@@ -17,25 +17,20 @@ npm run build      # outputs static site to dist/
 npm run preview    # serve the production build locally
 ```
 
-## Deploy to S3
+## Deploy
 
 ```sh
-# Hashed assets: cache forever
-aws s3 sync dist/ s3://YOUR_BUCKET \
-  --delete \
-  --cache-control "public,max-age=31536000,immutable" \
-  --exclude index.html
-
-# index.html: never cache (so deploys go live immediately)
-aws s3 cp dist/index.html s3://YOUR_BUCKET/index.html \
-  --cache-control "no-cache"
+./deploy.sh    # build → S3 → CloudFront invalidation → live at https://nealon.tech
 ```
 
-If serving through CloudFront, invalidate after deploy:
+Infrastructure (AWS account 389901108572, `personal` CLI profile, created 2026-06-13):
 
-```sh
-aws cloudfront create-invalidation --distribution-id YOUR_DIST_ID --paths "/index.html"
-```
+| Piece | Value |
+|---|---|
+| S3 bucket (private, OAC-only) | `nealon-tech-site-389901108572` (ap-southeast-2) |
+| CloudFront distribution | `E2G1CF1OWQH84U` (aliases: nealon.tech, www.nealon.tech) |
+| ACM cert (us-east-1) | `d8034fef-3bee-4aa8-a64d-22dd1681961e` |
+| DNS | Route53 zone `Z1APPUETVY7T79` — A/AAAA aliases at apex + www |
 
 Vite is configured with `base: './'` so the build works from the bucket root or any prefix.
 
