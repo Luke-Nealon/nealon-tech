@@ -74,7 +74,7 @@ export const notes = {
     },
     {
       title: 'Compliance by design beats compliance by audit.',
-      body: 'If the terminal wipes itself after every session, you don’t need a policy telling agents not to store card numbers. Build the rule into the system and the audit becomes a formality.',
+      body: 'A control you have to remember to follow is one that eventually fails. Design security and privacy into the architecture — least privilege, encryption, data you simply never store — and the audit becomes a formality rather than a scramble. The platforms I run hold ISO 27001 and GDPR and pass external penetration tests because that thinking is baked in from the first commit, not bolted on before a review.',
     },
   ],
 }
