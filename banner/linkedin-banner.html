@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --bg: #0a0e13;
+        --ink: #dce4ec;
+        --muted: #76828e;
+        --mint: #5ce1c6;
+        --mint2: #8ff0dc;
+      }
+      html, body { width: 1584px; height: 396px; overflow: hidden; }
+      .banner {
+        position: relative;
+        width: 1584px;
+        height: 396px;
+        background: var(--bg);
+        font-family: 'Instrument Sans', sans-serif;
+        overflow: hidden;
+      }
+      /* engineering grid */
+      .banner::before {
+        content: '';
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(220,228,236,0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(220,228,236,0.045) 1px, transparent 1px);
+        background-size: 44px 44px;
+      }
+      /* mint glow top-right */
+      .banner::after {
+        content: '';
+        position: absolute; inset: 0;
+        background:
+          radial-gradient(800px 460px at 88% 8%, rgba(92,225,198,0.10), transparent 60%),
+          radial-gradient(560px 420px at 2% 100%, rgba(90,169,255,0.05), transparent 60%);
+      }
+      /* node-network motif, right side */
+      .net { position: absolute; right: -40px; top: 0; width: 720px; height: 396px; opacity: 0.55; }
+      /* fade so headline sits cleanly above the node graphic */
+      .scrim {
+        position: absolute; inset: 0; z-index: 2;
+        background: linear-gradient(90deg, var(--bg) 46%, rgba(10,14,19,0.85) 62%, transparent 86%);
+      }
+      /* content block, right-of-center to clear the avatar (bottom-left) */
+      .content {
+        position: absolute;
+        left: 444px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 3;
+      }
+      .kicker {
+        display: flex; align-items: center; gap: 14px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 15px; letter-spacing: 0.26em; text-transform: uppercase;
+        color: var(--mint);
+        margin-bottom: 20px;
+      }
+      .kicker::before { content: ''; width: 40px; height: 1px; background: var(--mint); }
+      .headline {
+        font-family: 'Schibsted Grotesk', sans-serif;
+        font-weight: 600;
+        font-size: 43px;
+        line-height: 1.22;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        max-width: 860px;
+      }
+      .headline b { color: var(--mint2); font-weight: 600; }
+      .url {
+        margin-top: 24px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 16px; letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .url span { color: var(--mint); }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      <svg class="net" viewBox="0 0 760 396" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <g stroke="#5ce1c6" stroke-opacity="0.32" stroke-width="1.4">
+          <path d="M120 70 L300 150 L210 250 L420 210 L560 90 L690 180 L600 300 L420 210" />
+          <path d="M300 150 L340 320 L600 300" />
+          <path d="M560 90 L640 40" />
+          <path d="M210 250 L150 340" />
+        </g>
+        <g fill="#5ce1c6">
+          <circle cx="120" cy="70" r="4.5"/><circle cx="300" cy="150" r="6"/>
+          <circle cx="210" cy="250" r="4.5"/><circle cx="420" cy="210" r="7" fill="#8ff0dc"/>
+          <circle cx="560" cy="90" r="5"/><circle cx="690" cy="180" r="4.5"/>
+          <circle cx="600" cy="300" r="5.5"/><circle cx="340" cy="320" r="4"/>
+          <circle cx="640" cy="40" r="3.5"/><circle cx="150" cy="340" r="3.5"/>
+        </g>
+        <g fill="#5ce1c6" fill-opacity="0.12">
+          <circle cx="300" cy="150" r="16"/><circle cx="420" cy="210" r="18"/>
+        </g>
+      </svg>
+      <div class="scrim"></div>
+      <div class="content">
+        <div class="kicker">Technology · Data · AI</div>
+        <div class="headline">
+          I turn operational complexity into <b>systems, products &amp; measurable results</b> — fluent from boardroom to codebase.
+        </div>
+        <div class="url"><span>↗</span> nealon.tech</div>
+      </div>
+    </div>
+  </body>
+</html>

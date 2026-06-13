@@ -4,7 +4,7 @@
 export const hero = {
   kicker: 'Sydney, Australia — Technology & Digital Innovation',
   statement:
-    'Twenty years of putting bleeding-edge technology to work on real business problems — and writing the code that proves it.',
+    'Twenty years of putting bleeding-edge technology to work on real business problems — fluent from boardroom to codebase.',
 }
 
 export const links = {
@@ -81,7 +81,7 @@ export const notes = {
 
 export const about = {
   title: 'About',
-  big: 'I’m a technology executive in Sydney, currently leading digital innovation for a global managed-services provider. I turn operational complexity into systems, products, and measurable business value — and I still write the code that proves it.',
+  big: 'I’m a technology executive in Sydney, currently leading digital innovation for a global managed-services provider. I turn operational complexity into systems, products, and measurable business value — with the technical depth to direct the build and know it’s right.',
   facts: [
     { k: 'Now', v: 'Digital innovation leadership — global managed services' },
     { k: 'Focus', v: 'Applied AI · product · operations systemisation' },

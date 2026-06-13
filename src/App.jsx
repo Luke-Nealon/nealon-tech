@@ -89,7 +89,7 @@ function Hero() {
       </h1>
       <p className="statement rise d3">
         Twenty years of putting <em>bleeding-edge technology</em> to work on{' '}
-        <em>real business problems</em> — and writing the code that proves it.
+        <em>real business problems</em> — fluent from boardroom to codebase.
       </p>
       <div className="hero-links rise d4">
         <a href={links.linkedin} target="_blank" rel="noreferrer">
