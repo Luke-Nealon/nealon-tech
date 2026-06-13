@@ -74,7 +74,7 @@ export const notes = {
     },
     {
       title: 'Compliance by design beats compliance by audit.',
-      body: 'A control you have to remember to follow is one that eventually fails. Design security and privacy into the architecture — least privilege, encryption, data you simply never store — and the audit becomes a formality rather than a scramble. The platforms I run hold ISO 27001 and GDPR and pass external penetration tests because that thinking is baked in from the first commit, not bolted on before a review.',
+      body: 'A policy that tells people what not to do is a control waiting to fail; a system where the wrong thing is impossible never does. If sensitive data is never stored in the first place, nothing needs to protect it. Build the rule into the architecture and the audit just confirms what was already true.',
     },
   ],
 }
