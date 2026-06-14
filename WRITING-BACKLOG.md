@@ -7,6 +7,10 @@ should make an argument, not summarise a video. Ground claims in real experience
 ## Published
 - ✅ **Build for the model you'll want to replace** — model-provider independence; ties to the
   live assistant's model switcher. (slug: model-provider-independence)
+- ✅ **Most "agents" are workflows in disguise** — workflow vs agent decision + max-iteration
+  discipline; diagram. (slug: workflow-or-agent)
+- ✅ **Don't automate waste** — Lean/Six Sigma before automation; map → eliminate → standardise →
+  automate → measure; diagram; cites the 3× scale at flat headcount. (slug: dont-automate-waste)
 
 ## Drafts to write (source material + angle)
 
