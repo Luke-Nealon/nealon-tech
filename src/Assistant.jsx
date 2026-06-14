@@ -23,8 +23,39 @@ function sessionId() {
   return id
 }
 
+// minimal markdown → React: **bold**, "- " lists, blank-line paragraphs
+function renderInline(text) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((p, i) =>
+    p.startsWith('**') && p.endsWith('**')
+      ? <strong key={i}>{p.slice(2, -2)}</strong>
+      : <span key={i}>{p}</span>
+  )
+}
+function renderRich(text) {
+  const blocks = []
+  let list = null
+  for (const raw of text.split('\n')) {
+    const t = raw.trim()
+    const m = t.match(/^[-*]\s+(.*)/)
+    if (m) {
+      if (!list) list = []
+      list.push(m[1])
+    } else {
+      if (list) { blocks.push({ t: 'ul', items: list }); list = null }
+      if (t) blocks.push({ t: 'p', text: t })
+    }
+  }
+  if (list) blocks.push({ t: 'ul', items: list })
+  return blocks.map((b, i) =>
+    b.t === 'ul'
+      ? <ul key={i}>{b.items.map((it, j) => <li key={j}>{renderInline(it)}</li>)}</ul>
+      : <p key={i}>{renderInline(b.text)}</p>
+  )
+}
+
 export default function Assistant() {
   const [open, setOpen] = useState(false)
+  const [full, setFull] = useState(false)
   const [consented, setConsented] = useState(() => localStorage.getItem('assistant-consent') === 'yes')
   const [model, setModel] = useState('nova')
   const [messages, setMessages] = useState([])
@@ -40,33 +71,44 @@ export default function Assistant() {
     localStorage.setItem('assistant-consent', 'yes')
     setConsented(true)
   }
+  function revoke() {
+    localStorage.removeItem('assistant-consent')
+    setMessages([])
+    setConsented(false)
+  }
 
   async function send(text) {
     const msg = (text ?? input).trim()
     if (!msg || busy) return
     setInput('')
     const prior = messages.filter((m) => m.role === 'user' || m.role === 'assistant')
-    setMessages([...messages, { role: 'user', text: msg }])
+    const label = MODELS.find((m) => m.key === model)?.label
+    setMessages((m) => [...m, { role: 'user', text: msg }, { role: 'assistant', text: '', model: label, streaming: true }])
     setBusy(true)
+    const setLast = (patch) => setMessages((m) => {
+      const c = [...m]
+      c[c.length - 1] = { ...c[c.length - 1], ...patch }
+      return c
+    })
     try {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          message: msg,
-          sessionId: sessionId(),
-          model,
-          history: prior.slice(-8),
-        }),
+        body: JSON.stringify({ message: msg, sessionId: sessionId(), model, history: prior.slice(-8) }),
       })
-      const data = await res.json()
-      if (data.reply) {
-        setMessages((m) => [...m, { role: 'assistant', text: data.reply, model: data.model }])
-      } else {
-        setMessages((m) => [...m, { role: 'system', text: data.error || 'Something went wrong.' }])
+      if (!res.body) throw new Error('no stream')
+      const reader = res.body.getReader()
+      const dec = new TextDecoder()
+      let acc = ''
+      for (;;) {
+        const { done, value } = await reader.read()
+        if (done) break
+        acc += dec.decode(value, { stream: true })
+        setLast({ text: acc })
       }
+      setLast({ streaming: false })
     } catch {
-      setMessages((m) => [...m, { role: 'system', text: 'Network error — try again in a moment.' }])
+      setLast({ text: 'Network error — try again in a moment.', role: 'system', streaming: false })
     } finally {
       setBusy(false)
     }
@@ -83,13 +125,18 @@ export default function Assistant() {
       </button>
 
       {open && (
-        <div className="asst-panel" role="dialog" aria-label="AI assistant">
+        <div className={`asst-panel ${full ? 'asst-full' : ''}`} role="dialog" aria-label="AI assistant">
           <div className="asst-head">
             <div>
               <strong>Site assistant</strong>
               <span className="asst-sub">scoped · model-independent · cost-capped</span>
             </div>
-            <button className="asst-x" onClick={() => setOpen(false)} aria-label="Close">×</button>
+            <div className="asst-head-btns">
+              <button className="asst-icon" onClick={() => setFull((f) => !f)} aria-label={full ? 'Exit full screen' : 'Full screen'} title={full ? 'Exit full screen' : 'Full screen'}>
+                {full ? '⤡' : '⤢'}
+              </button>
+              <button className="asst-icon" onClick={() => setOpen(false)} aria-label="Close" title="Close">×</button>
+            </div>
           </div>
 
           {!consented ? (
@@ -102,10 +149,12 @@ export default function Assistant() {
               <p>
                 Your messages are sent to AWS Bedrock to generate replies and aren't stored beyond
                 an anonymous, expiring session counter used for rate limiting. No personal data is
-                kept. The demo runs on a small daily budget, so usage is capped.
+                kept, and nothing is used to train models. The demo runs on a small daily budget,
+                so usage is capped.
               </p>
               <p className="asst-fineprint">
                 Compliance by design: the control is built into the flow, not bolted on after.
+                Full detail in the <a href="/privacy.html" target="_blank" rel="noreferrer">privacy policy</a>.
               </p>
               <button className="asst-accept" onClick={accept}>I understand — start chatting</button>
             </div>
@@ -113,14 +162,8 @@ export default function Assistant() {
             <>
               <div className="asst-modelbar">
                 <label htmlFor="asst-model">Model</label>
-                <select
-                  id="asst-model"
-                  value={model}
-                  onChange={(e) => setModel(e.target.value)}
-                >
-                  {MODELS.map((m) => (
-                    <option key={m.key} value={m.key}>{m.label}</option>
-                  ))}
+                <select id="asst-model" value={model} onChange={(e) => setModel(e.target.value)}>
+                  {MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}
                 </select>
                 <span className="asst-modelnote">switch live — same framework</span>
               </div>
@@ -130,27 +173,24 @@ export default function Assistant() {
                   <div className="asst-empty">
                     <p>Ask me how I'm built, or try:</p>
                     <div className="asst-suggest">
-                      {SUGGESTIONS.map((s) => (
-                        <button key={s} onClick={() => send(s)}>{s}</button>
-                      ))}
+                      {SUGGESTIONS.map((s) => <button key={s} onClick={() => send(s)}>{s}</button>)}
                     </div>
                   </div>
                 )}
                 {messages.map((m, i) => (
                   <div key={i} className={`asst-msg asst-${m.role}`}>
-                    {m.role === 'assistant' && m.model && (
-                      <span className="asst-badge">{m.model}</span>
-                    )}
-                    <div className="asst-bubble">{m.text}</div>
+                    {m.role === 'assistant' && m.model && <span className="asst-badge">{m.model}</span>}
+                    <div className="asst-bubble">
+                      {m.role === 'assistant'
+                        ? (m.text ? renderRich(m.text) : <span className="asst-typing">…</span>)
+                        : m.text}
+                      {m.role === 'assistant' && m.streaming && m.text && <span className="asst-caret">▍</span>}
+                    </div>
                   </div>
                 ))}
-                {busy && <div className="asst-msg asst-assistant"><div className="asst-bubble asst-typing">…</div></div>}
               </div>
 
-              <form
-                className="asst-input"
-                onSubmit={(e) => { e.preventDefault(); send() }}
-              >
+              <form className="asst-input" onSubmit={(e) => { e.preventDefault(); send() }}>
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -160,6 +200,10 @@ export default function Assistant() {
                 />
                 <button type="submit" disabled={busy || !input.trim()}>Send</button>
               </form>
+              <div className="asst-foot">
+                <a href="/privacy.html" target="_blank" rel="noreferrer">Privacy policy</a>
+                <button className="asst-link" onClick={revoke}>Reset privacy choice</button>
+              </div>
             </>
           )}
         </div>

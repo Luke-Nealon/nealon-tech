@@ -53,10 +53,13 @@ Resources:
             - Effect: Allow
               Action:
                 - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
                 - bedrock:Converse
+                - bedrock:ConverseStream
               Resource: '*'
       FunctionUrlConfig:
         AuthType: NONE
+        InvokeMode: RESPONSE_STREAM
         Cors:
           AllowOrigins:
             - https://nealon.tech

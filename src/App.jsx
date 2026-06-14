@@ -192,6 +192,10 @@ function Footer() {
             <a href={links.github} target="_blank" rel="noreferrer">
               GitHub
             </a>
+            {' · '}
+            <a href="/privacy.html">
+              Privacy
+            </a>
           </span>
         </Reveal>
         <Reveal as="p" className="colophon" delay={0.15}>
