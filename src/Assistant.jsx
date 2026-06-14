@@ -10,9 +10,9 @@ const MODELS = [
 ]
 
 const SUGGESTIONS = [
-  'How are you built?',
-  'Draw your architecture',
-  'Are you locked to one AI vendor?',
+  'When should I use an agent vs a workflow?',
+  'Why does model independence matter?',
+  'How are you built? Draw your architecture',
 ]
 
 function downloadMarkdown(text) {
@@ -146,14 +146,19 @@ export default function Assistant() {
       if (!res.body) throw new Error('no stream')
       const reader = res.body.getReader()
       const dec = new TextDecoder()
+      const MARK = '<<SOURCES>>'
       let acc = ''
       for (;;) {
         const { done, value } = await reader.read()
         if (done) break
         acc += dec.decode(value, { stream: true })
-        setLast({ text: acc })
+        const i = acc.indexOf(MARK)
+        setLast({ text: i >= 0 ? acc.slice(0, i) : acc })
       }
-      setLast({ streaming: false })
+      const i = acc.indexOf(MARK)
+      let sources = []
+      if (i >= 0) { try { sources = JSON.parse(acc.slice(i + MARK.length)) } catch { /* ignore */ } }
+      setLast({ text: (i >= 0 ? acc.slice(0, i) : acc).trim(), streaming: false, sources })
     } catch {
       setLast({ text: 'Network error — try again in a moment.', role: 'system', streaming: false })
     } finally {
@@ -168,7 +173,7 @@ export default function Assistant() {
         onClick={() => setOpen(true)}
         aria-label="Open the AI assistant"
       >
-        <span className="dot" aria-hidden="true" /> Ask how this site's AI works
+        <span className="dot" aria-hidden="true" /> Ask me about applied AI
       </button>
 
       {open && (
@@ -190,8 +195,8 @@ export default function Assistant() {
             <div className="asst-consent">
               <p className="asst-consent-title">Before you start</p>
               <p>
-                This is a live AI demo I built — a scoped assistant that only explains its own
-                architecture and my approach to applied AI.
+                This is a live AI demo I built — it answers questions about applied AI grounded
+                in my own articles (with sources linked), and can explain how it's built.
               </p>
               <p>
                 Your messages are sent to AWS Bedrock to generate replies and aren't stored beyond
@@ -218,7 +223,7 @@ export default function Assistant() {
               <div className="asst-log" ref={scrollRef}>
                 {messages.length === 0 && (
                   <div className="asst-empty">
-                    <p>Ask me how I'm built, or try:</p>
+                    <p>Ask me about applied AI — answers come from my writing, with sources. Try:</p>
                     <div className="asst-suggest">
                       {SUGGESTIONS.map((s) => <button key={s} onClick={() => send(s)}>{s}</button>)}
                     </div>
@@ -233,6 +238,14 @@ export default function Assistant() {
                         : m.text}
                       {m.role === 'assistant' && m.streaming && m.text && <span className="asst-caret">▍</span>}
                     </div>
+                    {m.role === 'assistant' && m.sources?.length > 0 && (
+                      <div className="asst-sources">
+                        <span className="asst-sources-label">Sources</span>
+                        {m.sources.map((s) => (
+                          <a key={s.slug} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
+                        ))}
+                      </div>
+                    )}
                     {m.role === 'assistant' && !m.streaming && m.text && (
                       <button className="asst-dl" onClick={() => downloadMarkdown(m.text)} title="Download as Markdown">
                         ↓ Download

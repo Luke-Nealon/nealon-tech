@@ -57,6 +57,14 @@ Resources:
                 - bedrock:Converse
                 - bedrock:ConverseStream
               Resource: '*'
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3vectors:QueryVectors
+                - s3vectors:GetVectors
+              Resource:
+                - arn:aws:s3vectors:ap-southeast-2:389901108572:bucket/nealon-vectors
+                - arn:aws:s3vectors:ap-southeast-2:389901108572:bucket/nealon-vectors/index/*
       FunctionUrlConfig:
         AuthType: NONE
         InvokeMode: RESPONSE_STREAM
