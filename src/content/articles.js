@@ -382,6 +382,52 @@ A few years ago, standing up a RAG assistant with this kind of availability mean
 
 The proof is the thing you're reading this next to. Open the assistant and ask it something. It'll spin up out of nothing, answer from my writing, cite its sources, and disappear again. That's the architecture, working.`,
   },
+
+  {
+    slug: 'when-the-answer-replaces-the-search-box',
+    title: 'When the answer replaces the search box',
+    dek: 'Search is quietly stopping being the default front door. Here’s why a small file called llms.txt — and factual, referenceable content — is how a brand stays findable when people ask an AI instead of Google.',
+    date: '2026-06-15',
+    readMins: 5,
+    published: true,
+    body: `For twenty-five years, being findable meant one thing: ranking on Google. You optimised pages, you chased keywords, you earned links, and a good rank put you in front of people. That whole game rested on one assumption — that when someone wants to know something, they type it into a search box and pick from a list of links.
+
+That assumption is quietly breaking.
+
+More and more, people don't search. They ask. They put the question to ChatGPT, Claude, Perplexity, or the AI answer sitting at the top of Google itself, and they get a synthesised answer back — not ten blue links, an answer. Often they never visit a website at all. The answer was enough.
+
+\`\`\`mermaid
+flowchart LR
+  subgraph A["Old: search"]
+    U1["Person"] --> S["Search engine"] --> L["A list of links"] --> W1["Your site"]
+  end
+  subgraph B["New: ask an AI"]
+    U2["Person"] --> AI["AI assistant"] --> Ans["A synthesised answer, with citations"] --> W2["Your site — only if it gets cited"]
+  end
+\`\`\`
+
+Here's the part that should get a brand's attention. In that new flow, your Google rank doesn't save you. If your content isn't in the answer, you're invisible — no matter how well that page ranks on a results screen nobody looked at. The question stops being "how do I rank?" and becomes "how do I get quoted?"
+
+## Getting quoted is a different game
+
+To rank, you needed pages search engines could crawl and links that vouched for you. To get quoted by an AI, you need something subtly different: content a model can find, trust, and attribute. That means facts stated clearly and specifically, in clean text, consistent across your site, easy to lift and cite. Vague marketing copy doesn't get quoted. A precise, checkable claim does.
+
+It also changes how traffic comes back. A page that ranks well is one result seen by people who run that search. A clear, referenceable article is different: it can be cited across thousands of separate conversations, each one a different person, each citation a potential click back to you. You're no longer competing for one slot on one results page. You're becoming a source that gets quoted wherever the topic comes up.
+
+## Where llms.txt comes in
+
+This is why a quiet little standard called **llms.txt** matters more than it looks. It's a plain markdown file you put at the root of your site — like robots.txt, but for AI. It tells AI systems what your site is, who's behind it, and where your good, canonical content lives, in clean text they can actually use instead of fighting through your navigation and pop-ups.
+
+It's early. Adoption by the AI crawlers is uneven, and no one should pretend llms.txt is universally honoured yet. But that's exactly the point. robots.txt and sitemaps were once new too, and the brands that adopted them early shaped how they got used. The cost of putting up an llms.txt and keeping your facts clean is close to nothing. The cost of being unfindable when the front door moves is your pipeline.
+
+I practise this on this very site. There's an llms.txt at the root, the articles are written as clear factual pieces, and the assistant you can open in the corner answers from them and links its sources. That's the whole pattern in miniature: be the clean, referenceable source, and make it trivial for a machine to quote you and point people back.
+
+## What to actually do
+
+You don't need a project. Publish content that states real things clearly and consistently. Add an llms.txt and a sitemap. Keep your facts the same everywhere they appear, so a model isn't choosing between three versions of you. Make your site readable by machines, not walled off behind scripts and gates.
+
+Search isn't dead. But it's no longer the only front door, and it's shrinking as the default. The brands that stay findable through the shift will be the ones whose facts are clean, structured, and easy for an AI to quote — and who were early enough to be the source it reaches for.`,
+  },
 ]
 
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
