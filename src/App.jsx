@@ -340,7 +340,7 @@ export default function App() {
       <Header navigate={navigate} onHome={onHome} />
       {view}
       <Footer />
-      <Assistant />
+      <Assistant navigate={navigate} />
       <ThemeSwitcher />
       {/* terminal-theme atmosphere: CRT scanlines + sweeping beam (display:none elsewhere) */}
       <div className="fx fx-scan" aria-hidden="true" />

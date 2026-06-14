@@ -91,12 +91,16 @@ function renderRich(text) {
   )
 }
 
-export default function Assistant() {
-  const [open, setOpen] = useState(false)
+export default function Assistant({ navigate }) {
+  const [open, setOpen] = useState(() => sessionStorage.getItem('assistant-open') === '1')
   const [full, setFull] = useState(false)
   const [consented, setConsented] = useState(() => localStorage.getItem('assistant-consent') === 'yes')
-  const [model, setModel] = useState('haiku')
-  const [messages, setMessages] = useState([])
+  const [model, setModel] = useState(() => sessionStorage.getItem('assistant-model') || 'haiku')
+  const [messages, setMessages] = useState(() => {
+    try {
+      return (JSON.parse(sessionStorage.getItem('assistant-messages')) || []).map((m) => ({ ...m, streaming: false }))
+    } catch { return [] }
+  })
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const scrollRef = useRef(null)
@@ -105,11 +109,25 @@ export default function Assistant() {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [messages, busy, open])
 
+  // persist the conversation so it survives navigation / reloads within the tab
+  useEffect(() => {
+    try { sessionStorage.setItem('assistant-messages', JSON.stringify(messages)) } catch { /* quota */ }
+  }, [messages])
+  useEffect(() => { sessionStorage.setItem('assistant-open', open ? '1' : '0') }, [open])
+  useEffect(() => { sessionStorage.setItem('assistant-model', model) }, [model])
+
   useEffect(() => {
     const openIt = () => setOpen(true)
     window.addEventListener('open-assistant', openIt)
     return () => window.removeEventListener('open-assistant', openIt)
   }, [])
+
+  // open a source within the SPA so the chat stays mounted; close panel on mobile to read
+  function openSource(e, slug) {
+    e.preventDefault()
+    if (navigate) navigate(`/writing/${slug}`)
+    if (window.innerWidth < 760) setOpen(false)
+  }
 
   function accept() {
     localStorage.setItem('assistant-consent', 'yes')
@@ -237,9 +255,13 @@ export default function Assistant() {
                     </div>
                     {m.role === 'assistant' && m.sources?.length > 0 && (
                       <div className="asst-sources">
-                        <span className="asst-sources-label">Sources</span>
+                        <span className="asst-sources-label">Sources — tap to read</span>
                         {m.sources.map((s) => (
-                          <a key={s.slug} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
+                          <a key={s.slug} href={`/writing/${s.slug}`} onClick={(e) => openSource(e, s.slug)}>
+                            <span className="asst-source-icon" aria-hidden="true">📄</span>
+                            <span className="asst-source-title">{s.title}</span>
+                            <span className="asst-source-arrow" aria-hidden="true">↗</span>
+                          </a>
                         ))}
                       </div>
                     )}
