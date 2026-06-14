@@ -38,7 +38,7 @@ ${pub.map((a) => `- [${a.title}](${SITE}/writing/${a.slug}): ${a.dek}`).join('\n
 
 ## About
 - Currently: Managing Director, Digital Innovation at a global managed-services provider.
-- Background: 13 years of hospitality technology across Asia-Pacific with the Accor group, then applied AI, data platforms, and operations leadership.
+- Background: 13 years of hospitality technology across Asia-Pacific with a global hospitality group, then applied AI, data platforms, and operations leadership.
 - Point of view: AI is a component you apply with judgment, not a foundation you build a business on blindly.
 
 ## Contact

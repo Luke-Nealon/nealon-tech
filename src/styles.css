@@ -754,6 +754,17 @@ html[data-theme='terminal'] .kick-text {
   to { width: 52ch; }
 }
 
+/* on narrow screens the fixed-width typewriter clips — wrap the full text instead */
+@media (max-width: 720px) {
+  html[data-theme='terminal'] .kick-text {
+    white-space: normal;
+    width: auto;
+    max-width: 100%;
+    overflow: visible;
+    animation: none;
+  }
+}
+
 /* blinking cursor after the name */
 html[data-theme='terminal'] .name::after {
   content: '_';
@@ -1363,6 +1374,28 @@ html[data-theme='terminal'] .cta {
 @media (max-width: 880px) {
   .asst-launch { font-size: 10px; padding: 9px 13px; }
   .asst-panel.asst-full { left: 8px; right: 8px; top: 8px; bottom: 8px; }
+}
+
+/* phones: dock the panel near-fullscreen, but inset from the physical edges so
+   the screen's curved corners + safe areas don't clip the controls */
+@media (max-width: 560px) {
+  .asst-panel,
+  .asst-panel.asst-full {
+    left: max(8px, env(safe-area-inset-left));
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    top: auto;
+    width: auto;
+    max-width: 100%;
+    height: 86vh;
+    height: 86dvh;
+    margin: 0;
+    border-radius: 16px;
+  }
+  .asst-modelbar { flex-wrap: wrap; gap: 6px 10px; }
+  .asst-modelnote { margin-left: 0; flex-basis: 100%; }
+  /* 16px min stops iOS Safari from auto-zooming (and shoving Send off-screen) on focus */
+  .asst-input input { font-size: 16px; }
 }
 
 /* ————— Motion ————— */

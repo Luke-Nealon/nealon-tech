@@ -29,14 +29,14 @@ function fmtDate(iso) {
 export function WritingIndex({ navigate }) {
   const items = publishedArticles()
   useEffect(() => {
-    document.title = 'Writing — Luke Nealon'
+    document.title = 'Perspectives — Luke Nealon'
     return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
   }, [])
   return (
     <section className="sec wrap" id="writing">
       <span className="sec-ghost" aria-hidden="true">✎</span>
       <div className="sec-head reveal in">
-        <span className="idx">Writing</span>
+        <span className="idx">Perspectives</span>
         <h2>Field notes, long form</h2>
       </div>
       <p className="lede reveal in">
@@ -75,14 +75,14 @@ export function Article({ slug, navigate }) {
       <section className="sec wrap">
         <h2 className="article-title">Not found</h2>
         <p className="lede">That article doesn't exist (yet).</p>
-        <a className="writing-back" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>← All writing</a>
+        <a className="writing-back" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>← All perspectives</a>
       </section>
     )
   }
 
   return (
     <article className="article">
-      <a className="writing-back" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>← All writing</a>
+      <a className="writing-back" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>← All perspectives</a>
       <span className="article-meta">{fmtDate(article.date)} · {article.readMins} min read</span>
       <h1 className="article-title">{article.title}</h1>
       <p className="article-dek">{article.dek}</p>
@@ -95,7 +95,7 @@ export function Article({ slug, navigate }) {
       </div>
       <div className="article-foot">
         <span>Luke Nealon</span>
-        <a href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>More writing →</a>
+        <a href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>More perspectives →</a>
       </div>
     </article>
   )

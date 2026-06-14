@@ -316,8 +316,8 @@ There's one idea under all of it. AI is a component you apply with judgment, not
   },
 
   {
-    slug: 'serverless-rag-for-pennies',
-    title: 'No servers, AWS-grade uptime, pennies a month',
+    slug: 'serverless-rag-for-cents',
+    title: 'No servers, AWS-grade uptime, cents a month',
     dek: 'The assistant on this site does real retrieval-augmented generation, streams its answers, and cites its sources — on managed services that scale to zero and can’t run up a surprise bill. Here’s the whole architecture.',
     date: '2026-06-15',
     readMins: 6,
