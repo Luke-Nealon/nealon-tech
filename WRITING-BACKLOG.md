@@ -12,7 +12,16 @@ should make an argument, not summarise a video. Ground claims in real experience
 - ✅ **Don't automate waste** — Lean/Six Sigma before automation; map → eliminate → standardise →
   automate → measure; diagram; cites the 3× scale at flat headcount. (slug: dont-automate-waste)
 
-## Drafts to write (source material + angle)
+- ✅ **The most powerful AI tool is already on your machine** — skills over harnesses. (skills-over-harnesses)
+- ✅ **List every AI tool you depend on** — dependency audit / continuity. (audit-your-ai-dependencies)
+- ✅ **Your agent harness should repair itself** — self-healing loop. (self-healing-harness)
+- ✅ **It's maths, not magic** — next-token prediction (Part 1). (its-maths-not-magic)
+- ✅ **The maths learned to check its work** — reasoning models / test-time compute (Part 2). (the-maths-learned-to-check-its-work)
+- ✅ **Applied AI: what to think about before you ship** — the hub linking all of the above. (applied-ai-field-guide)
+
+→ All planned articles published (10 total). Next ideas welcome; add entries to articles.js.
+
+## Original drafts (now all written) — source material + angle
 
 1. **Skills over harnesses: the most powerful AI tool is already on your machine**
    - Source: "the most powerful AI tool" video — Anthropic Agent Skills; instead of bespoke

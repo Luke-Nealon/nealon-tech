@@ -826,6 +826,25 @@ html[data-theme='terminal'] .cta {
   padding: 2px 5px;
   border-radius: 4px;
 }
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 18px;
+  font-size: 14.5px;
+}
+.article-body th, .article-body td {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.article-body th {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
 .article-foot {
   display: flex;
   justify-content: space-between;
