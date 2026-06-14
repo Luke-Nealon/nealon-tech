@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import useReveal from './hooks/useReveal.js'
+import Assistant from './Assistant.jsx'
 import { hero, links, firsts, notes, about, footer } from './content.js'
 
 const THEMES = ['control', 'terminal']
@@ -212,6 +213,7 @@ export default function App() {
         <About />
       </main>
       <Footer />
+      <Assistant />
       <ThemeSwitcher />
       {/* terminal-theme atmosphere: CRT scanlines + sweeping beam (display:none elsewhere) */}
       <div className="fx fx-scan" aria-hidden="true" />

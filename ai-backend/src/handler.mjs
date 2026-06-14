@@ -18,7 +18,7 @@ const MODELS = {
   'sonnet': { id: 'au.anthropic.claude-sonnet-4-5-20250929-v1:0', label: 'Claude Sonnet 4.5', in: 3.0, out: 15.0 },
   'nova': { id: 'amazon.nova-lite-v1:0', label: 'Amazon Nova Lite', in: 0.06, out: 0.24 },
 }
-const DEFAULT_MODEL = 'haiku'
+const DEFAULT_MODEL = 'nova' // Nova needs no use-case form; flip to 'haiku' once Anthropic access is granted
 const SESSION_LIMIT = 12 // messages per session per day
 const MAX_TOKENS = 600
 const MAX_INPUT_CHARS = 1500
@@ -122,7 +122,12 @@ export const handler = async (event) => {
     return json(200, { reply, model: model.label, modelKey })
   } catch (err) {
     console.error(err)
-    // common Bedrock gotcha: a model needing an inference profile surfaces here
+    // Anthropic models need a one-time account use-case form; until granted, guide to Nova.
+    if (err.name === 'ResourceNotFoundException' || err.name === 'AccessDeniedException') {
+      return json(200, {
+        error: "That model isn't enabled on this account yet — try Amazon Nova Lite from the model selector, which is live now.",
+      })
+    }
     return json(500, { error: 'The assistant hit an error. ' + (err.name || '') })
   }
 }
