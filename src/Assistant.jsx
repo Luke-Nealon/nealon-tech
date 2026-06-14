@@ -10,9 +10,84 @@ const MODELS = [
 
 const SUGGESTIONS = [
   'How are you built?',
+  'Draw your architecture',
   'Are you locked to one AI vendor?',
-  'How is my cost kept under control?',
 ]
+
+// lazy-load mermaid only when a diagram actually appears
+let mermaidPromise = null
+function getMermaid() {
+  if (!mermaidPromise) {
+    mermaidPromise = import('mermaid').then((mod) => {
+      mod.default.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'strict' })
+      return mod.default
+    })
+  }
+  return mermaidPromise
+}
+
+let diagramSeq = 0
+function Mermaid({ code }) {
+  const [svg, setSvg] = useState('')
+  const [err, setErr] = useState(false)
+  useEffect(() => {
+    let cancelled = false
+    getMermaid()
+      .then((m) => m.render('mmd' + ++diagramSeq, code))
+      .then(({ svg }) => { if (!cancelled) setSvg(svg) })
+      .catch(() => { if (!cancelled) setErr(true) })
+    return () => { cancelled = true }
+  }, [code])
+  if (err) return <pre className="asst-code">{code}</pre>
+  if (!svg) return <div className="asst-diagram-loading">rendering diagram…</div>
+  return <div className="asst-diagram" dangerouslySetInnerHTML={{ __html: svg }} />
+}
+
+function downloadMarkdown(text) {
+  const blob = new Blob([text], { type: 'text/markdown' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'nealon-tech-architecture.md'
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+// split a reply into markdown + fenced code (```mermaid → diagram)
+function parseSegments(text) {
+  const segs = []
+  const re = /```(\w*)\n?([\s\S]*?)```/g
+  let last = 0
+  let m
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) segs.push({ type: 'md', text: text.slice(last, m.index) })
+    segs.push({ type: m[1] === 'mermaid' ? 'mermaid' : 'code', code: m[2].trim() })
+    last = m.index + m[0].length
+  }
+  if (last < text.length) segs.push({ type: 'md', text: text.slice(last) })
+  return segs
+}
+
+function renderMessage(text, streaming) {
+  // while streaming, hide an unterminated code fence behind a placeholder
+  let working = text
+  let drawing = false
+  if (streaming && ((text.match(/```/g) || []).length % 2 === 1)) {
+    working = text.slice(0, text.lastIndexOf('```'))
+    drawing = true
+  }
+  const segs = parseSegments(working)
+  return (
+    <>
+      {segs.map((s, i) =>
+        s.type === 'mermaid' ? <Mermaid key={i} code={s.code} />
+          : s.type === 'code' ? <pre key={i} className="asst-code">{s.code}</pre>
+          : <div key={i}>{renderRich(s.text)}</div>
+      )}
+      {drawing && <div className="asst-diagram-loading">drawing diagram…</div>}
+    </>
+  )
+}
 
 function sessionId() {
   let id = localStorage.getItem('assistant-session')
@@ -182,10 +257,15 @@ export default function Assistant() {
                     {m.role === 'assistant' && m.model && <span className="asst-badge">{m.model}</span>}
                     <div className="asst-bubble">
                       {m.role === 'assistant'
-                        ? (m.text ? renderRich(m.text) : <span className="asst-typing">…</span>)
+                        ? (m.text ? renderMessage(m.text, m.streaming) : <span className="asst-typing">…</span>)
                         : m.text}
                       {m.role === 'assistant' && m.streaming && m.text && <span className="asst-caret">▍</span>}
                     </div>
+                    {m.role === 'assistant' && !m.streaming && m.text && (
+                      <button className="asst-dl" onClick={() => downloadMarkdown(m.text)} title="Download as Markdown">
+                        ↓ Download
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
