@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root { --bg:#0a0e13; --ink:#dce4ec; --muted:#76828e; --mint:#5ce1c6; --mint2:#8ff0dc; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      .card {
+        position: relative; width: 1200px; height: 630px; background: var(--bg);
+        font-family: 'Schibsted Grotesk', sans-serif; overflow: hidden;
+        padding: 80px;
+        display: flex; flex-direction: column; justify-content: center;
+      }
+      .card::before {
+        content: ''; position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(220,228,236,0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(220,228,236,0.045) 1px, transparent 1px);
+        background-size: 48px 48px;
+      }
+      .card::after {
+        content: ''; position: absolute; inset: 0;
+        background: radial-gradient(700px 420px at 95% 0%, rgba(92,225,198,0.12), transparent 60%);
+      }
+      .net { position: absolute; right: -60px; top: 0; width: 560px; height: 630px; opacity: 0.5; }
+      .inner { position: relative; z-index: 2; }
+      .kicker {
+        display: flex; align-items: center; gap: 16px;
+        font-family: 'IBM Plex Mono', monospace; font-size: 20px;
+        letter-spacing: 0.22em; text-transform: uppercase; color: var(--mint);
+        margin-bottom: 30px;
+      }
+      .kicker::before { content:''; width: 48px; height: 2px; background: var(--mint); }
+      h1 {
+        font-weight: 700; font-size: 62px; line-height: 1.08; letter-spacing: -0.02em;
+        color: var(--ink); max-width: 880px;
+      }
+      h1 b { color: var(--mint2); font-weight: 700; }
+      .foot {
+        margin-top: 36px; font-family: 'IBM Plex Mono', monospace; font-size: 20px;
+        letter-spacing: 0.06em; color: var(--muted);
+      }
+      .foot span { color: var(--mint); }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <svg class="net" viewBox="0 0 560 630" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <g stroke="#5ce1c6" stroke-opacity="0.3" stroke-width="2">
+          <path d="M80 120 L240 240 L160 400 L360 340 L460 160 L520 300 L400 480 L240 240"/>
+          <path d="M240 240 L300 520"/>
+        </g>
+        <g fill="#5ce1c6">
+          <circle cx="80" cy="120" r="7"/><circle cx="240" cy="240" r="10" fill="#8ff0dc"/>
+          <circle cx="160" cy="400" r="7"/><circle cx="360" cy="340" r="11" fill="#8ff0dc"/>
+          <circle cx="460" cy="160" r="7"/><circle cx="520" cy="300" r="6"/>
+          <circle cx="400" cy="480" r="8"/><circle cx="300" cy="520" r="6"/>
+        </g>
+      </svg>
+      <div class="inner">
+        <div class="kicker">Luke Nealon · nealon.tech</div>
+        <h1>Applied AI, <b>field notes</b> — and a live demo that explains how it’s built.</h1>
+        <div class="foot"><span>↗</span> Technology · Data · AI · fluent from boardroom to codebase</div>
+      </div>
+    </div>
+  </body>
+</html>
