@@ -7,6 +7,7 @@ const MODELS = [
   { key: 'haiku', label: 'Claude Haiku 4.5' },
   { key: 'sonnet', label: 'Claude Sonnet 4.6' },
   { key: 'nova', label: 'Amazon Nova Lite' },
+  { key: 'qwen', label: 'Qwen3 Coder' },
 ]
 
 const SUGGESTIONS = [
