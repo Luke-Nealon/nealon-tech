@@ -272,6 +272,76 @@ a {
   opacity: 0.7;
 }
 
+/* ————— Page navigation (progress bar + section dots) ————— */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 90;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.page-dots {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 65;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-end;
+}
+.page-dot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 2px;
+}
+.page-dot-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.page-dot-mark {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
+  background: transparent;
+  flex: none;
+  transition: all 0.25s ease;
+}
+.page-dot:hover .page-dot-label { opacity: 1; transform: translateX(0); }
+.page-dot:hover .page-dot-mark { border-color: var(--ink); }
+.page-dot.on .page-dot-mark {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.25);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.page-dot.on .page-dot-label { opacity: 1; transform: translateX(0); color: var(--accent); }
+
+@media (max-width: 760px) {
+  .page-dots { right: 10px; gap: 12px; }
+  .page-dot-label { display: none; }
+  .page-dot.on .page-dot-label { display: none; }
+}
+
 /* ————— Sections ————— */
 
 .sec {

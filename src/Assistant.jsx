@@ -16,16 +16,6 @@ const SUGGESTIONS = [
   'How are you built? Draw your architecture',
 ]
 
-function downloadMarkdown(text) {
-  const blob = new Blob([text], { type: 'text/markdown' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'nealon-tech-architecture.md'
-  a.click()
-  URL.revokeObjectURL(url)
-}
-
 // split a reply into markdown + fenced code (```mermaid → diagram)
 function parseSegments(text) {
   const segs = []
@@ -252,11 +242,6 @@ export default function Assistant() {
                           <a key={s.slug} href={s.url} target="_blank" rel="noreferrer">{s.title}</a>
                         ))}
                       </div>
-                    )}
-                    {m.role === 'assistant' && !m.streaming && m.text && (
-                      <button className="asst-dl" onClick={() => downloadMarkdown(m.text)} title="Download as Markdown">
-                        ↓ Download
-                      </button>
                     )}
                   </div>
                 ))}

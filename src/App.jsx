@@ -36,6 +36,66 @@ function ThemeSwitcher() {
   )
 }
 
+const NAV_SECTIONS = [
+  { id: 'top', label: 'Top' },
+  { id: 'firsts', label: 'Firsts' },
+  { id: 'notes', label: 'Field notes' },
+  { id: 'about', label: 'About' },
+  { id: 'assistant', label: 'Live demo' },
+  { id: 'contact', label: 'Contact' },
+]
+
+function PageNav({ showDots }) {
+  const [active, setActive] = useState('top')
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    const onScroll = () => {
+      const d = document.documentElement
+      const max = d.scrollHeight - d.clientHeight
+      setProgress(max > 0 ? Math.min(100, (d.scrollTop / max) * 100) : 0)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll) }
+  }, [])
+
+  useEffect(() => {
+    if (!showDots) return
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id) }),
+      { rootMargin: '-45% 0px -45% 0px' }
+    )
+    NAV_SECTIONS.forEach((s) => { const el = document.getElementById(s.id); if (el) obs.observe(el) })
+    return () => obs.disconnect()
+  }, [showDots])
+
+  const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+
+  return (
+    <>
+      <div className="scroll-progress" style={{ width: progress + '%' }} aria-hidden="true" />
+      {showDots && (
+        <nav className="page-dots" aria-label="Page sections">
+          {NAV_SECTIONS.map((s) => (
+            <button
+              key={s.id}
+              className={`page-dot ${active === s.id ? 'on' : ''}`}
+              onClick={() => go(s.id)}
+              aria-label={s.label}
+              aria-current={active === s.id ? 'true' : undefined}
+            >
+              <span className="page-dot-label">{s.label}</span>
+              <span className="page-dot-mark" aria-hidden="true" />
+            </button>
+          ))}
+        </nav>
+      )}
+    </>
+  )
+}
+
 function Reveal({ as: Tag = 'div', className = '', delay = 0, children }) {
   const ref = useReveal()
   return (
@@ -106,9 +166,6 @@ function Hero() {
           Email <span aria-hidden="true">↗</span>
         </a>
       </div>
-      <span className="coords" aria-hidden="true">
-        33.8688° S — 151.2093° E
-      </span>
     </section>
   )
 }
@@ -279,6 +336,7 @@ export default function App() {
 
   return (
     <div className="page">
+      <PageNav showDots={onHome} />
       <Header navigate={navigate} onHome={onHome} />
       {view}
       <Footer />
