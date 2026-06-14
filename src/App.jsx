@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import useReveal from './hooks/useReveal.js'
 import Assistant from './Assistant.jsx'
+import { WritingIndex, Article } from './Writing.jsx'
 import { hero, links, firsts, notes, about, footer } from './content.js'
 
 const THEMES = ['control', 'terminal']
@@ -63,17 +64,19 @@ function SectionHead({ index, title, lede, ghost }) {
   )
 }
 
-function Header() {
+function Header({ navigate, onHome }) {
+  const go = (e, path) => { e.preventDefault(); navigate(path) }
   return (
     <header className="top wrap rise">
-      <a className="logo" href="#top" aria-label="Luke Nealon — home">
+      <a className="logo" href="/" onClick={(e) => go(e, '/')} aria-label="Luke Nealon — home">
         LN<span>.</span>
       </a>
       <nav aria-label="Sections">
-        <a href="#firsts">Firsts</a>
-        <a href="#notes">Notes</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+        <a href="/#firsts" onClick={onHome ? undefined : (e) => go(e, '/#firsts')}>Firsts</a>
+        <a href="/#notes" onClick={onHome ? undefined : (e) => go(e, '/#notes')}>Notes</a>
+        <a href="/writing" onClick={(e) => go(e, '/writing')}>Writing</a>
+        <a href="/#about" onClick={onHome ? undefined : (e) => go(e, '/#about')}>About</a>
+        <a href="/#contact" onClick={onHome ? undefined : (e) => go(e, '/#contact')}>Contact</a>
       </nav>
     </header>
   )
@@ -206,16 +209,51 @@ function Footer() {
   )
 }
 
+function Home() {
+  return (
+    <main>
+      <Hero />
+      <Firsts />
+      <Notes />
+      <About />
+    </main>
+  )
+}
+
+// tiny History-API router — CloudFront serves index.html for any path (SPA fallback)
+function usePath() {
+  const [path, setPath] = useState(window.location.pathname)
+  useEffect(() => {
+    const onPop = () => setPath(window.location.pathname)
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+  const navigate = (to) => {
+    const [p, hash] = to.split('#')
+    if (p === window.location.pathname || p === '') {
+      if (hash) document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      window.history.pushState({}, '', to)
+      setPath(p)
+      window.scrollTo(0, 0)
+      if (hash) setTimeout(() => document.getElementById(hash)?.scrollIntoView(), 60)
+    }
+  }
+  return [path, navigate]
+}
+
 export default function App() {
+  const [path, navigate] = usePath()
+  const onHome = path === '/' || path === ''
+  let view
+  if (path.startsWith('/writing/')) view = <Article slug={decodeURIComponent(path.slice('/writing/'.length))} navigate={navigate} />
+  else if (path === '/writing') view = <main><WritingIndex navigate={navigate} /></main>
+  else view = <Home />
+
   return (
     <div className="page">
-      <Header />
-      <main>
-        <Hero />
-        <Firsts />
-        <Notes />
-        <About />
-      </main>
+      <Header navigate={navigate} onHome={onHome} />
+      {view}
       <Footer />
       <Assistant />
       <ThemeSwitcher />
