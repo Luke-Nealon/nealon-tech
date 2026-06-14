@@ -133,10 +133,23 @@ export default function Assistant({ navigate }) {
     localStorage.setItem('assistant-consent', 'yes')
     setConsented(true)
   }
+  function newChat() {
+    setMessages([])
+    setInput('')
+    sessionStorage.removeItem('assistant-messages')
+  }
+
+  // privacy reset: wipe everything the assistant stored (matches the privacy policy)
   function revoke() {
     localStorage.removeItem('assistant-consent')
+    localStorage.removeItem('assistant-session')
+    sessionStorage.removeItem('assistant-messages')
+    sessionStorage.removeItem('assistant-open')
+    sessionStorage.removeItem('assistant-model')
     setMessages([])
+    setInput('')
     setConsented(false)
+    setOpen(false)
   }
 
   async function send(text) {
@@ -280,8 +293,11 @@ export default function Assistant({ navigate }) {
                 <button type="submit" disabled={busy || !input.trim()}>Send</button>
               </form>
               <div className="asst-foot">
-                <a href="/privacy.html" target="_blank" rel="noreferrer">Privacy policy</a>
-                <button className="asst-link" onClick={revoke}>Reset privacy choice</button>
+                <button className="asst-link" onClick={newChat}>＋ New chat</button>
+                <span className="asst-foot-right">
+                  <a href="/privacy.html" target="_blank" rel="noreferrer">Privacy</a>
+                  <button className="asst-link" onClick={revoke}>Reset privacy</button>
+                </span>
               </div>
             </>
           )}

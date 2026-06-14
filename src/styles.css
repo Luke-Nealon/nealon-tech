@@ -1358,6 +1358,7 @@ html[data-theme='terminal'] .cta {
   padding: 0;
 }
 .asst-foot a:hover, .asst-link:hover { color: var(--accent); }
+.asst-foot-right { display: flex; gap: 14px; align-items: center; }
 
 @media (max-width: 880px) {
   .asst-launch { font-size: 10px; padding: 9px 13px; }
