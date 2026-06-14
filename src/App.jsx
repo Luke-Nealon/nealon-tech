@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import useReveal from './hooks/useReveal.js'
 import Assistant from './Assistant.jsx'
 import { WritingIndex, Article } from './Writing.jsx'
-import { hero, links, firsts, notes, about, footer } from './content.js'
+import { hero, links, firsts, notes, about, assistant, footer } from './content.js'
 
 const THEMES = ['control', 'terminal']
 
@@ -176,6 +176,32 @@ function About() {
   )
 }
 
+function AssistantDemo({ navigate }) {
+  const openAssistant = () => window.dispatchEvent(new CustomEvent('open-assistant'))
+  return (
+    <section className="sec wrap" id="assistant">
+      <SectionHead index="04" title={assistant.title} lede={assistant.body} ghost="✦" />
+      <div className="demo-points">
+        {assistant.points.map((p, i) => (
+          <Reveal className="demo-point" key={p.h} delay={Math.min(i * 0.06, 0.2)}>
+            <span className="n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.h}</h3>
+            <p>{p.t}</p>
+          </Reveal>
+        ))}
+      </div>
+      <Reveal className="demo-try" delay={0.1}>
+        <span className="demo-try-label">Try this</span>
+        <p>{assistant.tryThis}</p>
+      </Reveal>
+      <Reveal className="demo-cta" delay={0.15}>
+        <button className="demo-open" onClick={openAssistant}>{assistant.cta} <span aria-hidden="true">→</span></button>
+        <a className="demo-secondary" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>{assistant.secondary}</a>
+      </Reveal>
+    </section>
+  )
+}
+
 function Footer() {
   return (
     <footer id="contact">
@@ -209,13 +235,14 @@ function Footer() {
   )
 }
 
-function Home() {
+function Home({ navigate }) {
   return (
     <main>
       <Hero />
       <Firsts />
       <Notes />
       <About />
+      <AssistantDemo navigate={navigate} />
     </main>
   )
 }
@@ -248,7 +275,7 @@ export default function App() {
   let view
   if (path.startsWith('/writing/')) view = <Article slug={decodeURIComponent(path.slice('/writing/'.length))} navigate={navigate} />
   else if (path === '/writing') view = <main><WritingIndex navigate={navigate} /></main>
-  else view = <Home />
+  else view = <Home navigate={navigate} />
 
   return (
     <div className="page">

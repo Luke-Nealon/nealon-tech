@@ -90,6 +90,19 @@ export const about = {
   ],
 }
 
+export const assistant = {
+  title: 'See it — don’t just read about it',
+  body: 'There’s a working AI assistant on this site, in the bottom-right corner. Even if you’ve used plenty of chatbots, give this one a minute — it works differently from most of them, in ways you can see for yourself.',
+  points: [
+    { h: 'It shows its sources', t: 'It answers from my own articles and links them at the bottom, so you can check it. It isn’t guessing or quietly making things up.' },
+    { h: 'Swap the AI mid-conversation', t: 'Change the model behind it — Claude, Amazon, Alibaba — in the middle of a chat, and it keeps going without missing a beat. Most products are welded to one AI company. This one isn’t.' },
+    { h: 'Honest by design', t: 'It stays on topic and runs on a tiny, capped budget. No surprises, and no pretending to be more than it is.' },
+  ],
+  tryThis: 'Try this: ask it a question, then pick a different model from the dropdown and ask a follow-up. Same conversation, different AI brain — and it won’t skip a beat.',
+  cta: 'Open the assistant',
+  secondary: 'Read the field notes',
+}
+
 export const footer = {
   cta: 'Let’s talk.',
   colophon:

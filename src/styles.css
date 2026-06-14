@@ -724,6 +724,92 @@ html[data-theme='terminal'] .cta {
   font-size: clamp(46px, 8.6vw, 108px);
 }
 
+/* ————— Assistant demo section ————— */
+
+.demo-points {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.demo-point {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.demo-point .n {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+.demo-point h3 {
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(18px, 2.1vw, 22px);
+  margin: 10px 0 8px;
+  letter-spacing: calc(var(--display-tracking) / 2);
+}
+.demo-point p { color: var(--muted); font-size: 15px; line-height: 1.65; }
+
+.demo-try {
+  margin-top: 36px;
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding: 18px 20px;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+.demo-try-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  flex: none;
+}
+.demo-try p { color: var(--ink-dim); font-size: 15.5px; line-height: 1.6; }
+
+.demo-cta {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.demo-open {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sel-fg);
+  background: var(--accent);
+  border: 0;
+  border-radius: 8px;
+  padding: 13px 22px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+.demo-open:hover { background: var(--accent-2); }
+.demo-secondary {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4px;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.demo-secondary:hover { color: var(--ink); border-color: var(--accent); }
+
+@media (max-width: 760px) {
+  .demo-points { grid-template-columns: 1fr; gap: 24px; }
+  .demo-try { flex-direction: column; gap: 8px; }
+}
+
 /* ————— Writing ————— */
 
 .writing-list {

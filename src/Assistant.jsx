@@ -115,6 +115,12 @@ export default function Assistant() {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [messages, busy, open])
 
+  useEffect(() => {
+    const openIt = () => setOpen(true)
+    window.addEventListener('open-assistant', openIt)
+    return () => window.removeEventListener('open-assistant', openIt)
+  }, [])
+
   function accept() {
     localStorage.setItem('assistant-consent', 'yes')
     setConsented(true)
@@ -218,7 +224,7 @@ export default function Assistant() {
                 <select id="asst-model" value={model} onChange={(e) => setModel(e.target.value)}>
                   {MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}
                 </select>
-                <span className="asst-modelnote">switch live — same framework</span>
+                <span className="asst-modelnote">switch anytime — the chat keeps going</span>
               </div>
 
               <div className="asst-log" ref={scrollRef}>
