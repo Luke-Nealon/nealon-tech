@@ -314,6 +314,74 @@ So: it's maths. Then we got the maths to check its own work, and that quiet chan
 
 There's one idea under all of it. AI is a component you apply with judgment, not a foundation you build a business on blindly. The teams that do well with it aren't the ones with the most models or the biggest frameworks. They're the ones who decided, on purpose, where it earns its place.`,
   },
+
+  {
+    slug: 'serverless-rag-for-pennies',
+    title: 'No servers, AWS-grade uptime, pennies a month',
+    dek: 'The assistant on this site does real retrieval-augmented generation, streams its answers, and cites its sources — on managed services that scale to zero and can’t run up a surprise bill. Here’s the whole architecture.',
+    date: '2026-06-15',
+    readMins: 6,
+    published: true,
+    body: `The assistant on this site is a real one. It does retrieval-augmented generation over my articles, streams its answers, lets you switch the model behind it, and cites its sources. It also costs me close to nothing to run, and it cannot run up a surprise bill. That combination is worth explaining, because it's a genuinely new way to build this kind of thing, and a lot of teams are still doing it the expensive way.
+
+Here's the whole architecture.
+
+\`\`\`mermaid
+flowchart TD
+  U["Visitor"] -->|HTTPS| CF["CloudFront + S3 — static React site"]
+  U -->|chat request| FU["Lambda Function URL (response streaming)"]
+  FU --> G{"Guardrails — DynamoDB: rate limit + $5/day cap"}
+  G -->|within budget| EMB["Bedrock Titan — embed the question"]
+  EMB --> VEC["S3 Vectors — retrieve article chunks"]
+  VEC --> GEN["Bedrock ConverseStream — Claude / Nova"]
+  GEN -->|streamed answer + sources| U
+\`\`\`
+
+## No servers, anywhere
+
+There isn't a server in this system. Not one I run, patch, scale, or pay for while it sits idle.
+
+The site is static React, built to plain files and served from Amazon S3 behind CloudFront. A global CDN with AWS's availability, for cents at this traffic.
+
+The chat runs on a single AWS Lambda function behind a streaming Function URL. Lambda is serverless in the literal sense: it doesn't exist until someone sends a message, it spins up to handle the request, streams the answer back token by token, and then it's gone. When nobody's using the assistant, which is most of the time for a personal site, it costs exactly zero. When ten people use it at once, AWS runs ten copies. I do nothing.
+
+The model layer is Amazon Bedrock. No GPU to rent, no model to host, no inference server to keep warm. I call the Converse API, pay per token, and the model stays a swappable component.
+
+The knowledge base is the new part. S3 Vectors is a vector store built into S3 itself. My articles are chunked, embedded, and stored as vectors, and the Lambda queries them to find the passages relevant to a question. Until recently, doing this meant running a vector database: an OpenSearch cluster or a managed service with nodes that run continuously and bill continuously. S3 Vectors removes that. The vectors sit in S3, you query on demand, and there's no cluster to operate. For a corpus this size it's effectively free.
+
+The guardrails use DynamoDB in on-demand mode: a per-session rate limit and a hard daily budget. Pay per request, nothing when idle.
+
+Every box in that diagram is a managed AWS service. None of them is a thing I keep running.
+
+## What that buys
+
+| | Traditional always-on | This (serverless) |
+|---|---|---|
+| Idle cost | App server + vector DB billing 24/7 | Zero — nothing runs when idle |
+| Scaling | You provision and manage capacity | Automatic, to zero and to spikes |
+| Ops | Patch, monitor, restart | None — managed services |
+| Cost ceiling | However high it climbs | Hard daily cap, by design |
+
+Three things fall out of building it this way.
+
+**Uptime is AWS's problem, not mine.** Every component is a managed, multi-availability-zone service. There's no instance to fall over at 2am, no disk to fill, no process to restart. The assistant inherits the availability of S3, CloudFront, Lambda, Bedrock, and DynamoDB, which is about as good as it gets, and I maintain none of it.
+
+**It scales to zero and to spikes, automatically.** No idle cost is the headline. A traditional version of this — an app server and a vector DB running around the clock — costs real money every month whether anyone uses it or not. This costs nothing when idle and absorbs a burst without me touching it.
+
+**The cost is tiny and capped.** At this scale the running cost is a few dollars a month, mostly whatever model usage actually happens. On top of that a hard daily ceiling is wired into the guardrails, so even sustained abuse can't produce a bill bigger than a sandwich. Cheap by design, bounded by design.
+
+## The honest trade-offs
+
+Serverless isn't free of compromise. Lambda has cold starts, so the first request after a quiet spell is a little slower — fine for a chat, not for a high-frequency trading API. S3 Vectors is new, and built for this exact shape of problem: modest corpora, query-on-demand, not billion-vector workloads with millisecond SLAs. And you work within each service's quotas.
+
+So this is the right pattern for a great many things: internal tools, scoped assistants, anything spiky or low-to-medium volume, anything where you don't want an ops burden. It's the wrong pattern for sustained high-throughput, ultra-low-latency systems, where dedicated infrastructure earns its keep. Knowing which one you have is the job.
+
+## The point
+
+A few years ago, standing up a RAG assistant with this kind of availability meant provisioning servers and a vector database and accepting a monthly bill before a single person used it. Now it's a handful of managed services, composed, that scale to zero and cost almost nothing. That shift is easy to miss and genuinely significant, because it drops the cost of trying something to near zero, which changes what's worth building at all.
+
+The proof is the thing you're reading this next to. Open the assistant and ask it something. It'll spin up out of nothing, answer from my writing, cite its sources, and disappear again. That's the architecture, working.`,
+  },
 ]
 
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
