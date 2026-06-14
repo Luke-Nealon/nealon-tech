@@ -21,6 +21,13 @@ should make an argument, not summarise a video. Ground claims in real experience
 
 → All planned articles published (10 total). Next ideas welcome; add entries to articles.js.
 
+## Future enhancements
+- **Per-article OG cards** — currently every link shares the default branded card (public/og.png)
+  because the SPA serves one index.html for all routes. For per-article preview images/titles:
+  prerender a static HTML per article with its own og tags + a generated card image, and add a
+  CloudFront Function to rewrite /writing/<slug> → /writing/<slug>/index.html. Bigger build;
+  the shared card is fine for launch.
+
 ## Original drafts (now all written) — source material + angle
 
 1. **Skills over harnesses: the most powerful AI tool is already on your machine**
