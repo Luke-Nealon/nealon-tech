@@ -23,7 +23,7 @@ const MODELS = {
   'sonnet': { id: 'au.anthropic.claude-sonnet-4-5-20250929-v1:0', label: 'Claude Sonnet 4.5', in: 3.0, out: 15.0 },
   'nova': { id: 'amazon.nova-lite-v1:0', label: 'Amazon Nova Lite', in: 0.06, out: 0.24 },
 }
-const DEFAULT_MODEL = 'nova' // flip to 'haiku' once the Anthropic use-case form is approved
+const DEFAULT_MODEL = 'haiku' // Anthropic use-case form approved 2026-06-14
 const SESSION_LIMIT = 20
 const MAX_TOKENS = 800
 const MAX_INPUT_CHARS = 1500

@@ -4,9 +4,9 @@ import Mermaid from './Mermaid.jsx'
 const ENDPOINT = 'https://6xfeceqcoli6rmkxmcghytx5eq0lpqux.lambda-url.ap-southeast-2.on.aws/'
 
 const MODELS = [
-  { key: 'nova', label: 'Amazon Nova Lite' },
   { key: 'haiku', label: 'Claude Haiku 4.5' },
   { key: 'sonnet', label: 'Claude Sonnet 4.5' },
+  { key: 'nova', label: 'Amazon Nova Lite' },
 ]
 
 const SUGGESTIONS = [
@@ -104,7 +104,7 @@ export default function Assistant() {
   const [open, setOpen] = useState(false)
   const [full, setFull] = useState(false)
   const [consented, setConsented] = useState(() => localStorage.getItem('assistant-consent') === 'yes')
-  const [model, setModel] = useState('nova')
+  const [model, setModel] = useState('haiku')
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
