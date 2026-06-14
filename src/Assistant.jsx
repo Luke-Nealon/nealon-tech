@@ -5,7 +5,7 @@ const ENDPOINT = 'https://6xfeceqcoli6rmkxmcghytx5eq0lpqux.lambda-url.ap-southea
 
 const MODELS = [
   { key: 'haiku', label: 'Claude Haiku 4.5' },
-  { key: 'sonnet', label: 'Claude Sonnet 4.5' },
+  { key: 'sonnet', label: 'Claude Sonnet 4.6' },
   { key: 'nova', label: 'Amazon Nova Lite' },
 ]
 

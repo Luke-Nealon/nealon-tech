@@ -20,7 +20,7 @@ const SITE = 'https://nealon.tech'
 
 const MODELS = {
   'haiku': { id: 'au.anthropic.claude-haiku-4-5-20251001-v1:0', label: 'Claude Haiku 4.5', in: 1.0, out: 5.0 },
-  'sonnet': { id: 'au.anthropic.claude-sonnet-4-5-20250929-v1:0', label: 'Claude Sonnet 4.5', in: 3.0, out: 15.0 },
+  'sonnet': { id: 'au.anthropic.claude-sonnet-4-6', label: 'Claude Sonnet 4.6', in: 3.0, out: 15.0 },
   'nova': { id: 'amazon.nova-lite-v1:0', label: 'Amazon Nova Lite', in: 0.06, out: 0.24 },
 }
 const DEFAULT_MODEL = 'haiku' // Anthropic use-case form approved 2026-06-14
