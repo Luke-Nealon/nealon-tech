@@ -104,9 +104,9 @@ body::after {
 }
 
 .wrap {
-  max-width: 1120px;
+  max-width: 1240px;
   margin-inline: auto;
-  padding-inline: clamp(20px, 4vw, 48px);
+  padding-inline: clamp(20px, 5vw, 72px);
   position: relative;
 }
 
@@ -574,7 +574,7 @@ footer {
 .themer {
   position: fixed;
   bottom: 16px;
-  right: 16px;
+  left: 16px;
   z-index: 70;
   display: flex;
   gap: 2px;
@@ -863,7 +863,7 @@ html[data-theme='terminal'] .cta {
 
 .asst-launch {
   position: fixed;
-  left: 16px;
+  right: 16px;
   bottom: 16px;
   z-index: 70;
   display: flex;
@@ -902,11 +902,11 @@ html[data-theme='terminal'] .cta {
 
 .asst-panel {
   position: fixed;
-  left: 16px;
+  right: 16px;
   bottom: 16px;
   z-index: 72;
-  width: min(400px, calc(100vw - 32px));
-  height: min(560px, calc(100vh - 32px));
+  width: min(420px, calc(100vw - 32px));
+  height: min(640px, calc(100vh - 32px));
   display: flex;
   flex-direction: column;
   background: var(--bg-soft);

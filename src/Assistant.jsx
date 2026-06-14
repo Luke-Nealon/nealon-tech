@@ -141,7 +141,7 @@ export default function Assistant() {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ message: msg, sessionId: sessionId(), model, history: prior.slice(-8) }),
+        body: JSON.stringify({ message: msg, sessionId: sessionId(), model, history: prior.slice(-20) }),
       })
       if (!res.body) throw new Error('no stream')
       const reader = res.body.getReader()
