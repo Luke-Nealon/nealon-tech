@@ -1,0 +1,5 @@
+# nealon.tech — open to search engines and AI crawlers
+User-agent: *
+Allow: /
+
+Sitemap: https://nealon.tech/sitemap.xml

@@ -28,6 +28,10 @@ function fmtDate(iso) {
 
 export function WritingIndex({ navigate }) {
   const items = publishedArticles()
+  useEffect(() => {
+    document.title = 'Writing — Luke Nealon'
+    return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
+  }, [])
   return (
     <section className="sec wrap" id="writing">
       <span className="sec-ghost" aria-hidden="true">✎</span>
@@ -61,6 +65,10 @@ export function WritingIndex({ navigate }) {
 export function Article({ slug, navigate }) {
   const article = getArticle(slug)
   useEffect(() => { window.scrollTo(0, 0) }, [slug])
+  useEffect(() => {
+    document.title = article ? `${article.title} — Luke Nealon` : 'Not found — Luke Nealon'
+    return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
+  }, [article])
 
   if (!article) {
     return (
