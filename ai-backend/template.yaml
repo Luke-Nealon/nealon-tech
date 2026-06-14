@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: nealon.tech scoped AI assistant — Bedrock Converse, model-independent, cost-capped
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: nodejs20.x
+
+Parameters:
+  DailyBudgetUsd:
+    Type: Number
+    Default: 5
+    Description: Hard global daily spend cap (kill-switch)
+
+Resources:
+  GuardrailTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: nealon-ai-guardrails
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  ChatFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2022
+        EntryPoints:
+          - handler.mjs
+    Properties:
+      Handler: handler.handler
+      CodeUri: src/
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref GuardrailTable
+          DAILY_BUDGET_USD: !Ref DailyBudgetUsd
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref GuardrailTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:Converse
+              Resource: '*'
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - https://nealon.tech
+            - https://www.nealon.tech
+            - http://localhost:5173
+          AllowMethods:
+            - POST
+          AllowHeaders:
+            - content-type
+
+Outputs:
+  ChatUrl:
+    Description: Function URL for the chat endpoint
+    Value: !GetAtt ChatFunctionUrl.FunctionUrl
