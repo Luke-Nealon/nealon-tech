@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import Mermaid from './Mermaid.jsx'
 
 const ENDPOINT = 'https://6xfeceqcoli6rmkxmcghytx5eq0lpqux.lambda-url.ap-southeast-2.on.aws/'
 
@@ -13,35 +14,6 @@ const SUGGESTIONS = [
   'Draw your architecture',
   'Are you locked to one AI vendor?',
 ]
-
-// lazy-load mermaid only when a diagram actually appears
-let mermaidPromise = null
-function getMermaid() {
-  if (!mermaidPromise) {
-    mermaidPromise = import('mermaid').then((mod) => {
-      mod.default.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'strict' })
-      return mod.default
-    })
-  }
-  return mermaidPromise
-}
-
-let diagramSeq = 0
-function Mermaid({ code }) {
-  const [svg, setSvg] = useState('')
-  const [err, setErr] = useState(false)
-  useEffect(() => {
-    let cancelled = false
-    getMermaid()
-      .then((m) => m.render('mmd' + ++diagramSeq, code))
-      .then(({ svg }) => { if (!cancelled) setSvg(svg) })
-      .catch(() => { if (!cancelled) setErr(true) })
-    return () => { cancelled = true }
-  }, [code])
-  if (err) return <pre className="asst-code">{code}</pre>
-  if (!svg) return <div className="asst-diagram-loading">rendering diagram…</div>
-  return <div className="asst-diagram" dangerouslySetInnerHTML={{ __html: svg }} />
-}
 
 function downloadMarkdown(text) {
   const blob = new Blob([text], { type: 'text/markdown' })

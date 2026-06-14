@@ -1,8 +1,24 @@
 import { useEffect } from 'react'
 import { marked } from 'marked'
+import Mermaid from './Mermaid.jsx'
 import { publishedArticles, getArticle } from './content/articles.js'
 
 marked.setOptions({ breaks: false, gfm: true })
+
+// split markdown into prose + ```mermaid diagram blocks
+function bodySegments(md) {
+  const segs = []
+  const re = /```mermaid\n?([\s\S]*?)```/g
+  let last = 0
+  let m
+  while ((m = re.exec(md)) !== null) {
+    if (m.index > last) segs.push({ type: 'md', text: md.slice(last, m.index) })
+    segs.push({ type: 'mermaid', code: m[1].trim() })
+    last = m.index + m[0].length
+  }
+  if (last < md.length) segs.push({ type: 'md', text: md.slice(last) })
+  return segs
+}
 
 function fmtDate(iso) {
   return new Date(iso + 'T00:00:00').toLocaleDateString('en-AU', {
@@ -57,12 +73,18 @@ export function Article({ slug, navigate }) {
   }
 
   return (
-    <article className="article wrap">
+    <article className="article">
       <a className="writing-back" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>← All writing</a>
       <span className="article-meta">{fmtDate(article.date)} · {article.readMins} min read</span>
       <h1 className="article-title">{article.title}</h1>
       <p className="article-dek">{article.dek}</p>
-      <div className="article-body" dangerouslySetInnerHTML={{ __html: marked.parse(article.body) }} />
+      <div className="article-body">
+        {bodySegments(article.body).map((s, i) =>
+          s.type === 'mermaid'
+            ? <Mermaid key={i} code={s.code} />
+            : <div key={i} dangerouslySetInnerHTML={{ __html: marked.parse(s.text) }} />
+        )}
+      </div>
       <div className="article-foot">
         <span>Luke Nealon</span>
         <a href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>More writing →</a>

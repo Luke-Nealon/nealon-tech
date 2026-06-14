@@ -766,10 +766,11 @@ html[data-theme='terminal'] .cta {
   color: var(--accent);
 }
 
-/* article page */
+/* article page — own centred reading measure */
 .article {
-  padding-block: clamp(40px, 8vh, 90px) clamp(60px, 10vh, 120px);
-  max-width: 720px;
+  max-width: 760px;
+  margin-inline: auto;
+  padding: clamp(40px, 8vh, 90px) clamp(20px, 5vw, 32px) clamp(60px, 10vh, 120px);
 }
 .writing-back {
   display: inline-block;

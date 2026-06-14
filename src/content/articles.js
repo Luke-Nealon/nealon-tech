@@ -16,7 +16,17 @@ Most teams building with AI right now are quietly making a decision they haven't
 
 Prices change. Rate limits tighten. A model you depend on gets deprecated with a few months' notice. A better one launches somewhere else and you can't reach it without a rewrite. Or the model simply goes away, and your product goes with it. If your whole operation runs on one model from one company, you don't own that capability. You're renting it, and somebody else holds the lease.
 
-So I treat the model as a component, not a foundation.
+So I treat the model as a component, not a foundation. The application talks to one interface; the model behind it is swappable.
+
+\`\`\`mermaid
+flowchart LR
+  A["Your application"] --> B["Model interface
+(your abstraction)"]
+  B --> C["Claude"]
+  B --> D["Amazon Nova"]
+  B --> E["Next model
+(whatever ships)"]
+\`\`\`
 
 ## What that looks like in practice
 
