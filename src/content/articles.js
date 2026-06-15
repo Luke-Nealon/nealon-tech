@@ -528,6 +528,49 @@ The team that wins isn’t the one that was perfectly configured for last year�
 
 Hire for how someone thinks, not for what they currently know how to operate. The tools will keep changing. Judgment is the only line on the CV that appreciates.`,
   },
+  {
+    slug: 'build-security-in',
+    category: 'Security, Risk & Trust',
+    title: 'Build security in from the start — the returns compound',
+    dek: 'Plan for the major standards on day one — 2FA, passkeys, SSO, GDPR and ISO by design — and the payoff compounds: faster audits, enterprise deals you can actually win, and migrations that pay for themselves.',
+    date: '2026-06-15',
+    readMins: 4,
+    published: true,
+    body: `Most teams treat security as something you add when you’re made to. A breach scare, an auditor, a big customer’s questionnaire — and suddenly there’s a scramble to bolt on the controls that should have been there all along. It’s slow, it’s expensive, and it’s the most stressful possible way to do it.
+
+The better move is to decide upfront that the major standards are part of the foundation, not a later project. It costs a bit more thought at the start and pays back many times over.
+
+Concretely, that foundation is a handful of decisions made on day one:
+
+- Two-factor authentication as the absolute minimum, on everything, from the start.
+- Device passcodes and passkeys, so you can begin removing the dependency on passwords altogether.
+- Single sign-on, which redirects authentication risk to a specialist identity provider whose entire job is to get it right, instead of you reinventing it badly.
+- GDPR and ISO 27001 designed in from the beginning — or, if you’ve inherited something that wasn’t, a planned migration to bring the core service up to them rather than patching around the edges.
+
+None of that feels urgent before you need it, which is exactly why most teams skip it. But build on that foundation and a lot of things get easier at once.
+
+\`\`\`mermaid
+flowchart TB
+  subgraph F["Built in from the start"]
+    direction LR
+    F1["2FA · passkeys · SSO · GDPR/ISO by design"] --> F2["Audits & reviews are a formality"] --> F3["Deals unlocked, returns compound"]
+  end
+  subgraph L["Bolted on later"]
+    direction LR
+    L1["Scramble when forced"] --> L2["Remediation project"] --> L3["Deals stalled, pay again"]
+  end
+\`\`\`
+
+The audit confirms what’s already true instead of triggering a remediation project. The enterprise security review that stalls most of your competitors becomes a formality you pass while they’re still filling in the questionnaire. And the same controls that protect you quietly unlock customers you otherwise couldn’t sell to — the larger, more regulated, more valuable ones who won’t even start a conversation until you clear their bar.
+
+That’s the part worth saying plainly to a CFO. Security planned in from the start isn’t only risk reduction. It’s a commercial capability — it opens markets and shortens sales cycles — so it deserves to be scored on both axes, not filed entirely under cost.
+
+And if you didn’t build it in early, which most haven’t, the same logic still holds. It just costs more to get there. A migration is real work, but it’s work with an outsized return, because once the foundation is set everything else compounds off it: the reviews, the audits, the deals, the next feature all get cheaper and faster. The longer you leave it, the more you pay, and the more business you can’t win in the meantime.
+
+One caution: the controls have to be real. Chasing a certificate you don’t actually live up to turns a genuine asset into a liability the first time someone checks. The point isn’t to look secure. It’s that being genuinely secure, and able to prove it, is the foundation everything else stands on.
+
+Pour that foundation once and everything you build on it gets cheaper, faster, and easier to sell. Bolt it on later and you pay for it again every time.`,
+  },
 ]
 
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
