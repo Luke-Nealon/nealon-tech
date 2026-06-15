@@ -893,6 +893,63 @@ html[data-theme='terminal'] .cta {
 
 /* ————— Writing ————— */
 
+.writing-featured { margin-top: 44px; }
+.writing-featured-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+.feature-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--bg-soft);
+  transition: border-color 0.25s ease, transform 0.4s var(--ease);
+}
+.feature-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.feature-cat {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.feature-card h3 {
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(18px, 1.8vw, 21px);
+  letter-spacing: calc(var(--display-tracking) / 2);
+  line-height: 1.2;
+}
+.feature-card p {
+  color: var(--ink-dim);
+  font-size: 14px;
+  line-height: 1.55;
+  flex: 1;
+}
+.feature-meta {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  .feature-grid { grid-template-columns: 1fr; }
+}
+
 .writing-controls {
   margin-top: 40px;
   display: flex;

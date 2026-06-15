@@ -2,12 +2,14 @@
 // Each entry: { slug, title, category, dek, date (ISO), readMins, published, body (markdown) }.
 //   category — must be one of CATEGORIES (below); drives the topic-keyed index.
 //   updated  — optional ISO date; when set, the index shows "Updated <year>" instead of the year.
+//   featured — optional number; sets the "Start here" row at the top of the index (lower = first).
 // Add an article = add an entry. published:false keeps it off the index.
 
 export const articles = [
   {
     slug: 'model-provider-independence',
     category: 'Technology Strategy',
+    featured: 3,
     title: 'Build for the model you’ll want to replace',
     dek: 'Why the assistant on this site swaps between Claude and Nova on a dropdown — and why model independence is a board-level decision, not a developer preference.',
     date: '2026-06-14',
@@ -99,6 +101,7 @@ This is the same principle as knowing where AI belongs at all. Autonomy is a cos
   {
     slug: 'dont-automate-waste',
     category: 'Operating Models & Efficiency',
+    featured: 2,
     title: 'Don’t automate waste',
     dek: 'The most expensive automation is the one that makes a broken process run faster. Why a waste analysis, not a technology wishlist, should decide what you automate.',
     date: '2026-06-14',
@@ -329,6 +332,7 @@ There's one idea under all of it. AI is a component you apply with judgment, not
   {
     slug: 'serverless-rag-for-cents',
     category: 'AI & Automation',
+    featured: 1,
     title: 'No servers, AWS-grade uptime, cents a month',
     dek: 'The assistant on this site does real retrieval-augmented generation, streams its answers, and cites its sources — on managed services that scale to zero and can’t run up a surprise bill. Here’s the whole architecture.',
     date: '2026-06-15',
@@ -446,6 +450,10 @@ Search isn't dead. But it's no longer the only front door, and it's shrinking as
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
 export const publishedArticles = () =>
   articles.filter((a) => a.published).sort((a, b) => b.date.localeCompare(a.date))
+
+// "Start here" picks for the top of the index, ordered by the `featured` number.
+export const featuredArticles = () =>
+  articles.filter((a) => a.published && a.featured).sort((a, b) => a.featured - b.featured)
 
 // Display order for the Perspectives index. Leads with executive-altitude themes;
 // AI & Automation is the deep bench beneath them. Leadership appears once written into.

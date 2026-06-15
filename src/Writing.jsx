@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { marked } from 'marked'
 import Mermaid from './Mermaid.jsx'
-import { publishedArticles, CATEGORIES, getArticle } from './content/articles.js'
+import { publishedArticles, featuredArticles, CATEGORIES, getArticle } from './content/articles.js'
 
 marked.setOptions({ breaks: false, gfm: true })
 
@@ -48,6 +48,7 @@ export function WritingIndex({ navigate }) {
     .map((category) => ({ category, items: matches.filter((a) => a.category === category) }))
     .filter((g) => g.items.length > 0)
   const filtering = q !== '' || activeCat !== 'All'
+  const featured = featuredArticles()
 
   return (
     <section className="sec wrap" id="writing">
@@ -60,6 +61,27 @@ export function WritingIndex({ navigate }) {
         Working notes on technology, AI, and the business of running it — written to be read
         by an operator, not an audience.
       </p>
+
+      {!filtering && featured.length > 0 && (
+        <div className="writing-featured reveal in">
+          <span className="writing-featured-label">Start here</span>
+          <div className="feature-grid">
+            {featured.map((a) => (
+              <a
+                key={a.slug}
+                className="feature-card"
+                href={`/writing/${a.slug}`}
+                onClick={(e) => { e.preventDefault(); navigate(`/writing/${a.slug}`) }}
+              >
+                <span className="feature-cat">{a.category}</span>
+                <h3>{a.title}</h3>
+                <p>{a.dek}</p>
+                <span className="feature-meta">{displayDate(a)} · {a.readMins} min read</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="writing-controls reveal in">
         <input
