@@ -5,3 +5,9 @@ dist/
 
 # SAM build artifacts
 .aws-sam/
+
+# analytics-report: bundled DB + deps (fetch before deploy, see ANALYTICS.md)
+analytics-report/src/node_modules/
+analytics-report/src/*.mmdb
+analytics-report/src/*.mmdb.gz
+analytics-report/src/package-lock.json

@@ -2,6 +2,9 @@
   "name": "nealon-analytics-report",
   "version": "1.0.0",
   "type": "module",
-  "description": "Daily CloudFront-logs traffic digest for nealon.tech (Athena -> SNS).",
-  "private": true
+  "description": "Daily CloudFront-logs traffic digest for nealon.tech (Athena -> SES HTML email).",
+  "private": true,
+  "dependencies": {
+    "maxmind": "^4.3.24"
+  }
 }

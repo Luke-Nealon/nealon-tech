@@ -67,20 +67,30 @@ cheapest proxy for assistant activity).
 
 ## Daily email digest (automated)
 
-A scheduled Lambda emails a plain-text traffic digest every day — no dashboard to log into.
+A scheduled Lambda emails an **HTML traffic digest** every day — no dashboard to log into.
 SAM app in `analytics-report/` (stack `nealon-analytics-report`, ap-southeast-2, profile `personal`).
 
-- **What it sends:** yesterday / 7-day / 30-day views + visitors, daily breakdown, top articles,
-  top pages, referrers (sources), AI-crawler hits (GPTBot/ClaudeBot/Perplexity/etc.), and assistant
-  usage (sessions/messages/tokens from `nealon-ai-guardrails`). Gracefully reports "no traffic yet".
-- **Delivery:** SNS topic → email subscription. **Confirm the subscription once** (AWS sends a
-  confirmation email on deploy). Recipient = `ReportEmail` param (default `luke@nealon.tech`).
+- **What it sends:** human views/visitors (yesterday / 7d / 30d) with bots filtered out and the
+  filtered count shown; **graphs** (daily-trend bar, top-articles bar, visitors-by-country bar) via
+  QuickChart; top pages; referrers; AI-crawler hits (GPTBot/ClaudeBot/Perplexity/…) split from
+  search crawlers; and assistant usage from `nealon-ai-guardrails`. Human-vs-bot split is heuristic
+  (user-agent + scanner-path filters). Gracefully reports "no traffic yet".
+- **Visitor countries:** accurate, from a bundled **DB-IP Lite Country** mmdb (`src/dbip-country.mmdb`,
+  CC BY 4.0) read with the `maxmind` npm package — **IPs are resolved inside the Lambda, never sent
+  out.** No literal choropleth map (the free QuickChart choropleth was unreliable; a country bar
+  chart is used instead). Refresh the DB monthly:
+  `curl -fsSL https://download.db-ip.com/free/dbip-country-lite-YYYY-MM.mmdb.gz | gunzip > src/dbip-country.mmdb`
+- **Delivery:** **SES** HTML email (no SNS). Sends from `FromEmail` (default `reports@nealon.tech`)
+  to `ToEmail` (default `luke@nealon.tech`). The `nealon.tech` SES domain identity is already
+  verified (Easy DKIM); domain verification also covers the `@nealon.tech` recipient in the SES
+  sandbox, so no production-access request is needed. No subscription to confirm.
 - **Schedule:** `cron(0 22 * * ? *)` = 22:00 UTC ≈ 08:00 Sydney (AEST; 09:00 during AEDT).
 - **No engagement/interaction time** — request logs can't see it (would need a cookieless client
   script like Plausible/Cloudflare; deliberately not added, to honour the privacy page).
+- **Setup before deploy** (DB + deps are gitignored): `cd analytics-report/src && npm install` and
+  download the mmdb (command above).
 - **Redeploy:** `cd analytics-report && sam build && sam deploy --stack-name nealon-analytics-report
   --region ap-southeast-2 --profile personal --resolve-s3 --capabilities CAPABILITY_IAM
-  --no-confirm-changeset --parameter-overrides ReportEmail=<addr> ScheduleExpr='cron(...)'`
+  --no-confirm-changeset --parameter-overrides FromEmail=<addr> ToEmail=<addr> ScheduleExpr='cron(...)'`
 - **Send one now (test):** `aws lambda invoke --function-name <ReportFunction name>
   --region ap-southeast-2 --profile personal /tmp/out.json`
-- Dependency-free (AWS SDK v3 from the nodejs20 runtime).

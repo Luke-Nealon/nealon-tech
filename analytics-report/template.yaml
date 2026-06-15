@@ -1,12 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: nealon.tech daily traffic digest — Athena over CloudFront logs, emailed via SNS. Cookieless, server-side.
+Description: nealon.tech daily traffic digest — Athena over CloudFront logs, HTML email via SES. Cookieless, server-side.
 
 Parameters:
-  ReportEmail:
+  FromEmail:
+    Type: String
+    Default: reports@nealon.tech
+    Description: Verified SES sender (any address on the verified nealon.tech domain).
+  ToEmail:
     Type: String
     Default: luke@nealon.tech
-    Description: Where the daily digest is sent (you must confirm the SNS subscription once).
+    Description: Where the daily digest is sent.
   ScheduleExpr:
     Type: String
     Default: cron(0 22 * * ? *)
@@ -15,22 +19,10 @@ Parameters:
 Globals:
   Function:
     Runtime: nodejs20.x
-    MemorySize: 256
+    MemorySize: 512
     Timeout: 120
 
 Resources:
-  ReportTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      DisplayName: nealon-analytics
-
-  ReportSubscription:
-    Type: AWS::SNS::Subscription
-    Properties:
-      TopicArn: !Ref ReportTopic
-      Protocol: email
-      Endpoint: !Ref ReportEmail
-
   ReportFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -40,46 +32,32 @@ Resources:
         Variables:
           ATHENA_DB: nealon_logs
           ATHENA_OUTPUT: s3://nealon-tech-logs-389901108572/athena-results/
-          TOPIC_ARN: !Ref ReportTopic
           GUARDRAILS_TABLE: nealon-ai-guardrails
+          FROM_EMAIL: !Ref FromEmail
+          TO_EMAIL: !Ref ToEmail
       Policies:
         - Statement:
             - Sid: Athena
               Effect: Allow
-              Action:
-                - athena:StartQueryExecution
-                - athena:GetQueryExecution
-                - athena:GetQueryResults
-                - athena:StopQueryExecution
+              Action: [athena:StartQueryExecution, athena:GetQueryExecution, athena:GetQueryResults, athena:StopQueryExecution]
               Resource: '*'
             - Sid: GlueCatalog
               Effect: Allow
-              Action:
-                - glue:GetTable
-                - glue:GetDatabase
-                - glue:GetPartitions
-                - glue:GetPartition
+              Action: [glue:GetTable, glue:GetDatabase, glue:GetPartitions, glue:GetPartition]
               Resource: '*'
             - Sid: S3LogsAndResults
               Effect: Allow
-              Action:
-                - s3:GetObject
-                - s3:PutObject
-                - s3:ListBucket
-                - s3:GetBucketLocation
-                - s3:AbortMultipartUpload
+              Action: [s3:GetObject, s3:PutObject, s3:ListBucket, s3:GetBucketLocation, s3:AbortMultipartUpload]
               Resource:
                 - arn:aws:s3:::nealon-tech-logs-389901108572
                 - arn:aws:s3:::nealon-tech-logs-389901108572/*
-            - Sid: PublishReport
+            - Sid: SendEmail
               Effect: Allow
-              Action: sns:Publish
-              Resource: !Ref ReportTopic
+              Action: [ses:SendEmail]
+              Resource: '*'
             - Sid: AssistantUsage
               Effect: Allow
-              Action:
-                - dynamodb:GetItem
-                - dynamodb:Scan
+              Action: [dynamodb:GetItem, dynamodb:Scan]
               Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/nealon-ai-guardrails'
       Events:
         Daily:
@@ -89,7 +67,5 @@ Resources:
             Name: nealon-analytics-daily
 
 Outputs:
-  TopicArn:
-    Value: !Ref ReportTopic
   FunctionName:
     Value: !Ref ReportFunction
