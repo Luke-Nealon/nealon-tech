@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { marked } from 'marked'
 import Mermaid from './Mermaid.jsx'
-import { publishedArticles, getArticle } from './content/articles.js'
+import { publishedArticles, CATEGORIES, getArticle } from './content/articles.js'
 
 marked.setOptions({ breaks: false, gfm: true })
 
@@ -20,18 +20,35 @@ function bodySegments(md) {
   return segs
 }
 
-function fmtDate(iso) {
-  return new Date(iso + 'T00:00:00').toLocaleDateString('en-AU', {
-    day: 'numeric', month: 'long', year: 'numeric',
-  })
+// Year-only by default; "Updated <year>" when an article carries an `updated` date.
+// Keeps the index from broadcasting that a batch was published on the same day.
+function displayDate(a) {
+  const year = (iso) => iso.slice(0, 4)
+  return a.updated ? `Updated ${year(a.updated)}` : year(a.date)
 }
 
 export function WritingIndex({ navigate }) {
-  const items = publishedArticles()
+  const [query, setQuery] = useState('')
+  const [activeCat, setActiveCat] = useState('All')
   useEffect(() => {
     document.title = 'Perspectives — Luke Nealon'
     return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
   }, [])
+
+  const all = publishedArticles()
+  // Only offer pills for categories that actually have published pieces.
+  const present = CATEGORIES.filter((c) => all.some((a) => a.category === c))
+  const q = query.trim().toLowerCase()
+  const matches = all.filter(
+    (a) =>
+      (activeCat === 'All' || a.category === activeCat) &&
+      (!q || `${a.title} ${a.dek} ${a.category} ${a.body}`.toLowerCase().includes(q))
+  )
+  const groups = present
+    .map((category) => ({ category, items: matches.filter((a) => a.category === category) }))
+    .filter((g) => g.items.length > 0)
+  const filtering = q !== '' || activeCat !== 'All'
+
   return (
     <section className="sec wrap" id="writing">
       <span className="sec-ghost" aria-hidden="true">✎</span>
@@ -40,24 +57,75 @@ export function WritingIndex({ navigate }) {
         <h2>Field notes, long form</h2>
       </div>
       <p className="lede reveal in">
-        Working notes on building AI that earns its place — what I'd want a developer or systems
-        engineer to think about before they ship.
+        Working notes on technology, AI, and the business of running it — written to be read
+        by an operator, not an audience.
       </p>
-      <div className="writing-list">
-        {items.map((a) => (
-          <a
-            key={a.slug}
-            className="writing-card"
-            href={`/writing/${a.slug}`}
-            onClick={(e) => { e.preventDefault(); navigate(`/writing/${a.slug}`) }}
+
+      <div className="writing-controls reveal in">
+        <input
+          type="search"
+          className="writing-search"
+          placeholder="Search perspectives…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Search perspectives"
+        />
+        <div className="writing-filters" aria-label="Filter by topic">
+          <button
+            className={`writing-pill${activeCat === 'All' ? ' is-active' : ''}`}
+            onClick={() => setActiveCat('All')}
           >
-            <span className="writing-meta">{fmtDate(a.date)} · {a.readMins} min read</span>
-            <h3>{a.title}</h3>
-            <p>{a.dek}</p>
-            <span className="writing-more">Read →</span>
-          </a>
-        ))}
+            All
+          </button>
+          {present.map((c) => (
+            <button
+              key={c}
+              className={`writing-pill${activeCat === c ? ' is-active' : ''}`}
+              onClick={() => setActiveCat(c)}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+        {filtering && (
+          <span className="writing-count">
+            {matches.length} of {all.length}
+            {filtering && (
+              <button
+                className="writing-clear"
+                onClick={() => { setQuery(''); setActiveCat('All') }}
+              >
+                Clear
+              </button>
+            )}
+          </span>
+        )}
       </div>
+
+      {groups.length === 0 ? (
+        <p className="writing-empty">No perspectives match that search.</p>
+      ) : (
+        groups.map(({ category, items }) => (
+          <div className="writing-group" key={category}>
+            <h3 className="writing-cat">{category}</h3>
+            <div className="writing-list">
+              {items.map((a) => (
+                <a
+                  key={a.slug}
+                  className="writing-card"
+                  href={`/writing/${a.slug}`}
+                  onClick={(e) => { e.preventDefault(); navigate(`/writing/${a.slug}`) }}
+                >
+                  <span className="writing-meta">{displayDate(a)} · {a.readMins} min read</span>
+                  <h4>{a.title}</h4>
+                  <p>{a.dek}</p>
+                  <span className="writing-more">Read →</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      )}
     </section>
   )
 }
@@ -83,7 +151,7 @@ export function Article({ slug, navigate }) {
   return (
     <article className="article">
       <a className="writing-back" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>← All perspectives</a>
-      <span className="article-meta">{fmtDate(article.date)} · {article.readMins} min read</span>
+      <span className="article-meta">{article.category} · {displayDate(article)} · {article.readMins} min read</span>
       <h1 className="article-title">{article.title}</h1>
       <p className="article-dek">{article.dek}</p>
       <div className="article-body">

@@ -1,10 +1,13 @@
 // Writing — articles for nealon.tech/writing.
-// Each entry: { slug, title, dek, date (ISO), readMins, published, body (markdown) }.
+// Each entry: { slug, title, category, dek, date (ISO), readMins, published, body (markdown) }.
+//   category — must be one of CATEGORIES (below); drives the topic-keyed index.
+//   updated  — optional ISO date; when set, the index shows "Updated <year>" instead of the year.
 // Add an article = add an entry. published:false keeps it off the index.
 
 export const articles = [
   {
     slug: 'model-provider-independence',
+    category: 'Technology Strategy',
     title: 'Build for the model you’ll want to replace',
     dek: 'Why the assistant on this site swaps between Claude and Nova on a dropdown — and why model independence is a board-level decision, not a developer preference.',
     date: '2026-06-14',
@@ -47,6 +50,7 @@ Own the capability. Rent the model. Keep the receipt so you can hand it back.`,
 
   {
     slug: 'workflow-or-agent',
+    category: 'AI & Automation',
     title: 'Most “agents” are workflows in disguise',
     dek: 'When an autonomous agent earns its place, when a plain workflow is the better engineering choice, and why most teams get the order backwards.',
     date: '2026-06-14',
@@ -94,6 +98,7 @@ This is the same principle as knowing where AI belongs at all. Autonomy is a cos
 
   {
     slug: 'dont-automate-waste',
+    category: 'Operating Models & Efficiency',
     title: 'Don’t automate waste',
     dek: 'The most expensive automation is the one that makes a broken process run faster. Why a waste analysis, not a technology wishlist, should decide what you automate.',
     date: '2026-06-14',
@@ -126,6 +131,7 @@ So before the model, before the pipeline, before the agent: walk the process and
 
   {
     slug: 'skills-over-harnesses',
+    category: 'AI & Automation',
     title: 'The most powerful AI tool is already on your machine',
     dek: 'You don’t need a sprawling agent framework. Structure beats infrastructure: folders, markdown, and one capable agent that reads them.',
     date: '2026-06-14',
@@ -154,6 +160,7 @@ The lesson for an organisation is a question to ask before you buy an agent plat
 
   {
     slug: 'audit-your-ai-dependencies',
+    category: 'Security, Risk & Trust',
     title: 'List every AI tool you depend on. Now find the backup.',
     dek: 'Model independence is the architecture. This is the ten-minute business-continuity exercise behind it.',
     date: '2026-06-14',
@@ -182,6 +189,7 @@ Ten minutes of listing dependencies, and one backup for the critical one, is the
 
   {
     slug: 'self-healing-harness',
+    category: 'AI & Automation',
     title: 'Your agent harness should repair itself',
     dek: 'Observability tells you what happened. The expensive part is everything after the trace — and a mature practice closes that loop automatically.',
     date: '2026-06-14',
@@ -215,6 +223,7 @@ The CIO version: when you run agents in production, budget for the loop after th
 
   {
     slug: 'its-maths-not-magic',
+    category: 'AI & Automation',
     title: 'It’s maths, not magic: what an LLM is actually doing',
     dek: 'No understanding, no thinking — just very powerful next-token prediction. Once you see that, you use it far better.',
     date: '2026-06-14',
@@ -251,6 +260,7 @@ That's part one: the mechanism. But if you've used the newer models and felt the
 
   {
     slug: 'the-maths-learned-to-check-its-work',
+    category: 'AI & Automation',
     title: 'The maths learned to check its work',
     dek: 'Part two. Reasoning models still don’t think — but they predict their way through the working, and weigh it, before they answer. That shift is most of the recent leap.',
     date: '2026-06-15',
@@ -291,6 +301,7 @@ So: it's maths. Then we got the maths to check its own work, and that quiet chan
 
   {
     slug: 'applied-ai-field-guide',
+    category: 'AI & Automation',
     title: 'Applied AI: what to think about before you ship',
     dek: 'A short field guide for developers and systems engineers putting AI into real products — the questions I’d want answered before anything goes live.',
     date: '2026-06-15',
@@ -317,6 +328,7 @@ There's one idea under all of it. AI is a component you apply with judgment, not
 
   {
     slug: 'serverless-rag-for-cents',
+    category: 'AI & Automation',
     title: 'No servers, AWS-grade uptime, cents a month',
     dek: 'The assistant on this site does real retrieval-augmented generation, streams its answers, and cites its sources — on managed services that scale to zero and can’t run up a surprise bill. Here’s the whole architecture.',
     date: '2026-06-15',
@@ -385,6 +397,7 @@ The proof is the thing you're reading this next to. Open the assistant and ask i
 
   {
     slug: 'when-the-answer-replaces-the-search-box',
+    category: 'Technology Strategy',
     title: 'When the answer replaces the search box',
     dek: 'Search is quietly stopping being the default front door. Here’s why a small file called llms.txt — and factual, referenceable content — is how a brand stays findable when people ask an AI instead of Google.',
     date: '2026-06-15',
@@ -433,3 +446,22 @@ Search isn't dead. But it's no longer the only front door, and it's shrinking as
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
 export const publishedArticles = () =>
   articles.filter((a) => a.published).sort((a, b) => b.date.localeCompare(a.date))
+
+// Display order for the Perspectives index. Leads with executive-altitude themes;
+// AI & Automation is the deep bench beneath them. Leadership appears once written into.
+export const CATEGORIES = [
+  'Technology Strategy',
+  'Operating Models & Efficiency',
+  'Security, Risk & Trust',
+  'AI & Automation',
+  'Leadership & Operating Teams',
+]
+
+// Published articles grouped by category in CATEGORIES order, newest first within
+// each group. Empty categories are omitted, so the index never shows a bare bucket.
+export const articlesByCategory = () => {
+  const live = publishedArticles()
+  return CATEGORIES
+    .map((category) => ({ category, items: live.filter((a) => a.category === category) }))
+    .filter((group) => group.items.length > 0)
+}
