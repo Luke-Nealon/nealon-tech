@@ -445,6 +445,46 @@ You don't need a project. Publish content that states real things clearly and co
 
 Search isn't dead. But it's no longer the only front door, and it's shrinking as the default. The brands that stay findable through the shift will be the ones whose facts are clean, structured, and easy for an AI to quote — and who were early enough to be the source it reaches for.`,
   },
+  {
+    slug: 'scale-the-system',
+    category: 'Operating Models & Efficiency',
+    title: 'Don’t scale the org chart — scale the system',
+    dek: 'The reflex when work grows is to add people in proportion. The businesses that scale well grow the system instead — and nothing exposes the difference faster than growing by acquisition.',
+    date: '2026-06-15',
+    readMins: 4,
+    published: true,
+    body: `The default answer to more work is more people. The queue gets longer, so you add someone to the queue. A new region opens, so you stand up a team for it. You buy a business and it arrives with its own finance, IT and HR, so you keep them. It’s automatic enough that most organisations never stop to ask whether the work needed a person at all, or whether the system they already had could have absorbed it.
+
+That reflex has a cost, and it compounds. A new hire isn’t just a salary. It’s onboarding, management time, tooling, and another box on the chart everyone else now has to coordinate with. Grow that way and your cost base climbs in step with your output, so you never actually get more efficient. You just get bigger.
+
+There’s another way to take on more: make the system carry it instead of the headcount.
+
+\`\`\`mermaid
+flowchart TB
+  subgraph A["Scale the org chart"]
+    direction LR
+    O1["More work"] --> O2["Add people"] --> O3["Cost rises with output"]
+  end
+  subgraph B["Scale the system"]
+    direction LR
+    S1["More work"] --> S2["Cut waste, standardise, automate"] --> S3["Capacity rises, cost flat"]
+  end
+\`\`\`
+
+I’ve run this. I once took an operation and roughly tripled the volume under management without adding a person to the team. Not by working anyone harder. I took the waste out of the process first, standardised what was left, and put automation on the parts that carried the volume. Headcount stayed flat while the output multiplied. That gap, between what you handle and what you have to staff, is where operating leverage actually lives.
+
+It matters most when a business grows by acquisition. Every company you buy turns up complete: its own finance team, its own service desk, its own HR, its own systems doing more or less what yours already do. Keep all of it and you end up running five of everything. Five payrolls, five month-end closes, five copies of the same software. The duplication is invisible day to day and enormous in aggregate. A lot of the value in an acquisition isn’t in the asset. It’s in not running five of everything once it’s yours.
+
+So the integration question is rarely “how do we keep their systems running.” It’s “which of these functions should exist once, in the centre, and which are genuinely local.” One finance platform. One service desk every new business plugs into. A shared spine the portfolio connects to. Get that right and the next acquisition is mostly a connection, not a rebuild.
+
+## This isn’t an argument against hiring
+
+Some growth genuinely needs people: judgment, relationships, a capability you don’t have yet. The point is to make headcount a decision, not a reflex. Hire where a person adds something no system can. Stop hiring where the honest answer is that the work shouldn’t exist, or the system should swallow it. And don’t consolidate so hard that you build a single point of failure; centralise the function, not the fragility.
+
+Here’s the test I’d put to any business that’s growing. If you doubled in size, how much bigger would your org chart have to get to cope? If the answer is “about double,” you’re scaling the org chart, and your costs will track your growth for as long as you do it. If the answer is “barely,” you’ve built something that scales. Most of the difference between growth that pays for itself and growth that just gets more expensive sits between those two answers.
+
+Grow the system, not the org chart. Build the spine that absorbs the next unit of work, and the business can double while the headcount barely moves.`,
+  },
 ]
 
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
