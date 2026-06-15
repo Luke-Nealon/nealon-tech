@@ -64,3 +64,23 @@ GROUP BY uri ORDER BY reads DESC;
 Assistant usage (chat requests hit the Lambda URL, not CloudFront — check Lambda/DynamoDB instead;
 the $5/day budget counter in DynamoDB table `nealon-ai-guardrails` keyed `budget#<date>` is the
 cheapest proxy for assistant activity).
+
+## Daily email digest (automated)
+
+A scheduled Lambda emails a plain-text traffic digest every day — no dashboard to log into.
+SAM app in `analytics-report/` (stack `nealon-analytics-report`, ap-southeast-2, profile `personal`).
+
+- **What it sends:** yesterday / 7-day / 30-day views + visitors, daily breakdown, top articles,
+  top pages, referrers (sources), AI-crawler hits (GPTBot/ClaudeBot/Perplexity/etc.), and assistant
+  usage (sessions/messages/tokens from `nealon-ai-guardrails`). Gracefully reports "no traffic yet".
+- **Delivery:** SNS topic → email subscription. **Confirm the subscription once** (AWS sends a
+  confirmation email on deploy). Recipient = `ReportEmail` param (default `luke@nealon.tech`).
+- **Schedule:** `cron(0 22 * * ? *)` = 22:00 UTC ≈ 08:00 Sydney (AEST; 09:00 during AEDT).
+- **No engagement/interaction time** — request logs can't see it (would need a cookieless client
+  script like Plausible/Cloudflare; deliberately not added, to honour the privacy page).
+- **Redeploy:** `cd analytics-report && sam build && sam deploy --stack-name nealon-analytics-report
+  --region ap-southeast-2 --profile personal --resolve-s3 --capabilities CAPABILITY_IAM
+  --no-confirm-changeset --parameter-overrides ReportEmail=<addr> ScheduleExpr='cron(...)'`
+- **Send one now (test):** `aws lambda invoke --function-name <ReportFunction name>
+  --region ap-southeast-2 --profile personal /tmp/out.json`
+- Dependency-free (AWS SDK v3 from the nodejs20 runtime).

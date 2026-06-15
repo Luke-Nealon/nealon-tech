@@ -1,0 +1,7 @@
+{
+  "name": "nealon-analytics-report",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Daily CloudFront-logs traffic digest for nealon.tech (Athena -> SNS).",
+  "private": true
+}
