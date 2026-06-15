@@ -29,6 +29,25 @@ const geo = () => (geoPromise ||= maxmind.open(MMDB))
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
+// The definitive list of real pages = the live sitemap. Counting human views only
+// for paths that actually exist kills scanner probes (/wp/, /wordpress/, *.php,
+// bogus /writing/<slug>) that the SPA serves a 200 for. Self-maintaining.
+async function sitemapPaths() {
+  try {
+    const res = await fetch('https://nealon.tech/sitemap.xml')
+    const xml = await res.text()
+    const set = new Set(['/'])
+    for (const m of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+      try {
+        const p = new URL(m[1]).pathname.replace(/\/$/, '') || '/'
+        set.add(p)
+        if (p !== '/') set.add(p + '.html') // CloudFront may log the rewritten path
+      } catch {}
+    }
+    return [...set]
+  } catch (e) { return [] }
+}
+
 const PAGE = `status < 400
   AND uri NOT LIKE '/assets/%' AND uri NOT LIKE '/og/%'
   AND uri NOT LIKE '%.ico' AND uri NOT LIKE '%.svg' AND uri NOT LIKE '%.png'
@@ -54,7 +73,6 @@ const NOTSCAN = `uri NOT LIKE '/.%' AND uri NOT LIKE '%.php' AND uri NOT LIKE '/
   AND uri NOT LIKE '/new%' AND uri NOT LIKE '/old%' AND uri NOT LIKE '/blog%'
   AND uri NOT LIKE '/config%' AND uri <> '/env' AND uri NOT LIKE '%for-pennies%'`
 
-const HUMAN = `${PAGE} AND ${NOTBOT} AND ${NOTSCAN}`
 const AI_BOTS = `(lower(user_agent) LIKE '%gptbot%' OR lower(user_agent) LIKE '%oai-searchbot%'
   OR lower(user_agent) LIKE '%chatgpt%' OR lower(user_agent) LIKE '%claudebot%'
   OR lower(user_agent) LIKE '%anthropic%' OR lower(user_agent) LIKE '%claude-web%'
@@ -127,6 +145,12 @@ async function assistantUsage(days) {
 export const handler = async () => {
   const today = new Date().toISOString().slice(0, 10)
   const lookup = await geo()
+
+  // human page view = real page (in sitemap) + browser-like UA. Allowlist beats blocklist.
+  const ALLOWED = await sitemapPaths()
+  const HUMAN = ALLOWED.length
+    ? `status < 400 AND ${NOTBOT} AND uri IN (${ALLOWED.map((p) => `'${p.replace(/'/g, "''")}'`).join(',')})`
+    : `${PAGE} AND ${NOTBOT} AND ${NOTSCAN}`
 
   const [h7, h30, hy, total7, daily, articles, pages, referrers, aiCrawlers, searchCrawlers, ips] = await Promise.all([
     runQuery(`SELECT count(*) views, count(DISTINCT request_ip) visitors FROM cf_logs WHERE date >= current_date - interval '7' day AND ${HUMAN}`),
