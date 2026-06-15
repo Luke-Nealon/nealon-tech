@@ -485,6 +485,49 @@ Here’s the test I’d put to any business that’s growing. If you doubled in 
 
 Grow the system, not the org chart. Build the spine that absorbs the next unit of work, and the business can double while the headcount barely moves.`,
   },
+  {
+    slug: 'hire-for-judgment',
+    category: 'Leadership & Operating Teams',
+    title: 'Hire for judgment, not the tech stack',
+    dek: 'The specific skills you hire for have a shorter and shorter shelf life. The thing that lasts — and the thing I actually interview for — is how someone thinks.',
+    date: '2026-06-15',
+    readMins: 4,
+    published: true,
+    body: `The tool you hired someone for is already going out of date. Maybe not this month, but soon. The framework they were expert in gets superseded. The platform reorganises under them. A model lands that makes half their hard-won technique irrelevant overnight. Hire purely for what someone knows how to use today and you’ve bought a depreciating asset.
+
+This has always been true in technology. It’s just faster now. What a developer needed to know to be good two years ago isn’t what they need today, and it won’t be what they need next year. I said almost exactly this to someone recently: the job you do now isn’t the job you did six months ago, and keeping up with that is relentless. If the half-life of a specific skill is measured in months, hiring for that skill is buying a problem you’ll have again soon.
+
+So I hire for judgment instead.
+
+\`\`\`mermaid
+flowchart TB
+  subgraph T["Hire for the tool"]
+    direction LR
+    T1["Today’s stack"] --> T2["Skill expires"] --> T3["Re-hire / re-train"]
+    T3 --> T1
+  end
+  subgraph J["Hire for judgment"]
+    direction LR
+    J1["New tool appears"] --> J2["Learns it fast, judges the fit"] --> J3["Capability compounds"]
+  end
+\`\`\`
+
+Judgment is the part that doesn’t expire. It’s knowing how to reason about a trade-off, how to tell whether a new tool actually fits the problem or just looks impressive, how to learn something quickly and properly, when to trust your own output and when to check it. Someone with judgment and a shallow grip on this week’s tool will outrun someone with a deep grip on last year’s — because the first picks up the new thing in a fortnight, and the second is defending an investment that has quietly stopped paying.
+
+It cuts deeper now that knowledge itself is almost free. The thing you used to hire for — the syntax, the API, the way a particular system is wired — is a token away from anyone with a model open in the next tab. What isn’t a token away is knowing which question to ask, whether the answer that comes back is actually right, and what to do with it. Critical thinking and a bit of the scientific method — form a view, test it, look honestly at what happened, change your mind — beat a memorised skill every time now, because the skill is the part that just got cheap.
+
+## How you interview for it
+
+You can’t test for judgment with a quiz on the current stack. That measures recall, which is exactly the thing that expires. I ask people how they made a hard decision, and listen for whether they reasoned it through or just followed the crowd. I ask about a time they were wrong, and what they changed afterwards. I ask how they’d size up a tool they’ve never touched. The detail of the answer matters less than the shape of the thinking behind it.
+
+None of this is an argument against expertise. The deep stuff lasts: how systems really work under the abstraction, how to debug something you don’t understand yet, how to reason about cost and risk and failure. That isn’t tool knowledge, it’s foundation — and it’s the thing that lets someone absorb the next tool fast. What expires is the surface: the particular syntax, the particular dashboard, the particular vendor. Hire for the foundation and the judgment on top of it, not the surface.
+
+And yes, sometimes you genuinely need someone who can use a specific tool on day one, because there’s a fire to put out now. Fine. But even then, weight where they’re heading over what they’ve already memorised. The person who keeps learning passes the one who peaked.
+
+The team that wins isn’t the one that was perfectly configured for last year’s technology. It’s the one that re-skills itself without being told to, because you hired people who treat a new tool as a Tuesday, not a threat. Build that team and the constant churn stops being a staffing problem and starts being an edge — because most of your competitors are still hiring for the tool.
+
+Hire for how someone thinks, not for what they currently know how to operate. The tools will keep changing. Judgment is the only line on the CV that appreciates.`,
+  },
 ]
 
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
