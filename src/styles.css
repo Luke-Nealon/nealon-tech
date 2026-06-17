@@ -1154,6 +1154,38 @@ html[data-theme='terminal'] .cta {
   letter-spacing: 0.08em;
   color: var(--accent);
 }
+.article-related {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.article-related-h {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.article-related-card {
+  display: block;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+  transition: padding-left 0.3s var(--ease);
+}
+.article-related-card:hover { padding-left: 10px; }
+.article-related-title {
+  display: block;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: 18px;
+  letter-spacing: calc(var(--display-tracking) / 2);
+  margin-bottom: 4px;
+}
+.article-related-dek { display: block; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
 .article-foot {
   display: flex;
   justify-content: space-between;

@@ -170,6 +170,11 @@ export function Article({ slug, navigate }) {
     )
   }
 
+  // self-maintaining "related": other published pieces in the same category
+  const related = publishedArticles()
+    .filter((a) => a.category === article.category && a.slug !== article.slug)
+    .slice(0, 3)
+
   return (
     <article className="article">
       <a className="writing-back" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>← All perspectives</a>
@@ -183,6 +188,22 @@ export function Article({ slug, navigate }) {
             : <div key={i} dangerouslySetInnerHTML={{ __html: marked.parse(s.text) }} />
         )}
       </div>
+      {related.length > 0 && (
+        <div className="article-related">
+          <h3 className="article-related-h">More in {article.category}</h3>
+          {related.map((a) => (
+            <a
+              key={a.slug}
+              className="article-related-card"
+              href={`/writing/${a.slug}`}
+              onClick={(e) => { e.preventDefault(); navigate(`/writing/${a.slug}`) }}
+            >
+              <span className="article-related-title">{a.title}</span>
+              <span className="article-related-dek">{a.dek}</span>
+            </a>
+          ))}
+        </div>
+      )}
       <div className="article-foot">
         <span>Luke Nealon</span>
         <a href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>More perspectives →</a>

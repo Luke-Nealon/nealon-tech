@@ -111,7 +111,7 @@ This is the same principle as knowing where AI belongs at all. Autonomy is a cos
 
 This is the trap with AI and automation right now. The technology is exciting, so teams go looking for things to automate. They pick the steps that hurt the most and make them faster. What they skip is the question that should come first: should this step exist at all?
 
-I came up through Lean and Six Sigma before I came up through automation, and the order those disciplines teach is the order that works. Before you make a process faster, you map it and you find the waste. The steps that exist only because of a decision nobody remembers. The handoffs that add a day and no value. The rework caused by a defect three steps upstream. The reports nobody reads. Most processes are full of this, and none of it should be automated. It should be deleted.
+I came up through [Lean and Six Sigma](/writing/how-lean-actually-works) before I came up through automation, and the order those disciplines teach is the order that works. Before you make a process faster, you map it and you find the waste. The steps that exist only because of a decision nobody remembers. The handoffs that add a day and no value. The rework caused by a defect three steps upstream. The reports nobody reads. Most processes are full of this, and none of it should be automated. It should be deleted.
 
 \`\`\`mermaid
 flowchart LR
@@ -570,6 +570,162 @@ And if you didn’t build it in early, which most haven’t, the same logic stil
 One caution: the controls have to be real. Chasing a certificate you don’t actually live up to turns a genuine asset into a liability the first time someone checks. The point isn’t to look secure. It’s that being genuinely secure, and able to prove it, is the foundation everything else stands on.
 
 Pour that foundation once and everything you build on it gets cheaper, faster, and easier to sell. Bolt it on later and you pay for it again every time.`,
+  },
+  {
+    slug: 'how-lean-actually-works',
+    category: 'Operating Models & Efficiency',
+    title: 'Lean: remove what doesn’t need to be there',
+    dek: 'What Lean actually is, how to run it as a continuous cycle — map, find the waste, eliminate, standardise, measure — and why removing waste beats working harder every time.',
+    date: '2026-06-16',
+    readMins: 6,
+    published: true,
+    body: `When something isn’t working well enough, the instinct is to add. Add people, add a tool, add a step to catch the problem, add effort. Lean starts from the opposite question: what’s already here that shouldn’t be? Most of the time the fastest improvement available to you isn’t doing more. It’s removing what was never needed.
+
+I came up through Lean and Six Sigma before I came up through software and AI, and it’s still the discipline underneath everything I build. It’s worth understanding properly, because it’s widely misread as "cost-cutting" or a box of tools you roll out. It’s neither.
+
+## What Lean actually is
+
+Lean came out of the Toyota Production System, but the idea travels far beyond factories. At its core it’s a way of seeing any process as a flow of work toward something a customer wants, and then relentlessly removing the parts of that flow that don’t contribute to it.
+
+The whole game rests on one distinction: value versus waste. Value is any step the customer would actually care about or pay for — the part that genuinely moves the work toward what they need. Waste is everything else. Not "everything bad" — everything that doesn’t add value, including a lot of work that feels productive.
+
+The uncomfortable part is how much of most processes is waste. When you map office work honestly, the value-adding steps are often a small fraction of the total — Lean studies routinely put the waste as high as **90%**. The rest is waiting, rework, handoffs, checking, and steps that exist because of a decision nobody remembers.
+
+<div style="margin:26px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:10px">A typical office process, by value</div>
+  <div style="display:flex;height:60px;border-radius:8px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 10%;background:#5ce1c6;color:#0a0e13;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">~10%</div>
+    <div style="flex:1;background:#1f2933;color:#dce4ec;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;letter-spacing:.02em">~90% &nbsp;waste — non-value-adding</div>
+  </div>
+  <div style="font-size:13px;line-height:1.5;color:#76828e;margin-top:8px">The mint sliver is the work a customer would actually pay for. The rest is waiting, rework, handoffs and steps nobody needs — and it's usually the overwhelming majority. Which is why speeding up the sliver barely moves anything, and attacking the waste moves everything.</div>
+</div>
+
+## The shapes waste takes
+
+Lean names the common forms of waste, and the names are useful because they train you to see them. In a factory they’re things like overproduction and excess inventory. In the knowledge and technology work most of us do, they show up as:
+
+- Waiting — work sitting in a queue for an approval, a handoff, a person.
+- Rework — fixing defects that a problem upstream caused.
+- Over-processing — doing more than the customer needs: the report nobody reads, the field nobody uses, five approvals where one would do.
+- Handoffs — every time work passes between people or systems, time and context leak out.
+- Searching — hunting for information, switching tools, re-finding what you already had.
+- Unused talent — people doing work a system should do, or never asked for the improvement they can already see.
+
+You don’t need the canonical list memorised. You need the habit of walking a process and asking, at each step: would the customer pay for this, or is it here for some other reason?
+
+## How to approach it — as a cycle, not a project
+
+This is the part people get wrong. Lean isn’t a project you run once and finish. It’s a loop you keep turning.
+
+\`\`\`mermaid
+flowchart LR
+  M["Map the work as it really is"] --> F["Find the waste"]
+  F --> E["Eliminate / redesign"]
+  E --> S["Standardise what's left"]
+  S --> Me["Measure the flow"]
+  Me --> M
+\`\`\`
+
+**Map the work as it really is** — not the official diagram, the real path, including the detours and the waiting. You usually can’t see the waste until the whole flow is in front of you.
+
+**Find the waste.** Walk the map and mark every step that doesn’t add value. Be honest; the comfortable steps are often the wasteful ones.
+
+**Eliminate or redesign.** Remove what shouldn’t exist. For what’s left, ask whether it can be simplified, combined, or made to flow without stopping. Removal first, optimisation second.
+
+**Standardise what’s left.** Once a process is genuinely better, write down the new way so it sticks and everyone works to it. Skip this and it quietly drifts back.
+
+**Measure the flow.** Then go around again. The standard you just set is the new baseline to improve from, not the finish line.
+
+That last point is the whole philosophy: continuous improvement, what Toyota calls kaizen. Small improvements, made constantly, compounding. Each loop the system gets a little better — and because the gains compound, "a little better, repeatedly" beats "a big transformation, once" almost every time.
+
+## The principles underneath it
+
+The cycle is how you run Lean. These seven principles are the values that guide it — what to optimise for as you turn the loop.
+
+<div style="margin:22px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">01</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Eliminate waste</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Remove anything a customer wouldn't pay for.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">02</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Build quality in</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Stop defects at the source; don't inspect them out later.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">03</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Create knowledge</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Treat the process as something you keep learning and writing down.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">04</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Defer commitment</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Decide as late as you responsibly can, when you know the most.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">05</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Deliver fast</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Short cycles; speed shortens feedback and exposes problems.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">06</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Respect people</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">The people doing the work see the waste first. Ask them.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px;grid-column:1 / -1">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">07</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Optimise the whole</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Improve the end-to-end flow, not one local step. A faster step feeding a longer queue improves nothing.</div>
+  </div>
+</div>
+
+## How to measure it
+
+Lean measures the flow, not the activity. Busy is not the same as productive, and most traditional metrics measure busy.
+
+- **Lead time** — how long from a request starting to it being done, including all the waiting.
+- **Cycle time** — how long the actual work takes once someone is working on it.
+- **Process efficiency** — value-adding time as a fraction of total lead time. Calculate it once and it changes how you see everything: it’s often shockingly low, single-digit percentages, which means most of the time your work is just sitting there.
+- **Rework rate** — how often something has to be done twice.
+
+The gap between cycle time and lead time is pure waiting, and waiting is usually the biggest and cheapest waste to attack. You don’t have to make anyone work faster. You have to stop the work from sitting.
+
+## Why removing waste is so powerful
+
+Here's the idea that makes it click. Your value-adding work is a small slice, so improving *it* — a faster tool, more people — barely changes the total. The waste is the big slice, so attacking *that*, for the same effort, changes everything.
+
+<div style="margin:24px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:14px">Same effort, very different result</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Speed up the value-adding work (new tool, more people)</div>
+  <div style="display:flex;width:95%;height:30px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 11%;background:#5ce1c6"></div>
+    <div style="flex:1;background:#1f2933"></div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin:5px 0 18px">Halve the ~10% that adds value &rarr; about <b style="color:#dce4ec">5% shorter overall</b>. Barely moves.</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Eliminate the waste</div>
+  <div style="display:flex;width:55%;height:30px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 18%;background:#5ce1c6"></div>
+    <div style="flex:1;background:#1f2933"></div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin-top:5px">Cut the ~90% waste in half &rarr; about <b style="color:#5ce1c6">45% shorter overall</b> — plus better quality and freed capacity.</div>
+</div>
+
+Three reasons it beats working harder.
+
+**It’s permanent and nearly free.** Speeding up a wasteful step costs money and effort, and you’ve still got the waste, now running faster. Removing the step costs you once and pays back forever. This is exactly why automating a broken process is the most expensive automation there is — you’ve cemented the waste at speed. ([Don’t automate waste](/writing/dont-automate-waste).)
+
+**It improves quality, speed and cost at the same time.** In most work those feel like trade-offs: go faster, lose quality; raise quality, spend more. Removing waste isn’t a trade-off. A handoff you delete is faster and less error-prone and cheaper all at once, because the delay and the defects and the cost were all coming from the same unnecessary step.
+
+**It creates capacity out of nothing.** Every hour of waiting or rework you remove is an hour returned, without hiring anyone. I once took a support operation, stripped the waste out of its processes, standardised what remained, and then automated the valuable parts — and tripled the volume it could handle without adding a single person. The automation got the credit; the waste removal is what made it possible. ([Scale the system, not the org chart](/writing/scale-the-system).)
+
+## The trap to avoid
+
+Lean done wrong becomes "make people work harder," which is the opposite of the point. The waste isn’t the people — it’s the friction around them: the dumb handoffs, the waiting, the rework caused upstream. Real Lean has a second pillar alongside removing waste, and it’s respect for the people doing the work, because they’re the ones who can see the waste first if you actually ask them. Strip out what makes their work harder and the speed comes for free.
+
+And don’t optimise one step in isolation. A faster step that just feeds a longer queue downstream improves nothing. You’re after the flow of the whole thing, not the local win.
+
+So before you add anything — a tool, a person, an AI, another process — walk the work as it really is and ask what shouldn’t be there. The cheapest, fastest, most durable improvement available to you is almost always removal. Then standardise it, measure it, and go around again.`,
   },
 ]
 
