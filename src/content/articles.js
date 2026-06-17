@@ -13,7 +13,8 @@ export const articles = [
     title: 'Build for the model you’ll want to replace',
     dek: 'Why the assistant on this site swaps between Claude and Nova on a dropdown — and why model independence is a board-level decision, not a developer preference.',
     date: '2026-06-14',
-    readMins: 4,
+    updated: '2026-06-17',
+    readMins: 6,
     published: true,
     body: `The assistant on this site has a dropdown. You can switch it between Claude Haiku, Claude Sonnet, and Amazon Nova in the middle of a conversation, and the answers keep coming. That isn't a party trick. It's the whole point.
 
@@ -42,6 +43,21 @@ Put an abstraction between your application and the model. On this site I use Am
 Pretending it is gets you burned the other way. The moment you abstract across providers, you're writing to the lowest common denominator. The clever provider-specific feature, the caching trick, the structured-output mode, the long-context behaviour, might be exactly what makes your product good. Sometimes the right call is to use it and accept the lock-in with your eyes open, because the value is worth the dependency. The wrong move is doing it by accident and discovering how deep the coupling goes only when you try to leave.
 
 Here's the test I apply. If this provider doubled its price or disappeared tomorrow, how long would it take to switch? If the answer is "an afternoon," you built it right. If the answer is "we can't," you'd better be getting enormous value in return, and you'd better have decided that on purpose.
+
+## When to rent, and when to lock in
+
+So the real decision isn't "abstract everything". It's knowing which parts to keep portable and which are worth marrying. The test is whether the model is the source of your edge.
+
+\`\`\`mermaid
+flowchart TD
+  Q{"Is this model the source of your edge?"}
+  Q -->|commodity step| P["Abstract it — stay portable, re-choose any time"]
+  Q -->|your actual edge| L["Lock in on purpose — take the dependency with eyes open"]
+\`\`\`
+
+For the commodity work, which is most of it — summarising, classifying, drafting — keep the model swappable and let price and quality compete for your traffic. For the one capability where a specific model's behaviour genuinely is the product, use it fully and accept the lock-in, because the value is worth the dependency. What you never want is to drift into deep coupling by accident, on the boring parts, and discover it only when you try to leave.
+
+A simple way to keep yourself honest: for each model dependency, write down what you'd do if that provider doubled its price or disappeared tomorrow. If the answer is "swap it in an afternoon," you built it right. If it's "we can't," that had better be a capability you chose to depend on, not one you backed into.
 
 ## Why it's a board-level question
 
@@ -312,6 +328,18 @@ So: it's maths. Then we got the maths to check its own work, and that quiet chan
     published: true,
     body: `AI is easy to demo and hard to ship well. A prototype that dazzles in a meeting is a different thing from a system you'd put in front of customers, on a budget, with your name on it. Over building a fair bit of the second kind, I've ended up with a short list of questions I ask before anything goes live. Each one has a longer piece behind it.
 
+\`\`\`mermaid
+flowchart TD
+  S["Shipping AI into a real product?"]
+  S --> Q1["Does it need AI at all?"]
+  S --> Q2["Is the process worth automating?"]
+  S --> Q3["Own the model, or rent it?"]
+  S --> Q4["Do you know your dependencies?"]
+  S --> Q5["What happens when it fails?"]
+  S --> Q6["Do you know what it actually is?"]
+  S --> Q7["Compliance built in, or bolted on?"]
+\`\`\`
+
 **Does it even need AI?** Most things shipped as "agents" are workflows in disguise. If you can draw the flowchart, build the flowchart. Use autonomy only where you genuinely can't predict the next step. → [Most "agents" are workflows in disguise](/writing/workflow-or-agent)
 
 **Is the process worth automating at all?** The most expensive automation makes a broken process run faster. Find and cut the waste first, then automate what's left. → [Don't automate waste](/writing/dont-automate-waste)
@@ -451,7 +479,8 @@ Search isn't dead. But it's no longer the only front door, and it's shrinking as
     title: 'Don’t scale the org chart — scale the system',
     dek: 'The reflex when work grows is to add people in proportion. The businesses that scale well grow the system instead — and nothing exposes the difference faster than growing by acquisition.',
     date: '2026-06-15',
-    readMins: 4,
+    updated: '2026-06-17',
+    readMins: 6,
     published: true,
     body: `The default answer to more work is more people. The queue gets longer, so you add someone to the queue. A new region opens, so you stand up a team for it. You buy a business and it arrives with its own finance, IT and HR, so you keep them. It’s automatic enough that most organisations never stop to ask whether the work needed a person at all, or whether the system they already had could have absorbed it.
 
@@ -475,7 +504,38 @@ I’ve run this. I once took an operation and roughly tripled the volume under m
 
 It matters most when a business grows by acquisition. Every company you buy turns up complete: its own finance team, its own service desk, its own HR, its own systems doing more or less what yours already do. Keep all of it and you end up running five of everything. Five payrolls, five month-end closes, five copies of the same software. The duplication is invisible day to day and enormous in aggregate. A lot of the value in an acquisition isn’t in the asset. It’s in not running five of everything once it’s yours.
 
+\`\`\`mermaid
+flowchart TB
+  subgraph DUP["Keep five of everything"]
+    D1["Business 1 · finance · IT · HR"]
+    D2["Business 2 · finance · IT · HR"]
+    D3["Business 3 · finance · IT · HR"]
+  end
+  subgraph ONE["One shared spine"]
+    A1["Business 1"] --> S["Shared finance · IT · core systems"]
+    A2["Business 2"] --> S
+    A3["Business 3"] --> S
+  end
+\`\`\`
+
 So the integration question is rarely “how do we keep their systems running.” It’s “which of these functions should exist once, in the centre, and which are genuinely local.” One finance platform. One service desk every new business plugs into. A shared spine the portfolio connects to. Get that right and the next acquisition is mostly a connection, not a rebuild.
+
+## What to centralise, what to leave local
+
+The trap on the other side is centralising everything and grinding the business to a halt. So the question for each function is whether it's a differentiator or a utility. Utilities should exist once; differentiators stay close to where the value is actually made.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:16px 18px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px">Centralise — one shared spine</div>
+    <div style="color:#dce4ec;font-size:14px;line-height:1.6">Finance &amp; payroll · IT &amp; identity · HR · procurement · core platforms · data &amp; reporting</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:16px 18px">
+    <div style="color:#76828e;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px">Keep local</div>
+    <div style="color:#dce4ec;font-size:14px;line-height:1.6">Customer relationships · market-specific operations · anything that IS the product</div>
+  </div>
+</div>
+
+In practice the playbook is the same each time you acquire: onboard the new business onto the shared spine, retire its duplicate functions, and measure the saving so the next integration is a known quantity rather than a debate. Done a few times, acquisitions stop adding a back office each and start plugging into one.
 
 ## This isn’t an argument against hiring
 
@@ -511,6 +571,19 @@ flowchart TB
     J1["New tool appears"] --> J2["Learns it fast, judges the fit"] --> J3["Capability compounds"]
   end
 \`\`\`
+
+<div style="margin:26px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:10px">Value over a few years, as the tools keep changing</div>
+  <svg viewBox="0 0 460 200" style="width:100%;max-width:520px;height:auto">
+    <line x1="46" y1="16" x2="46" y2="168" stroke="rgba(220,228,236,.22)" stroke-width="1"/>
+    <line x1="46" y1="168" x2="450" y2="168" stroke="rgba(220,228,236,.22)" stroke-width="1"/>
+    <polyline points="46,50 450,148" fill="none" stroke="#9aa6b2" stroke-width="3"/>
+    <polyline points="46,148 450,36" fill="none" stroke="#5ce1c6" stroke-width="3"/>
+    <text x="46" y="188" fill="#76828e" font-size="12">now</text>
+    <text x="450" y="188" fill="#76828e" font-size="12" text-anchor="end">a few years on</text>
+  </svg>
+  <div style="font-size:13px;line-height:1.55;color:#76828e;margin-top:8px"><span style="color:#5ce1c6;font-weight:700">Judgment</span> compounds — it makes every new tool faster to pick up. <span style="color:#9aa6b2;font-weight:700">A specific skill</span> decays as the stack moves on.</div>
+</div>
 
 Judgment is the part that doesn’t expire. It’s knowing how to reason about a trade-off, how to tell whether a new tool actually fits the problem or just looks impressive, how to learn something quickly and properly, when to trust your own output and when to check it. Someone with judgment and a shallow grip on this week’s tool will outrun someone with a deep grip on last year’s — because the first picks up the new thing in a fortnight, and the second is defending an investment that has quietly stopped paying.
 
