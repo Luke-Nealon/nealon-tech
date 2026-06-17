@@ -5,7 +5,18 @@ Categories match `CATEGORIES` in that file; the index is topic-keyed and shows t
 order (exec-altitude themes first, AI & Automation as the deep bench).
 
 **Voice:** Luke's — opinionated, plain, run through the `humanizer` skill before publishing.
-Each piece makes an argument, not a summary. Ground claims in real experience. ~500–900 words.
+Each piece makes an argument, not a summary. Ground claims in real experience.
+
+**Two formats:**
+- **Short opinion piece** — ~500–900 words, 3–4 min, one argument, maybe one diagram. The default.
+- **Long-form (flagship)** — the standard Luke wants for the bigger pieces, set by example:
+  **`how-lean-actually-works`**. ~1,200–1,500 words, 6–7 min, a full arc (define → break down →
+  how-to cycle → measure → why it matters → pitfalls), and **3–4 native visuals**: a Mermaid
+  diagram plus custom HTML/CSS data visuals embedded in the markdown body (proportion bars,
+  labelled grids, before/after comparisons); QuickChart only for true charts. **Never** generative
+  image models (Nano Banana / gpt-image / DALL·E) for diagrams — they garble text and look
+  off-brand; Claude has no image gen. Cross-link related pieces inline; the auto "More in
+  <category>" footer (Writing.jsx) handles the rest.
 
 **House rule:** no employer or client names on the site. Every topic below is tellable
 anonymously — "a major SD-WAN platform", "a global call centre" — as the firsts ledger does.
