@@ -31,13 +31,13 @@ interview material.
 
 ---
 
-## Published (11), by category
+## Published (16), by category
 
 **Technology Strategy** — Build for the model you'll want to replace · When the answer replaces the search box
-**Operating Models & Efficiency** — Don't automate waste
-**Security, Risk & Trust** — List every AI tool you depend on. Now find the backup.
+**Operating Models & Efficiency** — Don't automate waste · Don't scale the org chart — scale the system · Lean: remove what doesn't need to be there
+**Security, Risk & Trust** — List every AI tool you depend on. Now find the backup. · Build security in from the start · Cite me, don't train on me
 **AI & Automation** — Most "agents" are workflows in disguise · The most powerful AI tool is already on your machine · Your agent harness should repair itself · It's maths, not magic (Part 1) · The maths learned to check its work (Part 2) · Applied AI: what to think about before you ship · No servers, AWS-grade uptime, cents a month
-**Leadership & Operating Teams** — *(none yet — empty bucket, doesn't render on the index until written into)*
+**Leadership & Operating Teams** — Hire for judgment, not the tech stack
 
 ---
 
@@ -52,7 +52,7 @@ interview material.
 
 ### Operating Models & Efficiency  *(priority — thin)*
 - [ ] **We tripled what we managed without adding headcount** — capacity as an architecture problem, not a hiring one.
-- [ ] **Don't scale the org chart — scale the system** — de-duplication / shared services (the Mulpha consolidation argument).
+- [x] **Don't scale the org chart — scale the system** — shipped (de-duplication / shared services; the Mulpha consolidation argument).
 - [ ] **Insourcing the night shift** — replacing outsourced after-hours work with L1 automation; the economics of automate-vs-outsource.
 - [ ] **I measure technology by queues removed, not projects delivered.**
 
@@ -67,9 +67,9 @@ interview material.
 - [ ] **What a CFO should ask before funding an AI project** — the ROI / payback lens.
 - [ ] **AI won't shrink your headcount — it'll change what your headcount does.** (augment-not-replace.)
 
-### Leadership & Operating Teams  *(priority — empty)*
+### Leadership & Operating Teams  *(priority — thin)*
 - [ ] **Running a team across four time zones without burning anyone out.**
-- [ ] **Hiring for judgment when the technology changes every six months** — what you told Marcus on the call.
+- [x] **Hiring for judgment when the technology changes every six months** — shipped as "Hire for judgment, not the tech stack".
 - [ ] **Decision-making under uncertainty.**
 - [ ] **The 30-day pivot: leading delivery under a hard deadline** — the COVID PWA story as a leadership piece, not a tech one.
 - [ ] **I build with the team, not above it** — the boardroom-to-codebase ethos as a leadership stance.
