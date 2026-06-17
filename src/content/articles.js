@@ -391,7 +391,7 @@ The chat runs on a single AWS Lambda function behind a streaming Function URL. L
 
 The model layer is Amazon Bedrock. No GPU to rent, no model to host, no inference server to keep warm. I call the Converse API, pay per token, and the model stays a swappable component.
 
-The knowledge base is the new part. S3 Vectors is a vector store built into S3 itself. My articles are chunked, embedded, and stored as vectors, and the Lambda queries them to find the passages relevant to a question. Until recently, doing this meant running a vector database: an OpenSearch cluster or a managed service with nodes that run continuously and bill continuously. S3 Vectors removes that. The vectors sit in S3, you query on demand, and there's no cluster to operate. For a corpus this size it's effectively free.
+The knowledge base is the new part. S3 Vectors is a vector store built into S3 itself. My articles are chunked, embedded, and stored as vectors, and the Lambda queries them to find the passages relevant to a question. Until recently, doing this meant running a vector database: an OpenSearch cluster or a managed service with nodes that run continuously and bill continuously. S3 Vectors removes that. The vectors sit in S3, you query on demand, and there's no cluster to operate. At this size it's effectively free.
 
 The guardrails use DynamoDB in on-demand mode: a per-session rate limit and a hard daily budget. Pay per request, nothing when idle.
 
@@ -909,6 +909,86 @@ Because the ground is moving, and this is how you stand on the right part of it.
 And there’s a smaller, truer reason. This is what applying AI with judgment looks like at the smallest possible scale. No policy team, no vendor, no six-month working group — just understanding the machinery well enough to draw a line exactly where you want it, then drawing it. The whole thing took an afternoon: an hour to work out what each crawler really does, the rest to make my own site honour the distinction. The scarce part wasn’t the code. It was knowing the line was there to be drawn.
 
 That’s the move I’d want from anyone running technology: not “AI good” or “AI bad,” but *which part, on what terms, and can our own systems hold that line* — the same instinct as [building the control in from the start](/writing/build-security-in) rather than bolting it on later. If you want to govern how AI uses what your organisation produces, this is the rehearsal: small enough to do yourself in an afternoon, and a faithful model of the larger version. Start with the question none of the default settings ask for you — of everything reading you, what is each one actually doing, and which of those did you agree to?`,
+  },
+  {
+    slug: 'knowledge-is-a-graph',
+    category: 'Technology Strategy',
+    title: 'Your knowledge is a graph, not a folder',
+    dek: 'Most organisations store knowledge as a pile of documents and call it done. The value they’re leaving on the table is in the connections between them — and AI just made those cheap to keep.',
+    date: '2026-06-17',
+    readMins: 6,
+    published: true,
+    body: `I just built a map of everything I’ve written on this site. Not a list — a map: every article a dot, every connection between them a line, the whole body of thinking as one shape you can take in at once. ([Here it is.](/graph)) It took an afternoon. What it showed me was more interesting than the picture: a few of the strongest connections were ones I had never deliberately made.
+
+That gap — between the structure you put in and the structure that was there all along — is the whole case for knowledge graphs. And it’s a case most organisations get backwards.
+
+## A folder is not a map
+
+Most institutional knowledge lives in folders. Documents, wikis, decks, tickets — each a self-contained file, filed somewhere, found later by searching its text. That’s a library, and it answers one kind of question well: *find me the document about X.*
+
+It answers a different kind of question badly, or not at all: *how does X relate to Y? what connects these three decisions? what sits near this idea that I didn’t know to look for?* A library can’t tell you, because the moment each document was filed, the thing that connected it to the others was thrown away. The folder keeps the nouns and discards the verbs.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">A folder</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Documents you search by text</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Answers “find the doc about X.” Each file is an island; how they connect was discarded at filing time. The nouns, none of the verbs.</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">A graph</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Things, plus how they relate</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Answers “how do X and Y connect, what’s near this.” The relationships are first-class, so you can ask questions of the connections, not just the contents.</div>
+  </div>
+</div>
+
+## The value was in the edges
+
+Here’s the part worth holding onto as a leader: the value of your organisation’s knowledge isn’t only in the documents. A lot of it — sometimes most of it — is in the relationships between them. Which incident led to which fix. Which customer conversation seeded which product call. Which two teams keep solving the same problem without knowing it. Those are edges, not nodes, and a folder has nowhere to put an edge. So they live in people’s heads, and they leave when the people do.
+
+A knowledge graph is just the decision to keep the edges. Nodes are the things — documents, people, concepts, decisions. Edges are how they relate, and you can give them types: *caused by*, *decided in*, *owned by*, *similar to*. Once the relationships are first-class, the verbs a folder throws away become things you can actually query.
+
+\`\`\`mermaid
+flowchart LR
+  I["Incident #42"] -->|caused by| C["Config change"]
+  C -->|decided in| M["Architecture review"]
+  M -->|owned by| T["Platform team"]
+  I -->|similar to| I2["Incident #17"]
+\`\`\`
+
+## Two ways to draw the edges
+
+You build the edges two ways, and you want both.
+
+**Explicit** — the links people already draw. Every reference to another doc, every tag on a ticket, every cited decision is an edge a human asserted on purpose. It’s high-signal and free; you just have to stop discarding it.
+
+**Inferred** — the connections nobody drew but that are there anyway. This is where AI earns its place. Embed each document as a vector — the same trick behind modern search — and the ones that land close together are *about* similar things, whether or not anyone linked them. That’s how my own map found connections I never made: the explicit links were mine; the surprising ones came from the embeddings.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">Explicit edges</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">The links people already draw</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">References, tags, citations. A human asserted each one on purpose — high-signal and free. The only work is to stop throwing them away.</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">Inferred edges</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">The connections nobody drew</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">From embeddings: documents that sit close are about similar things, linked or not. The latent structure that was there all along.</div>
+  </div>
+</div>
+
+## Why this matters more now, not less
+
+For years knowledge graphs were a niche enterprise thing — heavy to build, hard to justify. AI flipped that on two fronts at once.
+
+It made them cheap to build. Pulling entities and relationships out of messy documents used to be a research project; now it’s a prompt. And it made them more valuable to have, because of how AI retrieves. The standard retrieval most assistants run — plain [RAG](/writing/serverless-rag-for-cents) — finds the handful of text chunks most similar to your question and answers from those. It works, but it’s flat: it sees documents, not the connections between them. Graph-aware retrieval lets the model traverse — start at the relevant node, then follow the edges to what’s related — so the answer reflects how things connect, not only what matches the words. The assistant on this site does the flat version today; the map is the structure a next version reasons over.
+
+## The question for a leader
+
+You don’t need to commission a graph database to take the point. The point is a question: *is our institutional knowledge a searchable pile, or a connected map?* Almost everywhere, it’s the pile — and the edges, the most valuable part, are quietly evaporating into the gaps between systems and the heads of people who will eventually move on.
+
+Structuring knowledge is unglamorous work, which is exactly why it gets skipped, and exactly why it compounds for the few who don’t skip it. ([Structure beats infrastructure](/writing/skills-over-harnesses) is the same lesson one level down.) Start small and concrete: take one set of documents that actually matters — incidents, customer calls, architecture decisions — and next time, keep the links between them instead of filing each one away and forgetting how they connect.
+
+I started with my own writing, because it was what I had to hand. The map is [right here](/graph). The most useful thing on it isn’t any single dot. It’s the lines.`,
   },
 ]
 
