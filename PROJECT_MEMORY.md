@@ -106,8 +106,25 @@ a MutationObserver on `data-theme` recolours live on toggle. Per-node hues from 
   red "This page contains the following errors" box.
 
 ## SEO / crawler / OG cards
-- `scripts/gen-seo.mjs` generates `public/robots.txt`, `sitemap.xml`, `llms.txt` — **re-run after
-  adding articles.** Per-page `document.title` set client-side.
+- `scripts/gen-seo.mjs` generates `sitemap.xml` + `llms.txt` — **re-run after adding articles.**
+  (It does NOT touch `robots.txt` — that's a hand-maintained static file.) Per-page
+  `document.title` set client-side.
+- **Crawler policy (2026-06-17):** stance = **allow AI search/retrieval crawlers that cite & link
+  back, opt out of bulk AI *training* crawlers.** `public/robots.txt` (static, shipped by
+  `deploy.sh`) carries the polite rules. Allowed incl. OAI-SearchBot, Claude-SearchBot/Claude-User,
+  ChatGPT-User, Perplexity(-User), Amzn-SearchBot/Amzn-User, MistralAI-*, meta-externalfetcher,
+  YouBot, DuckAssistBot, classic search, and **Google-Extended (deliberately allowed — keeps us
+  citable in Gemini; Google bundles training+grounding under one token, can't split).** Blocked
+  (training): GPTBot, ClaudeBot, Applebot-Extended, CCBot, Amazonbot, meta-externalagent,
+  Bytespider, cohere-training-data-crawler, AI2Bot, Webzio-Extended, omgilibot, PanguBot, GrokBot.
+- **Edge enforcement (no WAF, on cost grounds):** the `nealon-writing-rewrite` CloudFront Function
+  (`infra/cf-writing-rewrite.js`) also **403s honest-UA training crawlers** — list mirrors the
+  robots.txt Disallow set MINUS the control-only tokens (Applebot-Extended, Google-Extended) which
+  never send requests. Spoofed browser-UA crawlers (Bytespider/Grok stealth) are NOT caught — that
+  needs WAF ASN/IP rules (~$6–7/mo); accepted trade-off. **Deploy the function:**
+  `bash infra/deploy-cf-function.sh` (updates DEVELOPMENT → publishes LIVE; the dist association
+  points at LIVE so it propagates — no `update-distribution`). Keep the function's block list and
+  robots.txt Disallow set in sync.
 - **Per-article OG meta:** `scripts/prerender-og.mjs` runs as part of `npm run build` (after
   `vite build`): clones `dist/index.html` into `dist/writing/<slug>.html` (+ `dist/writing.html`)
   with article-specific title/description/og:*/twitter:*/canonical/published_time. A **CloudFront
