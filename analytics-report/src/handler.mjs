@@ -81,6 +81,29 @@ const AI_BOTS = `(lower(user_agent) LIKE '%gptbot%' OR lower(user_agent) LIKE '%
   OR lower(user_agent) LIKE '%amazonbot%' OR lower(user_agent) LIKE '%cohere%'
   OR lower(user_agent) LIKE '%diffbot%' OR lower(user_agent) LIKE '%youbot%')`
 
+// Training crawlers we opted out of (robots.txt Disallow + edge 403). MIRROR of the
+// block list in infra/cf-writing-rewrite.js — keep the two in sync. 403 = enforcement
+// landed; 'served' = a hit that slipped through (pre-deploy, or a UA not in the function).
+const TRAINING_BOTS = `(lower(user_agent) LIKE '%gptbot%' OR lower(user_agent) LIKE '%claudebot%'
+  OR lower(user_agent) LIKE '%ccbot%' OR lower(user_agent) LIKE '%bytespider%'
+  OR lower(user_agent) LIKE '%amazonbot%' OR lower(user_agent) LIKE '%cohere%'
+  OR lower(user_agent) LIKE '%meta-externalagent%' OR lower(user_agent) LIKE '%ai2bot%'
+  OR lower(user_agent) LIKE '%pangubot%' OR lower(user_agent) LIKE '%omgili%'
+  OR lower(user_agent) LIKE '%webzio%' OR lower(user_agent) LIKE '%grokbot%')`
+const TRAINING_LABEL = `CASE
+  WHEN lower(user_agent) LIKE '%gptbot%' THEN 'GPTBot'
+  WHEN lower(user_agent) LIKE '%claudebot%' THEN 'ClaudeBot'
+  WHEN lower(user_agent) LIKE '%ccbot%' THEN 'CCBot'
+  WHEN lower(user_agent) LIKE '%bytespider%' THEN 'Bytespider'
+  WHEN lower(user_agent) LIKE '%amazonbot%' THEN 'Amazonbot'
+  WHEN lower(user_agent) LIKE '%cohere%' THEN 'Cohere'
+  WHEN lower(user_agent) LIKE '%meta-externalagent%' THEN 'meta-externalagent'
+  WHEN lower(user_agent) LIKE '%ai2bot%' THEN 'AI2Bot'
+  WHEN lower(user_agent) LIKE '%pangubot%' THEN 'PanguBot'
+  WHEN lower(user_agent) LIKE '%omgili%' OR lower(user_agent) LIKE '%webzio%' THEN 'Webz.io'
+  WHEN lower(user_agent) LIKE '%grokbot%' THEN 'GrokBot'
+  ELSE 'other' END`
+
 async function runQuery(sql) {
   const { QueryExecutionId: id } = await athena.send(new StartQueryExecutionCommand({
     QueryString: sql,
@@ -152,7 +175,7 @@ export const handler = async () => {
     ? `status < 400 AND ${NOTBOT} AND uri IN (${ALLOWED.map((p) => `'${p.replace(/'/g, "''")}'`).join(',')})`
     : `${PAGE} AND ${NOTBOT} AND ${NOTSCAN}`
 
-  const [h7, h30, hy, total7, daily, articles, pages, referrers, aiCrawlers, searchCrawlers, ips] = await Promise.all([
+  const [h7, h30, hy, total7, daily, articles, pages, referrers, aiCrawlers, searchCrawlers, ips, enforce] = await Promise.all([
     runQuery(`SELECT count(*) views, count(DISTINCT request_ip) visitors FROM cf_logs WHERE date >= current_date - interval '7' day AND ${HUMAN}`),
     runQuery(`SELECT count(*) views, count(DISTINCT request_ip) visitors FROM cf_logs WHERE date >= current_date - interval '30' day AND ${HUMAN}`),
     runQuery(`SELECT count(*) views, count(DISTINCT request_ip) visitors FROM cf_logs WHERE date = current_date - interval '1' day AND ${HUMAN}`),
@@ -176,6 +199,8 @@ export const handler = async () => {
       FROM cf_logs WHERE date >= current_date - interval '7' day AND ${AI_BOTS} GROUP BY 1 ORDER BY hits DESC`),
     runQuery(`SELECT count(*) hits FROM cf_logs WHERE date >= current_date - interval '7' day AND (lower(user_agent) LIKE '%googlebot%' OR lower(user_agent) LIKE '%bingbot%' OR lower(user_agent) LIKE '%applebot%' OR lower(user_agent) LIKE '%duckduckbot%' OR lower(user_agent) LIKE '%yandex%' OR lower(user_agent) LIKE '%baidu%')`),
     runQuery(`SELECT request_ip, count(*) hits FROM cf_logs WHERE date >= current_date - interval '7' day AND ${HUMAN} GROUP BY request_ip`),
+    runQuery(`SELECT ${TRAINING_LABEL} bot, CASE WHEN status = 403 THEN 'blocked' ELSE 'served' END outcome, count(*) hits
+      FROM cf_logs WHERE date >= current_date - interval '7' day AND ${TRAINING_BOTS} GROUP BY 1, 2 ORDER BY 1`),
   ])
 
   const v7 = n(h7[0]?.views), u7 = n(h7[0]?.visitors)
@@ -183,6 +208,13 @@ export const handler = async () => {
   const vy = n(hy[0]?.views), uy = n(hy[0]?.visitors)
   const filtered = Math.max(0, n(total7[0]?.views) - v7)
   const assistant = await assistantUsage(7)
+
+  // crawler-policy enforcement: the training crawlers we opted out of, split 403 vs served
+  const enf = {}
+  for (const r of enforce) { (enf[r.bot] ||= { blocked: 0, served: 0 })[r.outcome] += n(r.hits) }
+  const enfRows = Object.entries(enf).sort((a, b) => (b[1].blocked + b[1].served) - (a[1].blocked + a[1].served))
+  const enfBlocked = enfRows.reduce((s, [, v]) => s + v.blocked, 0)
+  const enfServed = enfRows.reduce((s, [, v]) => s + v.served, 0)
 
   // geolocate human visitor IPs -> country
   const byCountry = {}
@@ -226,7 +258,11 @@ export const handler = async () => {
     ${ctyUrl ? `<div style="margin:14px 0"><img src="${ctyUrl}" width="640" alt="visitors by country" style="max-width:100%;border:1px solid #eee;border-radius:6px"></div>` : tbl('Visitors by country (7d)', rows(topCountries, (c) => li(esc(c.country), c.visitors)))}
     ${tbl('Top pages (7d, human)', rows(pages, (p) => li(esc(cleanUri(p.uri)), p.hits)))}
     ${tbl('Where they came from (7d)', referrers.length ? rows(referrers, (r) => li(esc(r.ref), r.hits)) : `<tr><td style="font:13px Arial;color:#999;padding:4px 0">No external referrers yet — LinkedIn app traffic usually shows as direct.</td></tr>`)}
-    ${tbl('AI crawlers (7d) — AIs indexing you for citation', rows(aiCrawlers, (c) => li(esc(c.label), c.hits)) + li('<i>Search crawlers (Google/Bing/Apple…)</i>', n(searchCrawlers[0]?.hits)))}
+    ${tbl('AI crawlers seen (7d) — by user-agent', rows(aiCrawlers, (c) => li(esc(c.label), c.hits)) + li('<i>Search crawlers (Google/Bing/Apple…)</i>', n(searchCrawlers[0]?.hits)))}
+    ${tbl('Training crawlers — opted out (7d) · 403 = blocked at edge',
+      rows(enfRows, ([bot, v]) => li(esc(bot), `${v.blocked}× <b>403</b> · ${v.served}× served`)) +
+      li('<i>Total</i>', `<b>${enfBlocked}</b>× 403 · ${enfServed}× served`))}
+    <div style="font:12px Arial;color:#999;margin:4px 2px 0">Compliant bots stop crawling once they re-read robots.txt, so both columns should trend toward 0; lingering <b>403</b>s are non-compliant honest-UA crawlers. Spoofed browser-UAs can't be counted here.</div>
     ${assistant ? tbl('Assistant (7d)', li('Sessions / messages', `${assistant.sessions} / ${assistant.messages}`) + li('Tokens', assistant.tokens.toLocaleString())) : ''}
     `
   }
@@ -252,7 +288,8 @@ export const handler = async () => {
   T.push(`30 days:   ${v30} views / ${u30} visitors`, '')
   T.push('Top countries (7d): ' + (topCountries.map((c) => `${c.country} ${c.visitors}`).join(', ') || 'none'))
   T.push('Top articles (7d): ' + (articles.map((a) => `${cleanUri(a.uri).replace('/writing/', '')} ${a.reads}`).join(', ') || 'none'))
-  T.push('AI crawlers (7d): ' + (aiCrawlers.map((c) => `${c.label} ${c.hits}`).join(', ') || 'none'))
+  T.push('AI crawlers seen (7d): ' + (aiCrawlers.map((c) => `${c.label} ${c.hits}`).join(', ') || 'none'))
+  T.push(`Training crawlers opted-out (7d): ${enfBlocked} blocked (403), ${enfServed} served`)
   if (assistant) T.push(`Assistant (7d): ${assistant.sessions} sessions, ${assistant.messages} messages, ${assistant.tokens} tokens`)
 
   const subject = (v7 > 0 ? `nealon.tech: ${v7} human views, ${u7} visitors (7d)` : 'nealon.tech: no human traffic yet (7d)').slice(0, 100)

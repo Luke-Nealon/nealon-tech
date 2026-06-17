@@ -73,8 +73,11 @@ SAM app in `analytics-report/` (stack `nealon-analytics-report`, ap-southeast-2,
 - **What it sends:** human views/visitors (yesterday / 7d / 30d) with bots filtered out and the
   filtered count shown; **graphs** (daily-trend bar, top-articles bar, visitors-by-country bar) via
   QuickChart; top pages; referrers; AI-crawler hits (GPTBot/ClaudeBot/Perplexity/…) split from
-  search crawlers; and assistant usage from `nealon-ai-guardrails`. Human-vs-bot split is heuristic
-  (user-agent + scanner-path filters). Gracefully reports "no traffic yet".
+  search crawlers; **training-crawler enforcement** (the opted-out training bots split
+  403-blocked vs served — mirrors the block list in `infra/cf-writing-rewrite.js` + robots.txt,
+  added 2026-06-17 to watch the crawler policy land); and assistant usage from
+  `nealon-ai-guardrails`. Human-vs-bot split is heuristic (user-agent + scanner-path filters).
+  Gracefully reports "no traffic yet".
 - **Visitor countries:** accurate, from a bundled **DB-IP Lite Country** mmdb (`src/dbip-country.mmdb`,
   CC BY 4.0) read with the `maxmind` npm package — **IPs are resolved inside the Lambda, never sent
   out.** No literal choropleth map (the free QuickChart choropleth was unreliable; a country bar
