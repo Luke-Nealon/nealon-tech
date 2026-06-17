@@ -96,6 +96,23 @@ Coevolve RAG pattern). Scope = "AI topics Luke has written about + the assistant
 - Long-form flagships follow the **Lean article standard**: ~1.2–1.5k words, 3–4 native visuals
   (Mermaid + HTML/CSS), **no generative image models**.
 
+## /graph (knowledge graph)
+- Interactive node-link map of all published articles at **`/graph`** (nav label "Map"),
+  rendered natively with **cytoscape** (lazy-loaded chunk; themed off the live CSS vars + a
+  MutationObserver on `data-theme`, same pattern as `src/Mermaid.jsx`, so it recolours on the
+  Control/Terminal toggle). Nodes link to `/writing/<slug>`; hover isolates a node's
+  neighbourhood. Component `src/Graph.jsx`, route + "Map" nav in `src/App.jsx`, `.graph-*`
+  styles in `src/styles.css`.
+- **Data:** `scripts/gen-graph.mjs` generates `public/graph.json` — nodes = published articles;
+  edges = authored cross-links **+** top-3 **Titan-embedding** semantic neighbours (the SAME
+  embeddings as the RAG assistant), with an isolated-node rescue so nothing floats. Run **on
+  demand** (it calls Bedrock), NOT in the build: `AWS_PROFILE=personal node scripts/gen-graph.mjs`
+  — **re-run after adding/editing articles** (alongside the RAG ingest), then `./deploy.sh`
+  (ships `graph.json` no-cache + invalidates `/graph` + `/graph.json`).
+- The bare `/graph` route resolves via the CloudFront **403/404 → /index.html** SPA fallback
+  (no prerender needed). Deps added: `cytoscape` (runtime), `@aws-sdk/client-bedrock-runtime`
+  (build tooling, like satori).
+
 ## Mermaid theming (`src/Mermaid.jsx`)
 One shared component themes ALL article diagrams + chat diagrams. Uses mermaid `theme:'base'` with
 themeVariables computed from the live CSS vars, so diagrams match the active Control/Terminal theme;

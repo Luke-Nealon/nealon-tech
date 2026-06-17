@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import useReveal from './hooks/useReveal.js'
 import Assistant from './Assistant.jsx'
 import { WritingIndex, Article } from './Writing.jsx'
+import GraphView from './Graph.jsx'
 import { hero, links, firsts, notes, about, assistant, footer } from './content.js'
 
 const THEMES = ['control', 'terminal']
@@ -135,6 +136,7 @@ function Header({ navigate, onHome }) {
         <a href="/#firsts" onClick={onHome ? undefined : (e) => go(e, '/#firsts')}>Firsts</a>
         <a href="/#notes" onClick={onHome ? undefined : (e) => go(e, '/#notes')}>Notes</a>
         <a href="/writing" onClick={(e) => go(e, '/writing')}>Perspectives</a>
+        <a href="/graph" onClick={(e) => go(e, '/graph')}>Map</a>
         <a href="/#about" onClick={onHome ? undefined : (e) => go(e, '/#about')}>About</a>
         <a href="/#contact" onClick={onHome ? undefined : (e) => go(e, '/#contact')}>Contact</a>
       </nav>
@@ -332,6 +334,7 @@ export default function App() {
   let view
   if (path.startsWith('/writing/')) view = <Article slug={decodeURIComponent(path.slice('/writing/'.length))} navigate={navigate} />
   else if (path === '/writing') view = <main><WritingIndex navigate={navigate} /></main>
+  else if (path === '/graph') view = <main><GraphView navigate={navigate} /></main>
   else view = <Home navigate={navigate} />
 
   return (
