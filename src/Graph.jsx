@@ -32,7 +32,18 @@ function toHsl({ r, g, b }) {
   }
   return { h: h * 360, s, l }
 }
-const hsl = (h, s, l) => `hsl(${Math.round(((h % 360) + 360) % 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%)`
+// HSL -> hex. cytoscape's colour parser does NOT accept modern space-separated
+// hsl() ("hsl(167 55% 62%)"), so hand it hex instead or every node renders grey.
+function hslHex(h, s, l) {
+  h = ((h % 360) + 360) % 360
+  const a = s * Math.min(l, 1 - l)
+  const f = (n) => {
+    const k = (n + h / 30) % 12
+    const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))
+    return Math.round(255 * c).toString(16).padStart(2, '0')
+  }
+  return `#${f(0)}${f(8)}${f(4)}`
+}
 
 // one cohesive colour per category, fanned around the live theme-accent hue
 function categoryColors(cats) {
@@ -40,9 +51,12 @@ function categoryColors(cats) {
   const spread = [0, 50, -44, 100, 154]
   const s = Math.min(0.7, Math.max(0.46, base.s))
   const out = {}
-  cats.forEach((c, i) => { out[c] = hsl(base.h + (spread[i] ?? i * 40), s, 0.62) })
+  cats.forEach((c, i) => { out[c] = hslHex(base.h + (spread[i] ?? i * 40), s, 0.62) })
   return out
 }
+
+const HUB_DEGREE = 3   // nodes this connected stay labelled at rest
+const LABEL_ZOOM = 1.15 // zoom past this and every label appears
 
 export default function GraphView({ navigate }) {
   const boxRef = useRef(null)
@@ -73,48 +87,65 @@ export default function GraphView({ navigate }) {
       const ink = cssVar('--ink', '#dce4ec')
       const line = cssVar('--line', 'rgba(220,228,236,.13)')
       const mono = cssVar('--mono', 'monospace')
+      const bg = cssVar('--bg', '#0a0e13')
       const deg = {}; data.nodes.forEach((n) => (deg[n.id] = 0)); data.edges.forEach((e) => { deg[e.source]++; deg[e.target]++ })
       const elements = [
-        ...data.nodes.map((n) => ({ data: { id: n.id, label: n.label, url: n.url, deg: deg[n.id], color: palette[n.category] || accent } })),
+        ...data.nodes.map((n) => ({
+          data: { id: n.id, label: n.label, url: n.url, deg: deg[n.id], color: palette[n.category] || accent },
+          classes: deg[n.id] >= HUB_DEGREE ? 'hub' : '',
+        })),
         ...data.edges.map((e, i) => ({ data: { id: 'e' + i, source: e.source, target: e.target, type: e.type } })),
       ]
       if (cyRef.current) { cyRef.current.destroy(); cyRef.current = null }
       const cy = cytoscape({
         container: boxRef.current,
         elements,
-        minZoom: 0.3, maxZoom: 2.5, wheelSensitivity: 0.22,
-        layout: { name: 'cose', animate: false, padding: 30, nodeRepulsion: 9000, idealEdgeLength: 95, nodeOverlap: 18, gravity: 0.32, randomize: true },
+        minZoom: 0.35, maxZoom: 3, wheelSensitivity: 0.22,
+        layout: { name: 'cose', animate: false, padding: 40, nodeRepulsion: 16000, idealEdgeLength: 125, nodeOverlap: 26, gravity: 0.25, componentSpacing: 140, randomize: true },
         style: [
           { selector: 'node', style: {
-            'background-color': 'data(color)', 'background-opacity': 0.92,
-            width: 'mapData(deg, 1, 7, 16, 46)', height: 'mapData(deg, 1, 7, 16, 46)',
-            'border-width': 1.5, 'border-color': 'data(color)', 'border-opacity': 0.85,
-            label: 'data(label)', color: ink, 'font-family': mono, 'font-size': 10.5,
-            'text-wrap': 'wrap', 'text-max-width': 124, 'text-valign': 'bottom', 'text-margin-y': 5,
-            'min-zoomed-font-size': 7,
+            'background-color': 'data(color)', 'background-opacity': 0.95,
+            width: 'mapData(deg, 1, 7, 18, 50)', height: 'mapData(deg, 1, 7, 18, 50)',
+            'border-width': 1.5, 'border-color': 'data(color)', 'border-opacity': 0.9,
+            label: 'data(label)', color: ink, 'font-family': mono, 'font-size': 10,
+            'text-wrap': 'wrap', 'text-max-width': 104, 'text-valign': 'bottom', 'text-margin-y': 5,
+            'text-background-color': bg, 'text-background-opacity': 0.8, 'text-background-padding': 3, 'text-background-shape': 'roundrectangle',
+            'text-opacity': 0, 'min-zoomed-font-size': 6,
           } },
+          // labels appear for hubs, when zoomed in, or on hover (see handlers)
+          { selector: 'node.hub, node.zoomed, node.near', style: { 'text-opacity': 1 } },
           { selector: 'edge', style: { 'curve-style': 'bezier', 'line-color': line, width: 1 } },
           { selector: 'edge[type="link"]', style: { width: 1.6, 'line-color': accent, 'line-opacity': 0.5, 'target-arrow-shape': 'triangle', 'target-arrow-color': accent, 'arrow-scale': 0.75 } },
           { selector: 'edge[type="similar"]', style: { 'line-style': 'dashed', 'line-color': line, width: 1 } },
-          { selector: '.dim', style: { opacity: 0.1 } },
-          { selector: '.lit', style: { 'border-width': 3, 'border-color': accent, 'border-opacity': 1 } },
+          { selector: '.dim', style: { opacity: 0.08 } },
+          { selector: 'node.lit', style: { 'border-width': 3, 'border-color': accent, 'border-opacity': 1, 'text-opacity': 1 } },
         ],
       })
       cyRef.current = cy
-      cy.ready(() => cy.fit(undefined, 38))
+
+      // labels declutter by default and reveal as you zoom in — scales to many nodes
+      const syncZoomLabels = () => {
+        const on = cy.zoom() >= LABEL_ZOOM
+        cy.batch(() => { on ? cy.nodes().addClass('zoomed') : cy.nodes().removeClass('zoomed') })
+      }
+      cy.on('zoom', syncZoomLabels)
+      cy.ready(() => { cy.fit(undefined, 40); syncZoomLabels() })
+
       const box = boxRef.current
       cy.on('tap', 'node', (evt) => { const url = evt.target.data('url'); if (url) navRef.current(url) })
       cy.on('mouseover', 'node', (evt) => {
         box.style.cursor = 'pointer'
         const nh = evt.target.closedNeighborhood()
-        cy.elements().addClass('dim'); nh.removeClass('dim'); evt.target.addClass('lit')
+        cy.elements().addClass('dim')
+        nh.removeClass('dim'); nh.nodes().addClass('near'); evt.target.addClass('lit')
       })
-      cy.on('mouseout', 'node', () => { box.style.cursor = 'grab'; cy.elements().removeClass('dim lit') })
+      cy.on('mouseout', 'node', () => { box.style.cursor = 'grab'; cy.elements().removeClass('dim near lit') })
     }).catch(() => { if (!cancelled) setErr(true) })
     return () => { cancelled = true; if (cyRef.current) { cyRef.current.destroy(); cyRef.current = null } }
   }, [data, theme])
 
   const palette = data ? categoryColors(data.categories) : {}
+  const resetView = () => cyRef.current?.animate({ fit: { padding: 40 } }, { duration: 250 })
 
   return (
     <section className="sec wrap graph-page" id="graph">
@@ -125,8 +156,8 @@ export default function GraphView({ navigate }) {
       </div>
       <p className="lede reveal in">
         Every published piece is a node, wired two ways: the links I drew between articles, and
-        semantic similarity from the same embeddings that power the assistant on this site. Drag to
-        explore, hover to isolate a piece, click a node to read it.
+        semantic similarity from the same embeddings that power the assistant on this site. Scroll to
+        zoom, drag to pan, hover a node to reveal its title and connections, click to read it.
       </p>
       {err ? (
         <p className="writing-empty">
@@ -144,8 +175,11 @@ export default function GraphView({ navigate }) {
             <span className="graph-legend-item"><span className="graph-line graph-line-link" /> linked</span>
             <span className="graph-legend-item"><span className="graph-line graph-line-sim" /> related</span>
           </div>
-          <div className="graph-canvas" ref={boxRef} role="img" aria-label="Knowledge graph of the articles" />
-          <p className="graph-hint">{data ? `${data.nodes.length} pieces · ${data.edges.length} connections` : 'building graph…'}</p>
+          <div className="graph-stage">
+            <div className="graph-canvas" ref={boxRef} role="img" aria-label="Knowledge graph of the articles" />
+            {data && <button type="button" className="graph-reset" onClick={resetView}>reset view</button>}
+          </div>
+          <p className="graph-hint">{data ? `${data.nodes.length} pieces · ${data.edges.length} connections · hubs stay labelled, the rest appear as you zoom or hover` : 'building graph…'}</p>
         </>
       )}
     </section>
