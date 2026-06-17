@@ -3,6 +3,11 @@
 Personal site for Luke Nealon. React + Vite, static output, no runtime dependencies
 beyond React. All copy lives in `src/content.js`.
 
+> **Working memory / setup source of truth:** [`PROJECT_MEMORY.md`](PROJECT_MEMORY.md) — AI
+> assistant backend, RAG/ingest, SEO/OG pipeline, DNS/email, cost guardrails, and the hard-won
+> gotchas. Read it first in a fresh session. (Analytics → `ANALYTICS.md`; article backlog →
+> `WRITING-BACKLOG.md`.)
+
 ## Develop
 
 ```sh
