@@ -105,10 +105,6 @@ export default function GraphView({ navigate }) {
         container: boxRef.current,
         elements,
         minZoom: 0.35, maxZoom: 3, wheelSensitivity: 0.22,
-        // fcose refining from the circle seed above: randomize:false keeps it deterministic
-        // (identical every load); strong gravity pulls the disconnected pieces into one
-        // centred blob that fills the canvas instead of stranding a cluster in a corner.
-        layout: { name: 'fcose', quality: 'proof', randomize: false, animate: false, packComponents: false, nodeSeparation: 95, idealEdgeLength: 90, nodeRepulsion: 4500, gravity: 0.45, gravityRange: 3.5, padding: 38 },
         style: [
           { selector: 'node', style: {
             'background-color': 'data(color)', 'background-opacity': 0.95,
@@ -136,7 +132,28 @@ export default function GraphView({ navigate }) {
         cy.batch(() => { on ? cy.nodes().addClass('zoomed') : cy.nodes().removeClass('zoomed') })
       }
       cy.on('zoom', syncZoomLabels)
-      cy.ready(() => { cy.fit(undefined, 40); syncZoomLabels() })
+
+      // Run fcose (deterministic: randomize:false refining the circle seed above), then
+      // stretch the settled layout horizontally to the canvas aspect ratio. A roughly-square
+      // network otherwise gets fit() to the canvas HEIGHT, leaving the wide sides empty.
+      const fitToCanvas = () => {
+        const box = boxRef.current
+        if (box && box.clientWidth && box.clientHeight) {
+          const bb = cy.nodes().boundingBox()
+          const canvasAspect = box.clientWidth / box.clientHeight
+          const layoutAspect = bb.w && bb.h ? bb.w / bb.h : canvasAspect
+          if (layoutAspect < canvasAspect) {
+            const sx = Math.min(2.8, canvasAspect / layoutAspect)
+            const cx = (bb.x1 + bb.x2) / 2
+            cy.batch(() => cy.nodes().forEach((n) => { const p = n.position(); n.position({ x: cx + (p.x - cx) * sx, y: p.y }) }))
+          }
+        }
+        cy.fit(undefined, 36)
+        syncZoomLabels()
+      }
+      const lay = cy.layout({ name: 'fcose', quality: 'proof', randomize: false, animate: false, packComponents: false, nodeSeparation: 95, idealEdgeLength: 90, nodeRepulsion: 4500, gravity: 0.45, gravityRange: 3.5, padding: 38 })
+      lay.one('layoutstop', fitToCanvas)
+      lay.run()
 
       const box = boxRef.current
       cy.on('tap', 'node', (evt) => { const url = evt.target.data('url'); if (url) navRef.current(url) })
