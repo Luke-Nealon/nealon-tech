@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 // lazy-load cytoscape only when the graph page is actually viewed (keeps it out of the
 // main bundle — same trick as Mermaid.jsx with mermaid).
 let cyPromise = null
-const loadCy = () => (cyPromise ||= import('cytoscape').then((m) => m.default))
+const loadCy = () => (cyPromise ||= Promise.all([import('cytoscape'), import('cytoscape-fcose')])
+  .then(([cyMod, fcoseMod]) => { const cytoscape = cyMod.default; cytoscape.use(fcoseMod.default); return cytoscape }))
 
 const cssVar = (n, f) => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || f
 
@@ -90,9 +91,12 @@ export default function GraphView({ navigate }) {
       const bg = cssVar('--bg', '#0a0e13')
       const deg = {}; data.nodes.forEach((n) => (deg[n.id] = 0)); data.edges.forEach((e) => { deg[e.source]++; deg[e.target]++ })
       const elements = [
-        ...data.nodes.map((n) => ({
+        ...data.nodes.map((n, i) => ({
           data: { id: n.id, label: n.label, url: n.url, deg: deg[n.id], color: palette[n.category] || accent },
           classes: deg[n.id] >= HUB_DEGREE ? 'hub' : '',
+          // deterministic circle seed -> fcose refines from this into a balanced blob
+          // (avoids fcose's spectral init degenerating to a diagonal on a disconnected graph)
+          position: { x: 300 * Math.cos((2 * Math.PI * i) / data.nodes.length), y: 300 * Math.sin((2 * Math.PI * i) / data.nodes.length) },
         })),
         ...data.edges.map((e, i) => ({ data: { id: 'e' + i, source: e.source, target: e.target, type: e.type } })),
       ]
@@ -101,7 +105,10 @@ export default function GraphView({ navigate }) {
         container: boxRef.current,
         elements,
         minZoom: 0.35, maxZoom: 3, wheelSensitivity: 0.22,
-        layout: { name: 'cose', animate: false, padding: 40, nodeRepulsion: 16000, idealEdgeLength: 125, nodeOverlap: 26, gravity: 0.25, componentSpacing: 140, randomize: true },
+        // fcose refining from the circle seed above: randomize:false keeps it deterministic
+        // (identical every load); strong gravity pulls the disconnected pieces into one
+        // centred blob that fills the canvas instead of stranding a cluster in a corner.
+        layout: { name: 'fcose', quality: 'proof', randomize: false, animate: false, packComponents: false, nodeSeparation: 95, idealEdgeLength: 90, nodeRepulsion: 4500, gravity: 0.45, gravityRange: 3.5, padding: 38 },
         style: [
           { selector: 'node', style: {
             'background-color': 'data(color)', 'background-opacity': 0.95,
