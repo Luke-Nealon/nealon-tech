@@ -800,6 +800,116 @@ And don’t optimise one step in isolation. A faster step that just feeds a long
 
 So before you add anything — a tool, a person, an AI, another process — walk the work as it really is and ask what shouldn’t be there. The cheapest, fastest, most durable improvement available to you is almost always removal. Then standardise it, measure it, and go around again.`,
   },
+  {
+    slug: 'cite-dont-train',
+    category: 'Security, Risk & Trust',
+    title: 'Cite me, don’t train on me',
+    dek: 'The crawlers we call “AI” are doing three different jobs — and you can now say yes to some and no to others. Why I let assistants quote and link this site but opted it out of model training, and the honest limits of where that line holds.',
+    date: '2026-06-17',
+    readMins: 6,
+    published: true,
+    body: `When this site gets read, the logs tell me who did the reading. More and more, the answer isn’t a who. It’s a what — ClaudeBot, GPTBot, OAI-SearchBot, PerplexityBot — a steady stream of machines working through my writing so that some model, somewhere, can do something with it later.
+
+The reflex splits two ways. Slam the door: block every AI crawler and keep your words to yourself. Or leave it wide open and trust that being in the training data pays off somehow. Both reflexes skip the question worth asking, which is more interesting than either: what is each of these machines actually *doing* with the page, and which of those things do I want?
+
+## Three jobs wearing one label
+
+The crawlers we lump together as “AI” are doing at least three different jobs.
+
+Some are collecting **training data** — pages to fold into the next model’s weights. This is the one people picture when they say AI is scraping their site. It takes your words and gives nothing back: your sentence might shape an answer a year from now, with no link, no name, no trace it was ever yours.
+
+Some are building a **search index** — pages they can retrieve and *cite* when a user asks a question. This is the engine behind ChatGPT search, Perplexity and the rest. When it uses your page, it shows your page: a link, a source, a reader who might click through.
+
+And some are **live fetches** — a model reading your page right now, because a real person just asked it something your page answers. That is the moment a citation actually appears in someone’s chat window.
+
+Until recently these arrived under one banner, and you took them or left them as a set. That has changed, and it’s the change the whole decision turns on. OpenAI, Anthropic, Google and the others now run these as separate crawlers with separate names — which makes them separate decisions. You can say yes to one and no to another.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">Training crawler</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Takes — gives nothing back</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Folds your words into the next model. No link, no credit, no reader. You can’t watch it happen and can’t undo it.</div>
+    <div style="color:#76828e;font-size:11px;margin-top:8px">GPTBot · ClaudeBot · CCBot</div>
+    <div style="color:#9aa6b2;font-weight:700;font-size:13px;margin-top:8px">→ Opt out</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">Citation crawler</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Uses you by sending readers</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Indexes the page so an assistant can quote and link it. The old search-engine deal: it shows you to answer someone.</div>
+    <div style="color:#76828e;font-size:11px;margin-top:8px">OAI-SearchBot · Claude-User · PerplexityBot</div>
+    <div style="color:#5ce1c6;font-weight:700;font-size:13px;margin-top:8px">→ Allow</div>
+  </div>
+</div>
+
+## The line I actually want
+
+Seen that way, the line draws itself. I’m happy, glad even, to have an assistant read this site and point a reader to it. That’s the deal I’ve always had with a search engine: index me, and in return send people my way. Citation is just attribution with a link, and attribution is the thing writers want.
+
+Training is the other deal. My words go in and nothing comes back — no reader sent my way, no name on the output. I’m not precious about it. But “use my work, uncredited, to build something you’ll sell” is a bargain I’d like to be asked about first. Given the choice, I decline.
+
+So: allow the crawlers whose whole job is to surface and link me, opt out of the ones that only absorb. That distinction now lives in two places.
+
+The first is robots.txt — the note every well-behaved crawler reads on its way in. Mine says, in effect, *training crawlers stay out, citation crawlers welcome*:
+
+\`\`\`
+# training crawlers — opt out
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+
+# citation crawlers — welcome
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+\`\`\`
+
+The second is enforcement — because a sign on the door only stops the people who read signs. A small function at my CDN edge checks each visitor’s name against the opt-out list and returns a polite 403 to the training crawlers before they ever reach a page.
+
+\`\`\`mermaid
+flowchart TB
+  R["A crawler arrives"] --> P["robots.txt — the polite ask"]
+  P --> Q{"Does it comply?"}
+  Q -->|"compliant"| L["Training bot leaves"]
+  Q -->|"ignores the ask"| E{"Edge: training user-agent?"}
+  E -->|"yes"| B["403 — blocked"]
+  E -->|"no"| S["200 — cited and served"]
+\`\`\`
+
+## Where the line gets blurry — and why that’s the point
+
+Here’s where it stops being a config snippet and becomes a judgment call. That’s the part I care about. A clean rule with no caveats is usually a rule you haven’t finished understanding. This one has four worth saying out loud.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">It’s an honour system</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Compliant crawlers obey. Determined ones spoof a browser and walk straight in. The edge 403 catches the lazy; only network-level rules stop the rest.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">Google won’t split</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Google runs training and answer-citation off one switch. Opt out of its training and you lose its citation too — so I left that one on, on purpose.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">Attribution isn’t enforceable</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">“Use it only if you credit me” isn’t something a text file can compel. The nearest you get is allowing only the crawlers whose job is to credit you.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">The past stays put</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Whatever’s already in a model’s weights is staying there. This governs what happens from here, not what already happened.</div>
+  </div>
+</div>
+
+None of those four make the line worthless. They make it *honest*. I know exactly what it does — opts me cleanly out of the compliant trainers, keeps me in the citation lane — and exactly what it doesn’t: stop a determined impersonator, or claw back what’s already learned. A control you understand the edges of beats ten you assume are airtight.
+
+## Why bother, if the door doesn’t fully lock?
+
+Because the ground is moving, and this is how you stand on the right part of it. For twenty years the deal was simple: let Google index you, get found in search. That deal is being rewritten in real time. [The answer is replacing the search box](/writing/when-the-answer-replaces-the-search-box), and the new prize is being the source an assistant *cites*, not the tenth blue link. Citation is the visibility that’s about to matter. Training is value you hand over to power someone else’s product. Opting into one and out of the other isn’t paranoia; it’s reading where the value is going and standing there.
+
+And there’s a smaller, truer reason. This is what applying AI with judgment looks like at the smallest possible scale. No policy team, no vendor, no six-month working group — just understanding the machinery well enough to draw a line exactly where you want it, then drawing it. The whole thing took an afternoon: an hour to work out what each crawler really does, the rest to make my own site honour the distinction. The scarce part wasn’t the code. It was knowing the line was there to be drawn.
+
+That’s the move I’d want from anyone running technology: not “AI good” or “AI bad,” but *which part, on what terms, and can our own systems hold that line* — the same instinct as [building the control in from the start](/writing/build-security-in) rather than bolting it on later. If you want to govern how AI uses what your organisation produces, this is the rehearsal: small enough to do yourself in an afternoon, and a faithful model of the larger version. Start with the question none of the default settings ask for you — of everything reading you, what is each one actually doing, and which of those did you agree to?`,
+  },
 ]
 
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)

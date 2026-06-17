@@ -5,6 +5,7 @@
 This site holds field notes on building AI that earns its place, and a live AI assistant that runs retrieval-augmented generation over these articles and explains its own architecture.
 
 ## Field notes (articles)
+- [Cite me, don’t train on me](https://nealon.tech/writing/cite-dont-train): The crawlers we call “AI” are doing three different jobs — and you can now say yes to some and no to others. Why I let assistants quote and link this site but opted it out of model training, and the honest limits of where that line holds.
 - [Lean: remove what doesn’t need to be there](https://nealon.tech/writing/how-lean-actually-works): What Lean actually is, how to run it as a continuous cycle — map, find the waste, eliminate, standardise, measure — and why removing waste beats working harder every time.
 - [The maths learned to check its work](https://nealon.tech/writing/the-maths-learned-to-check-its-work): Part two. Reasoning models still don’t think — but they predict their way through the working, and weigh it, before they answer. That shift is most of the recent leap.
 - [Applied AI: what to think about before you ship](https://nealon.tech/writing/applied-ai-field-guide): A short field guide for developers and systems engineers putting AI into real products — the questions I’d want answered before anything goes live.

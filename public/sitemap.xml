@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://nealon.tech/</loc><lastmod>2026-06-16</lastmod></url>
-  <url><loc>https://nealon.tech/writing</loc><lastmod>2026-06-16</lastmod></url>
+  <url><loc>https://nealon.tech/</loc><lastmod>2026-06-17</lastmod></url>
+  <url><loc>https://nealon.tech/writing</loc><lastmod>2026-06-17</lastmod></url>
+  <url><loc>https://nealon.tech/writing/cite-dont-train</loc><lastmod>2026-06-17</lastmod></url>
   <url><loc>https://nealon.tech/writing/how-lean-actually-works</loc><lastmod>2026-06-16</lastmod></url>
   <url><loc>https://nealon.tech/writing/the-maths-learned-to-check-its-work</loc><lastmod>2026-06-15</lastmod></url>
   <url><loc>https://nealon.tech/writing/applied-ai-field-guide</loc><lastmod>2026-06-15</lastmod></url>
