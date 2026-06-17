@@ -65,14 +65,6 @@ export default function GraphView({ navigate }) {
   const navRef = useRef(navigate); navRef.current = navigate
   const [data, setData] = useState(null)
   const [err, setErr] = useState(false)
-  const [theme, setTheme] = useState(() => document.documentElement.getAttribute('data-theme') || 'control')
-
-  // recolour live when the site theme is toggled (same pattern as Mermaid.jsx)
-  useEffect(() => {
-    const obs = new MutationObserver(() => setTheme(document.documentElement.getAttribute('data-theme') || 'control'))
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-    return () => obs.disconnect()
-  }, [])
 
   useEffect(() => {
     fetch('/graph.json').then((r) => r.json()).then(setData).catch(() => setErr(true))
@@ -166,7 +158,7 @@ export default function GraphView({ navigate }) {
       cy.on('mouseout', 'node', () => { box.style.cursor = 'grab'; cy.elements().removeClass('dim near lit') })
     }).catch(() => { if (!cancelled) setErr(true) })
     return () => { cancelled = true; if (cyRef.current) { cyRef.current.destroy(); cyRef.current = null } }
-  }, [data, theme])
+  }, [data])
 
   const palette = data ? categoryColors(data.categories) : {}
   const resetView = () => cyRef.current?.animate({ fit: { padding: 40 } }, { duration: 250 })

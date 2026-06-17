@@ -1,8 +1,6 @@
 /* ————————————————————————————————————————————————
-   nealon.tech — two themes, one brand
-   control (default): cold graphite, signal mint, Schibsted Grotesk
-   terminal: phosphor HUD, Chakra Petch, CRT atmosphere
-   Switch via the .themer pill or ?theme= URL param.
+   nealon.tech — brand palette
+   cold graphite, signal mint, Schibsted Grotesk
    ———————————————————————————————————————————————— */
 
 :root {
@@ -30,27 +28,6 @@
   --display-font: var(--grotesk);
   --display-weight: 600;
   --display-tracking: -0.025em;
-}
-
-html[data-theme='terminal'] {
-  /* phosphor HUD: deep blue-black, signal green, Chakra Petch display */
-  --bg: #04080a;
-  --bg-soft: #081016;
-  --ink: #d8f6e9;
-  --ink-dim: #a3d6c2;
-  --muted: #6f9c8d;
-  --line: rgba(150, 255, 210, 0.14);
-  --accent: #2bf5a0;
-  --accent-2: #8affd1;
-  --sel-fg: #04080a;
-  --glow1: rgba(43, 245, 160, 0.08);
-  --glow2: rgba(64, 170, 255, 0.05);
-  --ghost-stroke: rgba(43, 245, 160, 0.11);
-  --grain-opacity: 0.04;
-  --grain-blend: overlay;
-  --display-font: 'Chakra Petch', var(--sans);
-  --display-weight: 600;
-  --display-tracking: -0.01em;
 }
 
 * {
@@ -637,172 +614,6 @@ footer {
   font-size: 12px;
   color: var(--muted);
   opacity: 0.75;
-}
-
-/* ————— Theme switcher ————— */
-
-.themer {
-  position: fixed;
-  bottom: 16px;
-  left: 16px;
-  z-index: 70;
-  display: flex;
-  gap: 2px;
-  padding: 4px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--bg) 84%, transparent);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.themer button {
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  background: transparent;
-  border: 0;
-  border-radius: 999px;
-  padding: 6px 11px;
-  cursor: pointer;
-  transition: color 0.25s ease, background 0.25s ease;
-}
-
-.themer button:hover {
-  color: var(--ink);
-}
-
-.themer button.on {
-  background: var(--accent);
-  color: var(--sel-fg);
-}
-
-/* ————— Terminal theme extras ————— */
-
-/* faint engineering grid behind everything */
-html[data-theme='terminal'] .page::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(43, 245, 160, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(43, 245, 160, 0.035) 1px, transparent 1px);
-  background-size: 44px 44px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* CRT scanlines + sweeping beam — hidden outside terminal theme */
-.fx {
-  display: none;
-}
-
-html[data-theme='terminal'] .fx {
-  display: block;
-  position: fixed;
-  pointer-events: none;
-}
-
-html[data-theme='terminal'] .fx-scan {
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.22) 0px,
-    rgba(0, 0, 0, 0.22) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  opacity: 0.4;
-  z-index: 61;
-  animation: flicker 4s steps(2) infinite;
-}
-
-html[data-theme='terminal'] .fx-beam {
-  left: 0;
-  right: 0;
-  top: -18%;
-  height: 140px;
-  background: linear-gradient(180deg, transparent, rgba(43, 245, 160, 0.07), transparent);
-  z-index: 62;
-  animation: beam 9s linear infinite;
-}
-
-@keyframes flicker {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.33; }
-}
-
-@keyframes beam {
-  0% { top: -18%; }
-  100% { top: 112%; }
-}
-
-/* typed-out kicker */
-html[data-theme='terminal'] .kick-text {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  max-width: 100%;
-  width: 52ch;
-  animation: typing 2.1s steps(52, end) 0.35s both;
-}
-
-@keyframes typing {
-  from { width: 0; }
-  to { width: 52ch; }
-}
-
-/* on narrow screens the fixed-width typewriter clips — wrap the full text instead */
-@media (max-width: 720px) {
-  html[data-theme='terminal'] .kick-text {
-    white-space: normal;
-    width: auto;
-    max-width: 100%;
-    overflow: visible;
-    animation: none;
-  }
-}
-
-/* blinking cursor after the name */
-html[data-theme='terminal'] .name::after {
-  content: '_';
-  color: var(--accent);
-  margin-left: 0.06em;
-  animation: blink 1.1s steps(1) infinite;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* prompt prefixes + phosphor glow */
-html[data-theme='terminal'] .sec-head h2::before {
-  content: '> ';
-  color: var(--accent);
-}
-
-html[data-theme='terminal'] .row .yr::before { content: '['; opacity: 0.6; }
-html[data-theme='terminal'] .row .yr::after { content: ']'; opacity: 0.6; }
-
-html[data-theme='terminal'] .name em,
-html[data-theme='terminal'] .cta em {
-  text-shadow: 0 0 22px rgba(43, 245, 160, 0.4);
-}
-
-html[data-theme='terminal'] .row:hover h3,
-html[data-theme='terminal'] .note h3:hover {
-  text-shadow: 0 0 14px rgba(43, 245, 160, 0.45);
-}
-
-/* mono display sizes need a touch less room */
-html[data-theme='terminal'] .name {
-  font-size: clamp(50px, 9.6vw, 126px);
-}
-
-html[data-theme='terminal'] .cta {
-  font-size: clamp(46px, 8.6vw, 108px);
 }
 
 /* ————— Assistant demo section ————— */
@@ -1659,16 +1470,6 @@ html[data-theme='terminal'] .cta {
     opacity: 1;
   }
 
-  html[data-theme='terminal'] .fx-scan,
-  html[data-theme='terminal'] .fx-beam,
-  html[data-theme='terminal'] .kick-text,
-  html[data-theme='terminal'] .name::after {
-    animation: none;
-  }
-
-  html[data-theme='terminal'] .kick-text {
-    width: auto;
-  }
 }
 
 /* ---- /graph — knowledge graph over the articles ---- */

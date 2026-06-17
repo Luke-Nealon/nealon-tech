@@ -5,38 +5,6 @@ import { WritingIndex, Article } from './Writing.jsx'
 import GraphView from './Graph.jsx'
 import { hero, links, firsts, notes, about, assistant, footer } from './content.js'
 
-const THEMES = ['control', 'terminal']
-
-function ThemeSwitcher() {
-  const [theme, setTheme] = useState(() => {
-    const fromUrl = new URLSearchParams(window.location.search).get('theme')
-    if (fromUrl && THEMES.includes(fromUrl)) return fromUrl
-    const stored = localStorage.getItem('theme')
-    return THEMES.includes(stored) ? stored : 'control'
-  })
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
-    localStorage.setItem('theme', theme)
-  }, [theme])
-
-  return (
-    <div className="themer" role="group" aria-label="Colour theme">
-      {THEMES.map((t) => (
-        <button
-          key={t}
-          type="button"
-          className={t === theme ? 'on' : ''}
-          aria-pressed={t === theme}
-          onClick={() => setTheme(t)}
-        >
-          {t}
-        </button>
-      ))}
-    </div>
-  )
-}
-
 const NAV_SECTIONS = [
   { id: 'top', label: 'Top' },
   { id: 'firsts', label: 'Firsts' },
@@ -344,10 +312,6 @@ export default function App() {
       {view}
       <Footer />
       <Assistant navigate={navigate} />
-      <ThemeSwitcher />
-      {/* terminal-theme atmosphere: CRT scanlines + sweeping beam (display:none elsewhere) */}
-      <div className="fx fx-scan" aria-hidden="true" />
-      <div className="fx fx-beam" aria-hidden="true" />
     </div>
   )
 }

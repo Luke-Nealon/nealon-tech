@@ -98,9 +98,10 @@ Coevolve RAG pattern). Scope = "AI topics Luke has written about + the assistant
 
 ## /graph (knowledge graph)
 - Interactive node-link map of all published articles at **`/graph`** (nav label "Map"),
-  rendered natively with **cytoscape** (lazy-loaded chunk; themed off the live CSS vars + a
-  MutationObserver on `data-theme`, same pattern as `src/Mermaid.jsx`, so it recolours on the
-  Control/Terminal toggle). Nodes link to `/writing/<slug>`; hover isolates a node's
+  rendered natively with **cytoscape** (lazy-loaded chunk + `cytoscape-fcose` layout; themed off
+  the live CSS vars — the single `control` brand palette). Layout is deterministic (fcose
+  `randomize:false` refining a circle seed) and stretches to the canvas aspect so it fills the
+  width. Nodes link to `/writing/<slug>`; hover isolates a node's
   neighbourhood. Component `src/Graph.jsx`, route + "Map" nav in `src/App.jsx`, `.graph-*`
   styles in `src/styles.css`.
 - **Data:** `scripts/gen-graph.mjs` generates `public/graph.json` — nodes = published articles;
@@ -113,10 +114,16 @@ Coevolve RAG pattern). Scope = "AI topics Luke has written about + the assistant
   (no prerender needed). Deps added: `cytoscape` (runtime), `@aws-sdk/client-bedrock-runtime`
   (build tooling, like satori).
 
+## Theme — single `control` brand palette (terminal removed 2026-06-17)
+The site is **one theme**: `control` (cold graphite + signal mint, Schibsted Grotesk), defined in
+`:root` in `src/styles.css`. The old `terminal` theme + the theme switcher + CRT atmosphere (`.fx*`)
++ Chakra Petch font were removed; there is no `data-theme` attribute or toggle anymore. Components
+still read colours from the live CSS vars (theme-agnostic), so re-introducing themes later is easy.
+
 ## Mermaid theming (`src/Mermaid.jsx`)
 One shared component themes ALL article diagrams + chat diagrams. Uses mermaid `theme:'base'` with
-themeVariables computed from the live CSS vars, so diagrams match the active Control/Terminal theme;
-a MutationObserver on `data-theme` recolours live on toggle. Per-node hues from an analogous palette.
+themeVariables computed from the live CSS vars (the single `control` palette). Per-node hues from an
+analogous palette.
 - **GOTCHA — do NOT revert:** the per-node recolour (`colourize()`) MUST use lenient HTML parsing
   (`div.innerHTML = svg` → manipulate → `root.outerHTML`). An earlier strict
   `DOMParser('image/svg+xml')` + XMLSerializer version choked on non-strict-XML SVGs and rendered a

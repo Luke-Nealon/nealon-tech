@@ -126,16 +126,6 @@ let diagramSeq = 0
 export default function Mermaid({ code }) {
   const [svg, setSvg] = useState('')
   const [err, setErr] = useState(false)
-  const [theme, setTheme] = useState(() => document.documentElement.getAttribute('data-theme') || 'control')
-
-  // recolour diagrams live when the site theme is toggled
-  useEffect(() => {
-    const obs = new MutationObserver(() => {
-      setTheme(document.documentElement.getAttribute('data-theme') || 'control')
-    })
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-    return () => obs.disconnect()
-  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -147,7 +137,7 @@ export default function Mermaid({ code }) {
       .then(({ svg }) => { if (!cancelled) setSvg(colourize(svg, buildPalette(cssVar('--accent', '#5ce1c6')))) })
       .catch(() => { if (!cancelled) setErr(true) })
     return () => { cancelled = true }
-  }, [code, theme])
+  }, [code])
 
   if (err) return <pre className="asst-code">{code}</pre>
   if (!svg) return <div className="asst-diagram-loading">rendering diagram…</div>
