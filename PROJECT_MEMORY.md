@@ -130,9 +130,10 @@ analogous palette.
   red "This page contains the following errors" box.
 
 ## SEO / crawler / OG cards
-- `scripts/gen-seo.mjs` generates `sitemap.xml` + `llms.txt` — **re-run after adding articles.**
-  (It does NOT touch `robots.txt` — that's a hand-maintained static file.) Per-page
-  `document.title` set client-side.
+- `scripts/gen-seo.mjs` generates `sitemap.xml` + `llms.txt` — local & deterministic, so
+  **`deploy.sh` runs it automatically** before the build (no need to remember after adding
+  articles); still runnable standalone. (It does NOT touch `robots.txt` — that's a hand-maintained
+  static file.) Per-page `document.title` set client-side.
 - **Crawler policy (2026-06-17):** stance = **allow AI search/retrieval crawlers that cite & link
   back, opt out of bulk AI *training* crawlers.** `public/robots.txt` (static, shipped by
   `deploy.sh`) carries the polite rules. Allowed incl. OAI-SearchBot, Claude-SearchBot/Claude-User,

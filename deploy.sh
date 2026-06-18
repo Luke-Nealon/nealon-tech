@@ -7,11 +7,12 @@ PROFILE=personal
 BUCKET=nealon-tech-site-389901108572
 DISTRIBUTION=E2G1CF1OWQH84U
 
-# Regenerate per-page OG social cards before building (local satori render —
-# deterministic, no AWS, no cost) so an article or copy change can't ship a stale
-# social card. Deliberately NOT here: gen-graph.mjs calls Bedrock ($) and must be
-# run manually when articles change — see PROJECT_MEMORY.md.
-node scripts/gen-og-images.mjs
+# Regenerate committed, content-derived assets before building — both are local,
+# deterministic (no git churn), and need no AWS/cost, so an article or copy change
+# can't ship a stale social card, sitemap, or llms.txt. Deliberately NOT here:
+# gen-graph.mjs calls Bedrock ($) and must be run manually — see PROJECT_MEMORY.md.
+node scripts/gen-og-images.mjs   # branded OG social cards -> public/og/*.png
+node scripts/gen-seo.mjs         # sitemap.xml + llms.txt  -> public/
 
 npm run build
 
