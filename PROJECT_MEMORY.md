@@ -157,9 +157,12 @@ analogous palette.
   per-article meta while the SPA still hydrates. `deploy.sh` uploads `writing*.html` no-cache.
   - **GOTCHA** in `prerender-og.mjs` `setMeta`: match the FULL `property="og:image"` (with quotes)
     or it also clobbers `og:image:width/height`.
-- **Per-article OG images:** `scripts/gen-og-images.mjs` (run **on-demand**, NOT in build:
-  `node scripts/gen-og-images.mjs`) uses **satori + @resvg/resvg-js** to render branded 1200×630
-  PNGs → `public/og/<slug>.png`.
+- **Per-page OG images:** `scripts/gen-og-images.mjs` uses **satori + @resvg/resvg-js** to render
+  branded 1200×630 PNGs → `public/og/<slug>.png` (+ `perspectives.png`, `about.png`). It is
+  **deterministic** (regenerating unchanged content yields byte-identical PNGs, so no git churn) and
+  needs **no AWS/cost** — so `deploy.sh` now runs it automatically before the build; a copy/article
+  change can't ship a stale card. Still runnable standalone: `node scripts/gen-og-images.mjs`.
+  Contrast with `gen-graph.mjs`, which calls Bedrock ($) and stays **manual**.
   - **Font GOTCHA:** use the **static** Schibsted Grotesk 600 `.woff` from Fontsource in
     `scripts/fonts/` — the Google *variable*-font TTF crashes satori's opentype fork on the fvar
     table. IBM Plex Mono static TTFs are fine.
