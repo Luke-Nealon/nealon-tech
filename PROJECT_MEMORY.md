@@ -114,6 +114,23 @@ Coevolve RAG pattern). Scope = "AI topics Luke has written about + the assistant
   (no prerender needed). Deps added: `cytoscape` (runtime), `@aws-sdk/client-bedrock-runtime`
   (build tooling, like satori).
 
+## Home page + /about page (structure as of 2026-06-18)
+- **Home (`/`)** — single-scroll sections in `src/App.jsx`: Hero → **01 "Who I am"** (the `about`
+  bio + facts, then an "Early, on purpose" *teaser card* linking to `/about#track-record`) →
+  **02 Positions** → **03 Perspectives/Writing** → **04 Live demo (assistant)** → footer Contact.
+  Top nav (5): Positions · Perspectives · Knowledge map · About · Contact. Right-rail page-dots
+  mirror the sections (desktop only); the section eyebrow numbers are 01–04.
+- **`/about`** — dedicated page (`AboutPage` in `App.jsx`): `<h1>` "Who I am" bio + facts, then the
+  full **"Early, on purpose" career timeline** (`firsts.rows`, 2011→2025, anchor `id="track-record"`).
+  The home page only *teases* the timeline — the full list lives here.
+- **Copy split in `content.js`:** `firsts.teaser` = the home teaser line; `firsts.lede` = the /about
+  timeline lede; `firsts.rows` = anonymised career milestones (employer/client names stripped;
+  source `~/dev/resume`). The home teaser reuses the `.graph-teaser` card style.
+- **/about OG/meta** is prerendered like articles: `prerender-og.mjs` emits `dist/about.html`
+  (title/description/og:*/twitter:*/canonical), `gen-og-images.mjs` renders `public/og/about.png`,
+  and the `nealon-writing-rewrite` CloudFront function rewrites `/about → /about.html`. `deploy.sh`
+  uploads `about.html` no-cache and invalidates `/about` + `/about.html`.
+
 ## Theme — single `control` brand palette (terminal removed 2026-06-17)
 The site is **one theme**: `control` (cold graphite + signal mint, Schibsted Grotesk), defined in
 `:root` in `src/styles.css`. The old `terminal` theme + the theme switcher + CRT atmosphere (`.fx*`)
@@ -180,3 +197,16 @@ analogous palette.
 - **No analytics scripts, no tracking cookies** — deliberate, to honour `/privacy.html`. All traffic
   insight comes server-side from CloudFront logs via Athena (see `ANALYTICS.md`). No engagement /
   time-on-page metric (would need a client script — not added on purpose).
+
+## Open threads (as of 2026-06-18 — trim as done)
+- **Authenticated tools subdomain** (e.g. `tools.nealon.tech`): private little web apps behind a
+  login, for family/select users, to keep cost/sensitive services off the public internet. Not yet
+  designed — candidates: Cloudflare Access / Cognito hosted UI / CloudFront-function basic auth,
+  per-feature cost guardrails like the assistant's $5/day kill-switch. (Also in cross-session memory.)
+- **`/about` timeline — optional extra entries** drafted but not added: V2 client portal; certified
+  compliance (ISO 27001 + GDPR + external pen-tests); 30-day developer onboarding; global scale
+  (teams AU·UK·US·Malaysia, clients in 70+ countries). Add to `firsts.rows` if wanted.
+- **Thin article categories** (Leadership / Operating Models) could use more pieces — see
+  `WRITING-BACKLOG.md`.
+- **Heading hierarchy:** `/writing` and `/graph` still open at `<h2>` (no `<h1>`); `/about` was
+  fixed. Minor SEO/a11y nicety if ever doing a consistency pass.
