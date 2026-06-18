@@ -53,6 +53,18 @@ export const firsts = {
       detail:
         'Critical client incidents worked alongside the founders of a major SD-WAN platform, co-writing fixes in real time; design-input and early-access programmes with two global SASE vendors.',
     },
+    {
+      year: '2025',
+      title: 'Tripled the work, not the team',
+      detail:
+        'Automated front-line outage recovery, health checks, and case closure cut support tickets 68% and retired a six-figure outsourced after-hours contract — absorbing a tripled load of managed sites and links with no extra headcount, and an 80% cut to the platform’s cloud bill on top.',
+    },
+    {
+      year: '2025',
+      title: 'Generative AI across the whole client base',
+      detail:
+        'Automated monthly reporting for every enterprise client — an AI reviews each one’s data and network performance the way an analyst would, across the entire base rather than a pilot, with forecasts that feed the strategic client reviews.',
+    },
   ],
 }
 
@@ -72,7 +84,7 @@ export const notes = {
     },
     {
       title: 'Early adoption starts with the problem, not the product.',
-      body: 'I don’t adopt technology for novelty. It starts with a business problem that needs a custom solution or a willingness to experiment — then the new tool is proven safe, given an exit path, and measured against the outcome. Every first on this page paid for itself.',
+      body: 'I don’t adopt technology for novelty. It starts with a business problem that needs a custom solution or a willingness to experiment — then the new tool is proven safe, given an exit path, and measured against the outcome. Every first I’ve shipped paid for itself.',
       to: 'dont-automate-waste',
     },
     {

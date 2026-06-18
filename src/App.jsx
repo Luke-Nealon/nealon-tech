@@ -8,10 +8,9 @@ import { featuredArticles, publishedArticles, CATEGORIES } from './content/artic
 
 const NAV_SECTIONS = [
   { id: 'top', label: 'Top' },
-  { id: 'firsts', label: 'Firsts' },
+  { id: 'intro', label: 'Intro' },
   { id: 'notes', label: 'Positions' },
   { id: 'perspectives', label: 'Writing' },
-  { id: 'about', label: 'About' },
   { id: 'assistant', label: 'Live demo' },
   { id: 'contact', label: 'Contact' },
 ]
@@ -103,11 +102,10 @@ function Header({ navigate, onHome }) {
         LN<span>.</span>
       </a>
       <nav aria-label="Sections">
-        <a href="/#firsts" onClick={onHome ? undefined : (e) => go(e, '/#firsts')}>Firsts</a>
         <a href="/#notes" onClick={onHome ? undefined : (e) => go(e, '/#notes')}>Positions</a>
         <a href="/writing" onClick={(e) => go(e, '/writing')}>Perspectives</a>
         <a href="/graph" onClick={(e) => go(e, '/graph')}>Knowledge map</a>
-        <a href="/#about" onClick={onHome ? undefined : (e) => go(e, '/#about')}>About</a>
+        <a href="/about" onClick={(e) => go(e, '/about')}>About</a>
         <a href="/#contact" onClick={onHome ? undefined : (e) => go(e, '/#contact')}>Contact</a>
       </nav>
     </header>
@@ -145,19 +143,27 @@ function Hero({ navigate }) {
   )
 }
 
-function Firsts() {
+// Homepage opener: the short bio + facts, then an "Early, on purpose" teaser
+// card that links through to the full timeline on /about (#track-record).
+function Intro({ navigate }) {
   return (
-    <section className="sec wrap" id="firsts">
-      <SectionHead index="01" title={firsts.title} lede={firsts.lede} ghost="01" />
-      <div className="ledger">
-        {firsts.rows.map((row, i) => (
-          <Reveal className="row" key={row.year + row.title} delay={Math.min(i * 0.05, 0.3)}>
-            <span className="yr">{row.year}</span>
-            <h3>{row.title}</h3>
-            <p>{row.detail}</p>
-          </Reveal>
-        ))}
+    <section className="sec wrap" id="intro">
+      <SectionHead index="01" title="Who I am" ghost="01" />
+      <div className="about-grid">
+        <Reveal as="p" className="about-big">
+          {about.big}
+        </Reveal>
+        <Facts />
       </div>
+      <a
+        className="graph-teaser reveal in"
+        href="/about#track-record"
+        onClick={(e) => { e.preventDefault(); navigate('/about#track-record') }}
+      >
+        <span className="graph-teaser-label">{firsts.title}</span>
+        <p>{firsts.lede}</p>
+        <span className="graph-teaser-cta">See the full track record <span aria-hidden="true">→</span></span>
+      </a>
     </section>
   )
 }
@@ -219,32 +225,69 @@ function Perspectives({ navigate }) {
   )
 }
 
-function About() {
+function Facts() {
   return (
-    <section className="sec wrap" id="about">
-      <SectionHead index="04" title={about.title} ghost="04" />
-      <div className="about-grid">
-        <Reveal as="p" className="about-big">
-          {about.big}
+    <Reveal as="ul" className="facts" delay={0.1}>
+      {about.facts.map((f) => (
+        <li key={f.k}>
+          <span className="k">{f.k}</span>
+          <span className="v">
+            {f.href ? (
+              <a href={f.href} target="_blank" rel="noreferrer">
+                {f.v} <span aria-hidden="true">↗</span>
+              </a>
+            ) : (
+              f.v
+            )}
+          </span>
+        </li>
+      ))}
+    </Reveal>
+  )
+}
+
+// Dedicated /about page: the personal-brand "who is this" — short bio + facts,
+// then the full "Early, on purpose" timeline (the homepage only teases it).
+function AboutPage() {
+  useEffect(() => {
+    document.title = 'About — Luke Nealon'
+    return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
+  }, [])
+  return (
+    <>
+      <section className="sec wrap" id="about">
+        <span className="sec-ghost" aria-hidden="true">§</span>
+        <div className="sec-head reveal in">
+          <span className="idx">About</span>
+          <h2>Who I am</h2>
+        </div>
+        <div className="about-grid">
+          <Reveal as="p" className="about-big">
+            {about.big}
+          </Reveal>
+          <Facts />
+        </div>
+      </section>
+      <section className="sec wrap" id="track-record">
+        <span className="sec-ghost" aria-hidden="true">✦</span>
+        <div className="sec-head reveal in">
+          <span className="idx">Track record</span>
+          <h2>{firsts.title}</h2>
+        </div>
+        <Reveal as="p" className="lede" delay={0.08}>
+          {firsts.lede}
         </Reveal>
-        <Reveal as="ul" className="facts" delay={0.1}>
-          {about.facts.map((f) => (
-            <li key={f.k}>
-              <span className="k">{f.k}</span>
-              <span className="v">
-                {f.href ? (
-                  <a href={f.href} target="_blank" rel="noreferrer">
-                    {f.v} <span aria-hidden="true">↗</span>
-                  </a>
-                ) : (
-                  f.v
-                )}
-              </span>
-            </li>
+        <div className="ledger">
+          {firsts.rows.map((row, i) => (
+            <Reveal className="row" key={row.year + row.title} delay={Math.min(i * 0.05, 0.3)}>
+              <span className="yr">{row.year}</span>
+              <h3>{row.title}</h3>
+              <p>{row.detail}</p>
+            </Reveal>
           ))}
-        </Reveal>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   )
 }
 
@@ -252,7 +295,7 @@ function AssistantDemo({ navigate }) {
   const openAssistant = () => window.dispatchEvent(new CustomEvent('open-assistant'))
   return (
     <section className="sec wrap" id="assistant">
-      <SectionHead index="05" title={assistant.title} lede={assistant.body} ghost="✦" />
+      <SectionHead index="04" title={assistant.title} lede={assistant.body} ghost="✦" />
       <div className="demo-points">
         {assistant.points.map((p, i) => (
           <Reveal className="demo-point" key={p.h} delay={Math.min(i * 0.06, 0.2)}>
@@ -311,10 +354,9 @@ function Home({ navigate }) {
   return (
     <main>
       <Hero navigate={navigate} />
-      <Firsts />
+      <Intro navigate={navigate} />
       <Notes navigate={navigate} />
       <Perspectives navigate={navigate} />
-      <About />
       <AssistantDemo navigate={navigate} />
     </main>
   )
@@ -349,6 +391,7 @@ export default function App() {
   if (path.startsWith('/writing/')) view = <Article slug={decodeURIComponent(path.slice('/writing/'.length))} navigate={navigate} />
   else if (path === '/writing') view = <main><WritingIndex navigate={navigate} /></main>
   else if (path === '/graph') view = <main><GraphView navigate={navigate} /></main>
+  else if (path === '/about') view = <main><AboutPage /></main>
   else view = <Home navigate={navigate} />
 
   return (

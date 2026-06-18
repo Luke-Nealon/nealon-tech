@@ -30,7 +30,7 @@ for f in dist/writing/*.html; do put "writing/$(basename "$f")" text/html; done
 
 aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION" \
   --paths "/index.html" "/robots.txt" "/sitemap.xml" "/llms.txt" "/privacy.html" \
-          "/writing" "/writing.html" "/writing/*" "/graph" "/graph.json" "/og/*" \
+          "/writing" "/writing.html" "/writing/*" "/graph" "/graph.json" "/about" "/og/*" \
   --profile "$PROFILE" --output text --query 'Invalidation.Id'
 
 echo "✓ deployed → https://nealon.tech"
