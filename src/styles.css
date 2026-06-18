@@ -318,10 +318,16 @@ a {
   .page-dots { display: none; }
 
   /* The 6-item nav overflows phone widths. Drop it to its own full-width line
-     under the logo and let it wrap, so every item stays visible (not cut off). */
+     under the logo and let it wrap to two balanced lines (no single orphaned
+     item). nowrap keeps multi-word labels like "Knowledge map" intact. */
   .top { flex-wrap: wrap; gap: 6px 0; }
-  .top nav { width: 100%; display: flex; flex-wrap: wrap; gap: 9px 16px; }
-  .top nav a { margin-left: 0; font-size: 10.5px; letter-spacing: 0.12em; }
+  .top nav { width: 100%; display: flex; flex-wrap: wrap; gap: 10px 14px; }
+  .top nav a { margin-left: 0; font-size: 10.5px; letter-spacing: 0.11em; white-space: nowrap; }
+
+  /* The desktop hero top padding uses 14vh, which on a tall phone resolves to
+     ~120px and reads as an accidental gap under the nav. Halve it on phones;
+     bottom padding stays from the base rule. */
+  .hero { padding-top: clamp(36px, 7vh, 72px); }
 }
 
 /* ————— Sections ————— */

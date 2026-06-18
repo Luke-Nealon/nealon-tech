@@ -106,7 +106,7 @@ function Header({ navigate, onHome }) {
         <a href="/#firsts" onClick={onHome ? undefined : (e) => go(e, '/#firsts')}>Firsts</a>
         <a href="/#notes" onClick={onHome ? undefined : (e) => go(e, '/#notes')}>Positions</a>
         <a href="/writing" onClick={(e) => go(e, '/writing')}>Perspectives</a>
-        <a href="/graph" onClick={(e) => go(e, '/graph')}>Map</a>
+        <a href="/graph" onClick={(e) => go(e, '/graph')}>Knowledge map</a>
         <a href="/#about" onClick={onHome ? undefined : (e) => go(e, '/#about')}>About</a>
         <a href="/#contact" onClick={onHome ? undefined : (e) => go(e, '/#contact')}>Contact</a>
       </nav>

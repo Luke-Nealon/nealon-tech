@@ -167,7 +167,7 @@ export default function GraphView({ navigate }) {
     <section className="sec wrap graph-page" id="graph">
       <span className="sec-ghost" aria-hidden="true">⌗</span>
       <div className="sec-head reveal in">
-        <span className="idx">Map</span>
+        <span className="idx">Knowledge map</span>
         <h2>How the writing connects</h2>
       </div>
       <p className="lede reveal in">
