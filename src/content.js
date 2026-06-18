@@ -85,9 +85,10 @@ export const notes = {
 
 export const about = {
   title: 'About',
-  big: 'I’m a technology executive in Sydney, currently leading digital innovation for a global managed-services provider. I turn operational complexity into systems and products that pay for themselves — with the technical depth to direct the build and know it’s right.',
+  big: 'I’m a technology executive in Sydney. I built and led a global digital-innovation function from the ground up — teams across four continents — turning operational complexity into systems and products that pay for themselves, with the technical depth to direct the build and know it’s right.',
   facts: [
     { k: 'Now', v: 'Digital innovation leadership — global managed services' },
+    { k: 'Led', v: 'Global teams across Australia, the UK, the US and Asia' },
     { k: 'Focus', v: 'Data & applied AI · operating models · product' },
     { k: 'Stack', v: 'React / TypeScript · Node.js · Python · AWS · IaC' },
     { k: 'History', v: 'The formal version lives on LinkedIn', href: 'https://linkedin.com/in/luke-nealon' },
@@ -95,14 +96,14 @@ export const about = {
 }
 
 export const assistant = {
-  title: 'See it — don’t just read about it',
-  body: 'There’s a working AI assistant on this site, in the bottom-right corner. Even if you’ve used plenty of chatbots, give this one a minute — it works differently from most of them, in ways you can see for yourself.',
+  title: 'Ask it about my thinking',
+  body: 'There’s a working AI assistant in the bottom-right corner. It runs retrieval-augmented generation over everything I’ve written here, so you can interrogate the ideas directly — and watch it do a few things most site chatbots can’t.',
   points: [
-    { h: 'It shows its sources', t: 'It answers from my own articles and links them at the bottom, so you can check it. It isn’t guessing or quietly making things up.' },
-    { h: 'Swap the AI mid-conversation', t: 'Change the model behind it — Claude, Amazon, Alibaba — in the middle of a chat, and it keeps going without missing a beat. Most products are welded to one AI company. This one isn’t.' },
-    { h: 'Honest by design', t: 'It stays on topic and runs on a tiny, capped budget. No surprises, and no pretending to be more than it is.' },
+    { h: 'Ask it anything I’ve written about', t: 'It answers from my own articles and cites them, so you can check it. Ask its take on model independence, Lean, or treating data as a product — it replies grounded in what I actually wrote, not a guess.' },
+    { h: 'It draws, not just types', t: 'Ask for a diagram or a timeline and it renders one live — flowcharts, sequences, timelines — the same kind of visuals you see in the articles, generated on the spot instead of a wall of text.' },
+    { h: 'Swap the model mid-conversation', t: 'Change the AI behind it — Claude, Amazon Nova, Alibaba Qwen — in the middle of a chat and it keeps going. Most products are welded to one vendor; this one treats the model as a replaceable part, on a capped daily budget.' },
   ],
-  tryThis: 'Try this: ask it a question, then pick a different model from the dropdown and ask a follow-up. Same conversation, different AI brain — and it won’t skip a beat.',
+  tryThis: 'Try this: ask it to “draw a timeline of the firsts on this site”, then switch the model from the dropdown and ask a follow-up — same conversation, a different AI behind it.',
   cta: 'Open the assistant',
   secondary: 'Read the perspectives',
 }

@@ -1077,6 +1077,82 @@ You don’t need to personally model the data. The executive move is narrower an
 
 Treat data as exhaust and you’ll keep buying tools to manage a mess you keep producing. Treat it as a product and the mess stops being produced. The lake was never the problem. The stance was.`,
   },
+  {
+    slug: 'go-first-then-get-out-of-the-way',
+    category: 'Leadership & Operating Teams',
+    title: 'Go first, then get out of the way',
+    dek: 'How I lead a team that out-innovates me: prove the risky idea myself, hand it over to scale, then amplify what the team brings back. The leader’s job is to start the experiment and widen the circle — not to own every outcome.',
+    date: '2026-06-18',
+    readMins: 6,
+    published: true,
+    body: `The fastest way I know to get a team innovating is counterintuitive: don’t ask them to. Go first. Prove the risky idea yourself, hand it over, and get out of the way.
+
+I’ve led technology teams across four continents, and the pattern that worked everywhere wasn’t “set a vision and delegate”. It was to be the first experimenter — the one who takes the unproven idea, tests it, and shows it can work — and then to make sure the team, not me, owns what happens next.
+
+## Go first
+
+I don’t ask anyone to take a risk I haven’t taken. When I see a business problem worth solving or an opportunity worth testing, I treat it like a hypothesis: here’s what I think will work, and here’s the cheapest way to find out if I’m wrong. Then I build the proof of concept myself.
+
+That does two things at once. It de-risks the idea — by the time the team picks it up, the scary question (“will this even work?”) is already answered, so they’re scaling something proven rather than gambling. And it sets the standard without a single meeting about culture: the example on display is “try it and see”, not “write a paper about whether we should try it”. Teams copy what their leader actually does, not what the strategy deck says.
+
+## Then get out of the way
+
+Here’s the part technical leaders find hardest, me included. Once the proof of concept works, I hand it over — the team picks it up and runs with it, and I stop building.
+
+The pull to keep going is strong, because the fun part is the building and I’m the one who started it. But if I hold on, I’ve made myself a bottleneck and quietly told the team the interesting work belongs to me. So the job changes shape: from builder to amplifier. The proof of concept was mine; the product is theirs.
+
+\`\`\`mermaid
+flowchart LR
+  P["Spot a business problem"] --> H["Form a hypothesis"]
+  H --> POC["Build the proof of concept"]
+  POC --> HO["Hand it to the team"]
+  HO --> S["They scale and own it"]
+  S --> N["They surface new ideas"]
+  N --> A["I back and promote them"]
+  A --> P
+\`\`\`
+
+## Widen the circle
+
+This is where it compounds. Once the team owns delivery, they start bringing me things — a project they want to start, an improvement they’ve spotted, an idea worth a shot. When that happens, my most important job is to make it visible: back it, resource it, and promote their work loudly, up to the leadership team and across the business.
+
+That’s the whole flywheel. People bring ideas forward once they’ve seen that bringing an idea forward gets it built and gets them the credit. Do that a few times and you no longer have one experimenter — you have a team of them, and a circle of innovation that turns without you pushing it. The measure of the approach isn’t how many good ideas I have. It’s how many the team has, and how many make it out into the business with their name on them.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">01</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Go first</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Prove the risky idea myself before asking anyone to invest in it.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">02</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Hand it over</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Once it works, the team owns it and I stop building. No bottleneck.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">03</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Widen the circle</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Back the ideas the team brings me, and promote their work loudly.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">04</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Steer to value</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Redirect technically-brilliant-but-unscalable energy toward outcomes that matter.</div>
+  </div>
+</div>
+
+## Steer cool toward valuable
+
+There’s one place I do step in hard — gently, but hard. Every good technical team produces ideas that are genuinely gorgeous to build and won’t survive contact with a business case. Someone is lit up about it. Crushing it is the wrong move; so is letting it quietly eat a quarter.
+
+So I steer. I keep the enthusiasm and change the target — point the same energy at the version of the idea that actually moves the business. “That’s a great technique; here’s the problem it could solve that someone would pay for.” Most of the time the person ends up more excited, not less, because now the clever thing is also going to ship and matter. That redirection — knowing which brilliant ideas are worth scaling and which are a hobby — is the judgment the whole job runs on. It’s the same instinct as [refusing to automate the wrong thing faster](/writing/dont-automate-waste): the cleverness is never the point, the outcome is.
+
+## The job
+
+A leader who only directs gets compliance. A leader who goes first, hands off, and then amplifies gets a team that out-innovates them — which is the only kind of team that keeps moving a business forward when the leader is busy, away, or simply wrong.
+
+The job was never to have all the ideas. It’s to take the first risk so others feel safe taking theirs, then make having ideas the most rewarded thing on the team. ([Which is also what you hire for.](/writing/hire-for-judgment)) Go first. Then get out of the way.`,
+  },
 ]
 
 export const getArticle = (slug) => articles.find((a) => a.slug === slug && a.published)
