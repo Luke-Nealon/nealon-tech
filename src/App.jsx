@@ -3,12 +3,14 @@ import useReveal from './hooks/useReveal.js'
 import Assistant from './Assistant.jsx'
 import { WritingIndex, Article } from './Writing.jsx'
 import GraphView from './Graph.jsx'
-import { hero, links, firsts, notes, about, assistant, footer } from './content.js'
+import { hero, links, firsts, notes, about, assistant, perspectives, footer } from './content.js'
+import { featuredArticles, publishedArticles, CATEGORIES } from './content/articles.js'
 
 const NAV_SECTIONS = [
   { id: 'top', label: 'Top' },
   { id: 'firsts', label: 'Firsts' },
-  { id: 'notes', label: 'Field notes' },
+  { id: 'notes', label: 'Positions' },
+  { id: 'perspectives', label: 'Writing' },
   { id: 'about', label: 'About' },
   { id: 'assistant', label: 'Live demo' },
   { id: 'contact', label: 'Contact' },
@@ -102,7 +104,7 @@ function Header({ navigate, onHome }) {
       </a>
       <nav aria-label="Sections">
         <a href="/#firsts" onClick={onHome ? undefined : (e) => go(e, '/#firsts')}>Firsts</a>
-        <a href="/#notes" onClick={onHome ? undefined : (e) => go(e, '/#notes')}>Notes</a>
+        <a href="/#notes" onClick={onHome ? undefined : (e) => go(e, '/#notes')}>Positions</a>
         <a href="/writing" onClick={(e) => go(e, '/writing')}>Perspectives</a>
         <a href="/graph" onClick={(e) => go(e, '/graph')}>Map</a>
         <a href="/#about" onClick={onHome ? undefined : (e) => go(e, '/#about')}>About</a>
@@ -112,7 +114,7 @@ function Header({ navigate, onHome }) {
   )
 }
 
-function Hero() {
+function Hero({ navigate }) {
   return (
     <section className="hero wrap" id="top">
       <p className="kicker rise d1">
@@ -122,10 +124,13 @@ function Hero() {
         Luke <em>Nealon.</em>
       </h1>
       <p className="statement rise d3">
-        Twenty years of putting <em>bleeding-edge technology</em> to work on{' '}
-        <em>real business problems</em> — fluent from boardroom to codebase.
+        Twenty years turning emerging technology into <em>measurable business value</em> —
+        fluent from <em>boardroom to codebase</em>.
       </p>
       <div className="hero-links rise d4">
+        <a className="hero-cta" href="/writing" onClick={(e) => { e.preventDefault(); navigate('/writing') }}>
+          Read the perspectives <span aria-hidden="true">→</span>
+        </a>
         <a href={links.linkedin} target="_blank" rel="noreferrer">
           LinkedIn <span aria-hidden="true">↗</span>
         </a>
@@ -157,7 +162,7 @@ function Firsts() {
   )
 }
 
-function Notes() {
+function Notes({ navigate }) {
   return (
     <section className="sec wrap" id="notes">
       <SectionHead index="02" title={notes.title} lede={notes.lede} ghost="02" />
@@ -167,6 +172,15 @@ function Notes() {
             <span className="n">{String(i + 1).padStart(2, '0')}</span>
             <h3>{note.title}</h3>
             <p>{note.body}</p>
+            {note.to && (
+              <a
+                className="note-link"
+                href={`/writing/${note.to}`}
+                onClick={(e) => { e.preventDefault(); navigate(`/writing/${note.to}`) }}
+              >
+                Read the full argument <span aria-hidden="true">→</span>
+              </a>
+            )}
           </Reveal>
         ))}
       </div>
@@ -174,10 +188,41 @@ function Notes() {
   )
 }
 
+function Perspectives({ navigate }) {
+  const featured = featuredArticles().slice(0, 3)
+  const live = publishedArticles()
+  const themes = CATEGORIES.filter((c) => live.some((a) => a.category === c)).length
+  const go = (to) => (e) => { e.preventDefault(); navigate(to) }
+  return (
+    <section className="sec wrap" id="perspectives">
+      <SectionHead index="03" title={perspectives.title} lede={perspectives.lede} ghost="✎" />
+      <p className="perspectives-count reveal in">{live.length} essays across {themes} themes</p>
+      <div className="feature-grid reveal in">
+        {featured.map((a) => (
+          <a key={a.slug} className="feature-card" href={`/writing/${a.slug}`} onClick={go(`/writing/${a.slug}`)}>
+            <span className="feature-cat">{a.category}</span>
+            <h3>{a.title}</h3>
+            <p>{a.dek}</p>
+            <span className="feature-meta">{a.readMins} min read</span>
+          </a>
+        ))}
+      </div>
+      <a className="perspectives-all reveal in" href="/writing" onClick={go('/writing')}>
+        {perspectives.cta} <span aria-hidden="true">→</span>
+      </a>
+      <a className="graph-teaser reveal in" href="/graph" onClick={go('/graph')}>
+        <span className="graph-teaser-label">{perspectives.graph.label}</span>
+        <p>{perspectives.graph.line}</p>
+        <span className="graph-teaser-cta">{perspectives.graph.cta} <span aria-hidden="true">→</span></span>
+      </a>
+    </section>
+  )
+}
+
 function About() {
   return (
     <section className="sec wrap" id="about">
-      <SectionHead index="03" title={about.title} ghost="03" />
+      <SectionHead index="04" title={about.title} ghost="04" />
       <div className="about-grid">
         <Reveal as="p" className="about-big">
           {about.big}
@@ -207,7 +252,7 @@ function AssistantDemo({ navigate }) {
   const openAssistant = () => window.dispatchEvent(new CustomEvent('open-assistant'))
   return (
     <section className="sec wrap" id="assistant">
-      <SectionHead index="04" title={assistant.title} lede={assistant.body} ghost="✦" />
+      <SectionHead index="05" title={assistant.title} lede={assistant.body} ghost="✦" />
       <div className="demo-points">
         {assistant.points.map((p, i) => (
           <Reveal className="demo-point" key={p.h} delay={Math.min(i * 0.06, 0.2)}>
@@ -265,9 +310,10 @@ function Footer() {
 function Home({ navigate }) {
   return (
     <main>
-      <Hero />
+      <Hero navigate={navigate} />
       <Firsts />
-      <Notes />
+      <Notes navigate={navigate} />
+      <Perspectives navigate={navigate} />
       <About />
       <AssistantDemo navigate={navigate} />
     </main>

@@ -117,7 +117,7 @@ This is the same principle as knowing where AI belongs at all. Autonomy is a cos
   {
     slug: 'dont-automate-waste',
     category: 'Operating Models & Efficiency',
-    featured: 2,
+    featured: 4,
     title: 'Don’t automate waste',
     dek: 'The most expensive automation is the one that makes a broken process run faster. Why a waste analysis, not a technology wishlist, should decide what you automate.',
     date: '2026-06-14',
@@ -360,7 +360,7 @@ There's one idea under all of it. AI is a component you apply with judgment, not
   {
     slug: 'serverless-rag-for-cents',
     category: 'AI & Automation',
-    featured: 1,
+    featured: 2,
     title: 'No servers, AWS-grade uptime, cents a month',
     dek: 'The assistant on this site does real retrieval-augmented generation, streams its answers, and cites its sources — on managed services that scale to zero and can’t run up a surprise bill. Here’s the whole architecture.',
     date: '2026-06-15',
@@ -989,6 +989,93 @@ You don’t need to commission a graph database to take the point. The point is 
 Structuring knowledge is unglamorous work, which is exactly why it gets skipped, and exactly why it compounds for the few who don’t skip it. ([Structure beats infrastructure](/writing/skills-over-harnesses) is the same lesson one level down.) Start small and concrete: take one set of documents that actually matters — incidents, customer calls, architecture decisions — and next time, keep the links between them instead of filing each one away and forgetting how they connect.
 
 I started with my own writing, because it was what I had to hand. The map is [right here](/graph). The most useful thing on it isn’t any single dot. It’s the lines.`,
+  },
+  {
+    slug: 'data-as-a-product',
+    category: 'Technology Strategy',
+    featured: 1,
+    title: 'Treat data as a product, not exhaust',
+    dek: 'Most organisations treat data as a byproduct of running systems — owned by no one, trusted by no one. The shift that unlocks both analytics and AI is treating it as a product, with an owner, a contract, and a quality bar.',
+    date: '2026-06-18',
+    readMins: 6,
+    published: true,
+    body: `Every analytics project and every AI project I’ve watched up close pays the same tax first, and it’s a big one. Before anyone builds a model or a dashboard, weeks disappear into finding the data, working out what the columns actually mean, reconciling three systems that each claim to know the customer, and quietly fixing the parts that are wrong. Then the next project starts and pays the tax again, from scratch.
+
+The reason is almost always the same. The organisation treats its data as exhaust — a byproduct that comes out the back of running systems, gets piped into a lake, and sits there owned by no one and trusted by no one. Exhaust is cheap to produce and expensive to use. The fix isn’t a bigger lake or a better tool; it’s a change of stance: treat the data as a product.
+
+## Exhaust versus product
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">Data as exhaust</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Emitted, not made</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">A byproduct of running systems. No owner, no promised shape, no quality bar. To use it you first find the person who remembers what it means.</div>
+    <div style="color:#9aa6b2;font-size:11px;margin-top:8px">owned by no one · trusted by no one</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">Data as a product</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Made, and stood behind</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Shaped for the people who use it, with an owner, a contract and a measurable quality bar. You can build on it without reverse-engineering it.</div>
+    <div style="color:#5ce1c6;font-size:11px;margin-top:8px">an owner · a contract · a quality bar</div>
+  </div>
+</div>
+
+The difference isn’t technical, it’s about responsibility. Exhaust is emitted; a product is made. When data is exhaust, nobody promised it would look a certain way, nobody is on the hook when it breaks, and the only way to learn what a field means is to find the person who remembers. When data is a product, someone owns it, people depend on it, and it makes promises it is expected to keep.
+
+## What “data as a product” actually means
+
+It’s a stance, not a platform you buy. A dataset is being run as a product when it has, at a minimum:
+
+- **An owner** — a named person or team accountable for it, not “the data team” in the abstract.
+- **A contract** — the shape, what each field actually means, and what it promises: how fresh it is, how complete, how change gets handled. Consumers can build on it without reverse-engineering it.
+- **Consumers it’s built for** — it’s shaped around who uses it (an analyst, an AI system, an operations process), not around how the source system happened to store it.
+- **A quality bar you can measure** — not “we think it’s fine” but a checked, visible standard, so a break is caught at the source instead of surfacing three steps downstream as a wrong number in a board paper.
+
+\`\`\`mermaid
+flowchart LR
+  P["Source systems"] --> D["Data product — owner, contract, quality bar"]
+  D --> A["Analytics"]
+  D --> AI["AI &amp; retrieval"]
+  D --> O["Operations"]
+\`\`\`
+
+None of that requires a re-platform. It requires deciding that a dataset is something you stand behind — the same way you’d stand behind any other product you ship.
+
+## Why this is the AI story, not just the reporting story
+
+Here’s the part that makes it urgent rather than tidy. Models are commoditising — you can [swap the one behind a product on a dropdown](/writing/model-provider-independence) and keep going. What you can’t swap is your data, and that is exactly what makes it the durable advantage. The organisations that get real value from AI won’t be the ones with the cleverest models; they’ll be the ones whose data is usable enough to point a model at.
+
+And AI is unforgiving about data in a way dashboards never were. A bad number in a report looks wrong, and someone questions it. Feed the same bad data to a model and it hands back a confident, fluent, wrong answer that reads exactly like a right one. Every retrieval system, every agent, every forecast is only as good as the data underneath it — [the assistant I built on this site](/writing/serverless-rag-for-cents) is only as sharp as the writing it reads, not the model doing the reading. That’s the whole reason “data” and “AI” belong in one sentence: the AI is the easy part now. The data is the moat.
+
+## Where to start — without boiling the ocean
+
+The trap is to hear “data as a product” and go buy a two-year mesh programme, a catalogue, and a roadmap. That’s the same mistake as [automating a process before you’ve fixed it](/writing/dont-automate-waste): you’d just be industrialising the exhaust.
+
+Start with one. Take the single dataset everyone already fights over — the one three teams each keep their own version of — and make it a product. Give it an owner. Write down its contract. Publish it where people can find it. Put one measurable quality check on it. Then point the next project at it instead of letting that project rebuild it from scratch.
+
+<div style="margin:24px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:12px">The data tax</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Exhaust — every project re-pays it</div>
+  <div style="display:flex;width:100%;height:28px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 75%;background:#1f2933;color:#76828e;display:flex;align-items:center;justify-content:center;font-size:11px">find · clean · reconcile</div>
+    <div style="flex:1;background:#5ce1c6;color:#0a0e13;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">build</div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin:5px 0 18px">Most of the effort, on every initiative, spent re-discovering and re-fixing the same data.</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Product — paid once, then amortised</div>
+  <div style="display:flex;width:45%;height:28px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 22%;background:#1f2933"></div>
+    <div style="flex:1;background:#5ce1c6"></div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin-top:5px">Fix it once at the source; every project after it starts at “build”.</div>
+</div>
+
+You’ve now paid the tax once instead of every time, and you have a template for the second dataset. One product, proven, then the next — the way every durable improvement compounds.
+
+## The job, for whoever’s running technology
+
+You don’t need to personally model the data. The executive move is narrower and harder to delegate: insist that data has owners and contracts, and make “whose data is this, and what does it promise?” a question that has an answer. In most places today it doesn’t — which is why every initiative re-pays the same tax and every AI pilot stalls in a data-cleaning quarter nobody budgeted for.
+
+Treat data as exhaust and you’ll keep buying tools to manage a mess you keep producing. Treat it as a product and the mess stops being produced. The lake was never the problem. The stance was.`,
   },
 ]
 

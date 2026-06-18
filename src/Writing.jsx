@@ -55,7 +55,7 @@ export function WritingIndex({ navigate }) {
       <span className="sec-ghost" aria-hidden="true">✎</span>
       <div className="sec-head reveal in">
         <span className="idx">Perspectives</span>
-        <h2>Field notes, long form</h2>
+        <h2>Long-form essays</h2>
       </div>
       <p className="lede reveal in">
         Working notes on technology, AI, and the business of running it — written to be read

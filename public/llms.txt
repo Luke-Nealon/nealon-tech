@@ -5,6 +5,7 @@
 This site holds field notes on building AI that earns its place, and a live AI assistant that runs retrieval-augmented generation over these articles and explains its own architecture.
 
 ## Field notes (articles)
+- [Treat data as a product, not exhaust](https://nealon.tech/writing/data-as-a-product): Most organisations treat data as a byproduct of running systems — owned by no one, trusted by no one. The shift that unlocks both analytics and AI is treating it as a product, with an owner, a contract, and a quality bar.
 - [Cite me, don’t train on me](https://nealon.tech/writing/cite-dont-train): The crawlers we call “AI” are doing three different jobs — and you can now say yes to some and no to others. Why I let assistants quote and link this site but opted it out of model training, and the honest limits of where that line holds.
 - [Your knowledge is a graph, not a folder](https://nealon.tech/writing/knowledge-is-a-graph): Most organisations store knowledge as a pile of documents and call it done. The value they’re leaving on the table is in the connections between them — and AI just made those cheap to keep.
 - [Lean: remove what doesn’t need to be there](https://nealon.tech/writing/how-lean-actually-works): What Lean actually is, how to run it as a continuous cycle — map, find the waste, eliminate, standardise, measure — and why removing waste beats working harder every time.

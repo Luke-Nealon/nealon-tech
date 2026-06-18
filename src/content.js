@@ -2,9 +2,9 @@
 // Rule: no current-employer or client names on this site.
 
 export const hero = {
-  kicker: 'Sydney, Australia — Technology & Digital Innovation',
+  kicker: 'Technology, Data & AI Executive · Sydney, Australia',
   statement:
-    'Twenty years of putting bleeding-edge technology to work on real business problems — fluent from boardroom to codebase.',
+    'Twenty years turning emerging technology into measurable business value — fluent from boardroom to codebase.',
 }
 
 export const links = {
@@ -57,34 +57,38 @@ export const firsts = {
 }
 
 export const notes = {
-  title: 'Field notes',
-  lede: 'Positions I will defend in a boardroom.',
+  title: 'Positions',
+  lede: 'Positions I will defend in a boardroom — each one argued in full.',
   items: [
     {
       title: 'Most businesses need a workflow, not an AI wrapper.',
       body: 'Deterministic pipeline first; AI only at the steps that need judgment — categorise, summarise, draft. The platforms I run are deliberately not marketed as “AI-powered”. Clients buy faster resolutions, not model names.',
+      to: 'workflow-or-agent',
     },
     {
       title: 'Where AI earns its place in an existing process.',
       body: 'Detection and categorisation at intake. Summarisation at handover. Drafts behind human approval. Pattern-finding in data nobody has time to read. The test is simple: it should remove a queue, not add a chatbot.',
+      to: 'applied-ai-field-guide',
     },
     {
       title: 'Early adoption starts with the problem, not the product.',
       body: 'I don’t adopt technology for novelty. It starts with a business problem that needs a custom solution or a willingness to experiment — then the new tool is proven safe, given an exit path, and measured against the outcome. Every first on this page paid for itself.',
+      to: 'dont-automate-waste',
     },
     {
       title: 'Compliance by design beats compliance by audit.',
       body: 'A policy that tells people what not to do is a control waiting to fail; a system where the wrong thing is impossible never does. If sensitive data is never stored in the first place, nothing needs to protect it. Build the rule into the architecture and the audit just confirms what was already true.',
+      to: 'build-security-in',
     },
   ],
 }
 
 export const about = {
   title: 'About',
-  big: 'I’m a technology executive in Sydney, currently leading digital innovation for a global managed-services provider. I turn operational complexity into systems, products, and measurable business value — with the technical depth to direct the build and know it’s right.',
+  big: 'I’m a technology executive in Sydney, currently leading digital innovation for a global managed-services provider. I turn operational complexity into systems and products that pay for themselves — with the technical depth to direct the build and know it’s right.',
   facts: [
     { k: 'Now', v: 'Digital innovation leadership — global managed services' },
-    { k: 'Focus', v: 'Applied AI · product · operations systemisation' },
+    { k: 'Focus', v: 'Data & applied AI · operating models · product' },
     { k: 'Stack', v: 'React / TypeScript · Node.js · Python · AWS · IaC' },
     { k: 'History', v: 'The formal version lives on LinkedIn', href: 'https://linkedin.com/in/luke-nealon' },
   ],
@@ -100,11 +104,22 @@ export const assistant = {
   ],
   tryThis: 'Try this: ask it a question, then pick a different model from the dropdown and ask a follow-up. Same conversation, different AI brain — and it won’t skip a beat.',
   cta: 'Open the assistant',
-  secondary: 'Read the field notes',
+  secondary: 'Read the perspectives',
+}
+
+export const perspectives = {
+  title: 'Perspectives',
+  lede: 'A growing body of writing on technology, data and applied AI — for operators, not an audience.',
+  cta: 'Read all perspectives',
+  graph: {
+    label: 'The knowledge map',
+    line: 'Every essay is a node, wired by what the assistant’s own embeddings judge to be related — the latent structure of how the thinking connects.',
+    cta: 'Explore the map',
+  },
 }
 
 export const footer = {
   cta: 'Let’s talk.',
   colophon:
-    'Designed and built by hand — React, no templates, served from an S3 bucket.',
+    'Designed and built by hand — React, no templates, no servers, on AWS.',
 }

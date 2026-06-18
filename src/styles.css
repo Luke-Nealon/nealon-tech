@@ -314,9 +314,8 @@ a {
 .page-dot.on .page-dot-label { opacity: 1; transform: translateX(0); color: var(--accent); }
 
 @media (max-width: 760px) {
-  .page-dots { right: 10px; gap: 12px; }
-  .page-dot-label { display: none; }
-  .page-dot.on .page-dot-label { display: none; }
+  /* Hide the right-rail dots on phones: unlabelled, and they crowd the assistant launcher. */
+  .page-dots { display: none; }
 
   /* The 6-item nav overflows phone widths. Drop it to its own full-width line
      under the logo and let it wrap, so every item stays visible (not cut off). */
@@ -1524,4 +1523,79 @@ footer {
 @media (max-width: 640px) {
   .graph-canvas { height: 70vh; }
   .graph-legend { gap: 10px 14px; }
+}
+
+/* ---- homepage: hero CTA, Positions links, Perspectives teaser ---- */
+.hero-cta {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--sel-fg);
+  background: var(--accent);
+  padding: 9px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.hero-cta:hover { background: var(--accent-2); transform: translateY(-1px); }
+
+.note-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.note-link:hover { color: var(--accent-2); }
+
+.perspectives-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 14px 0 6px;
+}
+.perspectives-all {
+  display: inline-block;
+  margin-top: 22px;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.perspectives-all:hover { color: var(--accent-2); }
+
+.graph-teaser {
+  display: block;
+  margin-top: 30px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: radial-gradient(120% 140% at 85% 0%, var(--glow1), transparent 60%);
+  text-decoration: none;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.graph-teaser:hover { border-color: var(--accent); transform: translateY(-2px); }
+.graph-teaser-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.graph-teaser p {
+  margin: 8px 0 10px;
+  color: var(--ink-dim);
+  max-width: 60ch;
+}
+.graph-teaser-cta {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
 }
