@@ -119,4 +119,16 @@ await render(
   'perspectives.png'
 )
 
-console.log(`generated ${n} article OG images + perspectives.png → public/og/`)
+// about page image
+await render(
+  card({
+    kicker: 'NEALON.TECH',
+    meta: 'ABOUT',
+    title: 'Who I am',
+    dek: 'Technology, data & AI executive in Sydney. Twenty years turning emerging technology into measurable business value — fluent from boardroom to codebase.',
+    footer: 'SYDNEY, AUSTRALIA',
+  }),
+  'about.png'
+)
+
+console.log(`generated ${n} article OG images + perspectives.png + about.png → public/og/`)

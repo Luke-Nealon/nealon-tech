@@ -15,6 +15,7 @@ export const links = {
 
 export const firsts = {
   title: 'Early, on purpose',
+  teaser: 'The full arc — 2011 to 2025, every first tied to a measurable result.',
   lede: 'A career of early adoption — never for novelty. Every technology here was picked up in pursuit of a specific business problem, proven safe, and tied to a measurable result.',
   rows: [
     {

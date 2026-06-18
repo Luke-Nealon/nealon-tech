@@ -85,4 +85,18 @@ writeFileSync(
   })
 )
 
-console.log(`prerendered ${n} article pages + writing index → dist/writing/`)
+// the /about page (SPA route; served via the CloudFront /about -> /about.html rewrite)
+writeFileSync(
+  resolve(dist, 'about.html'),
+  pageHtml(template, {
+    title: 'About — Luke Nealon',
+    description:
+      'Luke Nealon — technology, data & AI executive in Sydney. Who I am, and a career of being early on purpose: twenty years turning emerging tech into measurable business value.',
+    url: `${SITE}/about`,
+    image: `${SITE}/og/about.png`,
+    type: 'website',
+    canonical: `${SITE}/about`,
+  })
+)
+
+console.log(`prerendered ${n} article pages + writing index + about → dist/`)

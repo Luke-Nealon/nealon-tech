@@ -365,7 +365,7 @@ a {
   color: var(--accent);
 }
 
-.sec-head h2 {
+.sec-head :is(h1, h2) {
   font-family: var(--display-font);
   font-weight: var(--display-weight);
   font-size: clamp(38px, 5.6vw, 60px);

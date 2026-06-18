@@ -5,8 +5,8 @@
 //     of the no-WAF approach. Keep this list in sync with the Disallow block in
 //     public/robots.txt. Control-only tokens (Applebot-Extended, Google-Extended) are
 //     NOT here — they never send requests, they only mean anything in robots.txt.
-//  2) Serve prerendered per-article OG HTML:
-//     /writing -> /writing.html ; /writing/<slug> -> /writing/<slug>.html
+//  2) Serve prerendered per-route OG HTML:
+//     /writing -> /writing.html ; /writing/<slug> -> /writing/<slug>.html ; /about -> /about.html
 //     everything else passes through; missing .html -> distribution 404 -> /index.html SPA.
 var BLOCKED_AI_TRAINING = [
   'gptbot', 'claudebot', 'ccbot', 'bytespider', 'amazonbot',
@@ -49,6 +49,12 @@ function handler(event) {
   if (uri.indexOf('/writing/') === 0) {
     var u = uri.charAt(uri.length - 1) === '/' ? uri.slice(0, -1) : uri;
     request.uri = u + '.html';
+    return request;
+  }
+
+  // About page.
+  if (uri === '/about' || uri === '/about/') {
+    request.uri = '/about.html';
     return request;
   }
 

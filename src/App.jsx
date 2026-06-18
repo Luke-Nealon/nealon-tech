@@ -161,7 +161,7 @@ function Intro({ navigate }) {
         onClick={(e) => { e.preventDefault(); navigate('/about#track-record') }}
       >
         <span className="graph-teaser-label">{firsts.title}</span>
-        <p>{firsts.lede}</p>
+        <p>{firsts.teaser}</p>
         <span className="graph-teaser-cta">See the full track record <span aria-hidden="true">→</span></span>
       </a>
     </section>
@@ -259,7 +259,7 @@ function AboutPage() {
         <span className="sec-ghost" aria-hidden="true">§</span>
         <div className="sec-head reveal in">
           <span className="idx">About</span>
-          <h2>Who I am</h2>
+          <h1>Who I am</h1>
         </div>
         <div className="about-grid">
           <Reveal as="p" className="about-big">
