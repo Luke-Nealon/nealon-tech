@@ -11,3 +11,6 @@ analytics-report/src/node_modules/
 analytics-report/src/*.mmdb
 analytics-report/src/*.mmdb.gz
 analytics-report/src/package-lock.json
+
+# playwright MCP scratch (screenshots, snapshots)
+.playwright-mcp/

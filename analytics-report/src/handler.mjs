@@ -64,7 +64,9 @@ const NOTBOT = `user_agent <> '-'
   AND lower(user_agent) NOT LIKE '%httpclient%' AND lower(user_agent) NOT LIKE '%libwww%'
   AND lower(user_agent) NOT LIKE '%facebookexternalhit%' AND lower(user_agent) NOT LIKE '%zgrab%'
   AND lower(user_agent) NOT LIKE '%masscan%' AND lower(user_agent) NOT LIKE '%censys%'
-  AND lower(user_agent) NOT LIKE '%nuclei%' AND lower(user_agent) NOT LIKE '%fetch%'`
+  AND lower(user_agent) NOT LIKE '%nuclei%' AND lower(user_agent) NOT LIKE '%fetch%'
+  AND lower(user_agent) NOT LIKE '%scan%' AND lower(user_agent) NOT LIKE '%leakix%'
+  AND lower(user_agent) NOT LIKE '%expanse%' AND lower(user_agent) NOT LIKE '%palo alto%'`
 
 const NOTSCAN = `uri NOT LIKE '/.%' AND uri NOT LIKE '%.php' AND uri NOT LIKE '/wp-%'
   AND uri NOT LIKE '/vendor/%' AND uri NOT LIKE '/cgi-bin/%' AND uri <> '/index'
@@ -80,6 +82,8 @@ const AI_BOTS = `(lower(user_agent) LIKE '%gptbot%' OR lower(user_agent) LIKE '%
   OR lower(user_agent) LIKE '%ccbot%' OR lower(user_agent) LIKE '%bytespider%'
   OR lower(user_agent) LIKE '%amazonbot%' OR lower(user_agent) LIKE '%cohere%'
   OR lower(user_agent) LIKE '%diffbot%' OR lower(user_agent) LIKE '%youbot%')`
+
+const HEAVY = 50 // max human page views per IP per day; above this is a scanner/bot, dropped
 
 // Training crawlers we opted out of (robots.txt Disallow + edge 403). MIRROR of the
 // block list in infra/cf-writing-rewrite.js — keep the two in sync. 403 = enforcement
@@ -169,21 +173,36 @@ export const handler = async () => {
   const today = new Date().toISOString().slice(0, 10)
   const lookup = await geo()
 
-  // human page view = real page (in sitemap) + browser-like UA. Allowlist beats blocklist.
+  // page view = a successful HTML GET (drops 301 redirects, HEAD/OPTIONS, assets) from a
+  // browser-like UA, on a real page. Allowlist (live sitemap) beats blocklist.
   const ALLOWED = await sitemapPaths()
+  const BASE = `method = 'GET' AND status = 200 AND sc_content_type LIKE 'text/html%' AND ${NOTBOT}`
   const HUMAN = ALLOWED.length
-    ? `status < 400 AND ${NOTBOT} AND uri IN (${ALLOWED.map((p) => `'${p.replace(/'/g, "''")}'`).join(',')})`
-    : `${PAGE} AND ${NOTBOT} AND ${NOTSCAN}`
+    ? `${BASE} AND uri IN (${ALLOWED.map((p) => `'${p.replace(/'/g, "''")}'`).join(',')})`
+    : `${BASE} AND ${PAGE} AND ${NOTSCAN}`
+  // Even a real page (e.g. /) gets hammered by browser-UA scanners, which the allowlist can't
+  // catch — so drop any IP that made more than HEAVY page views in one day (matches the tools
+  // dashboard). human() builds a query over the human set for a window, with that exclusion.
+  const human = (win, select, extra = '', tail = '') => `WITH heavy AS (
+      SELECT request_ip, date FROM cf_logs WHERE date ${win} AND ${HUMAN}
+      GROUP BY request_ip, date HAVING count(*) > ${HEAVY})
+    SELECT ${select} FROM cf_logs l
+    WHERE l.date ${win} AND ${HUMAN}${extra}
+      AND NOT EXISTS (SELECT 1 FROM heavy h WHERE h.request_ip = l.request_ip AND h.date = l.date)
+    ${tail}`
+  const W7 = `>= current_date - interval '7' day`, W30 = `>= current_date - interval '30' day`
+  const WY = `= current_date - interval '1' day`, W14 = `>= current_date - interval '14' day`
+  const VIEWS = `count(*) views, count(DISTINCT request_ip) visitors`
 
   const [h7, h30, hy, total7, daily, articles, pages, referrers, aiCrawlers, searchCrawlers, ips, enforce] = await Promise.all([
-    runQuery(`SELECT count(*) views, count(DISTINCT request_ip) visitors FROM cf_logs WHERE date >= current_date - interval '7' day AND ${HUMAN}`),
-    runQuery(`SELECT count(*) views, count(DISTINCT request_ip) visitors FROM cf_logs WHERE date >= current_date - interval '30' day AND ${HUMAN}`),
-    runQuery(`SELECT count(*) views, count(DISTINCT request_ip) visitors FROM cf_logs WHERE date = current_date - interval '1' day AND ${HUMAN}`),
-    runQuery(`SELECT count(*) views FROM cf_logs WHERE date >= current_date - interval '7' day AND ${PAGE}`),
-    runQuery(`SELECT date, count(*) views FROM cf_logs WHERE date >= current_date - interval '14' day AND ${HUMAN} GROUP BY date ORDER BY date ASC`),
-    runQuery(`SELECT uri, count(*) reads FROM cf_logs WHERE date >= current_date - interval '7' day AND uri LIKE '/writing/%' AND ${HUMAN} GROUP BY uri ORDER BY reads DESC LIMIT 8`),
-    runQuery(`SELECT uri, count(*) hits FROM cf_logs WHERE date >= current_date - interval '7' day AND ${HUMAN} GROUP BY uri ORDER BY hits DESC LIMIT 8`),
-    runQuery(`SELECT url_decode(referrer) ref, count(*) hits FROM cf_logs WHERE date >= current_date - interval '7' day AND referrer <> '-' AND referrer NOT LIKE '%nealon.tech%' AND ${NOTBOT} GROUP BY url_decode(referrer) ORDER BY hits DESC LIMIT 8`),
+    runQuery(human(W7, VIEWS)),
+    runQuery(human(W30, VIEWS)),
+    runQuery(human(WY, VIEWS)),
+    runQuery(`SELECT count(*) views FROM cf_logs WHERE date ${W7} AND ${PAGE}`),
+    runQuery(human(W14, `l.date AS date, count(*) views`, '', `GROUP BY l.date ORDER BY l.date ASC`)),
+    runQuery(human(W7, `l.uri AS uri, count(*) reads`, ` AND l.uri LIKE '/writing/%'`, `GROUP BY l.uri ORDER BY reads DESC LIMIT 8`)),
+    runQuery(human(W7, `l.uri AS uri, count(*) hits`, '', `GROUP BY l.uri ORDER BY hits DESC LIMIT 8`)),
+    runQuery(human(W7, `url_decode(l.referrer) ref, count(*) hits`, ` AND l.referrer <> '-' AND l.referrer NOT LIKE '%nealon.tech%'`, `GROUP BY url_decode(l.referrer) ORDER BY hits DESC LIMIT 8`)),
     runQuery(`SELECT CASE
         WHEN lower(user_agent) LIKE '%gptbot%' THEN 'GPTBot (OpenAI)'
         WHEN lower(user_agent) LIKE '%oai-searchbot%' THEN 'OAI-SearchBot'
@@ -198,7 +217,7 @@ export const handler = async () => {
         ELSE 'other AI' END label, count(*) hits
       FROM cf_logs WHERE date >= current_date - interval '7' day AND ${AI_BOTS} GROUP BY 1 ORDER BY hits DESC`),
     runQuery(`SELECT count(*) hits FROM cf_logs WHERE date >= current_date - interval '7' day AND (lower(user_agent) LIKE '%googlebot%' OR lower(user_agent) LIKE '%bingbot%' OR lower(user_agent) LIKE '%applebot%' OR lower(user_agent) LIKE '%duckduckbot%' OR lower(user_agent) LIKE '%yandex%' OR lower(user_agent) LIKE '%baidu%')`),
-    runQuery(`SELECT request_ip, count(*) hits FROM cf_logs WHERE date >= current_date - interval '7' day AND ${HUMAN} GROUP BY request_ip`),
+    runQuery(human(W7, `l.request_ip AS request_ip, count(*) hits`, '', `GROUP BY l.request_ip`)),
     runQuery(`SELECT ${TRAINING_LABEL} bot, CASE WHEN status = 403 THEN 'blocked' ELSE 'served' END outcome, count(*) hits
       FROM cf_logs WHERE date >= current_date - interval '7' day AND ${TRAINING_BOTS} GROUP BY 1, 2 ORDER BY 1`),
   ])
