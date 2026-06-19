@@ -15,6 +15,7 @@ const urls = [
   { loc: `${SITE}/`, lastmod: latest },
   { loc: `${SITE}/writing`, lastmod: latest },
   ...pub.map((a) => ({ loc: `${SITE}/writing/${a.slug}`, lastmod: a.date })),
+  { loc: `${SITE}/graph`, lastmod: latest },
   { loc: `${SITE}/about` },
   { loc: `${SITE}/privacy.html` },
 ]
