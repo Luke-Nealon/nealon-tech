@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: nealon.tech content radar — daily article-seed digest (RSS + GitHub -> Bedrock -> S3 + SES email)
+
+Parameters:
+  FromEmail:
+    Type: String
+    Default: reports@nealon.tech
+    Description: Verified SES sender on the nealon.tech domain.
+  ToEmail:
+    Type: String
+    Default: luke@nealon.tech
+  ModelId:
+    Type: String
+    Default: au.anthropic.claude-sonnet-4-6
+    Description: Bedrock model / inference profile for the synthesis pass.
+  RadarBucket:
+    Type: String
+    Default: nealon-tech-logs-389901108572
+    Description: Bucket the radar JSON is written to (read by the tools Radar tab).
+  ScheduleExpr:
+    Type: String
+    Default: cron(0 20 * * ? *)
+    Description: 20:00 UTC ~= 06:00 Sydney (AEST). Runs before the analytics digest.
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    MemorySize: 512
+    Timeout: 120
+
+Resources:
+  RadarFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handler.handler
+      Environment:
+        Variables:
+          MODEL_ID: !Ref ModelId
+          RADAR_BUCKET: !Ref RadarBucket
+          RADAR_PREFIX: radar
+          FROM_EMAIL: !Ref FromEmail
+          TO_EMAIL: !Ref ToEmail
+      Policies:
+        - Statement:
+            - Sid: Bedrock
+              Effect: Allow
+              Action: [bedrock:InvokeModel]
+              Resource: '*'
+            - Sid: RadarS3
+              Effect: Allow
+              Action: [s3:PutObject]
+              Resource: !Sub 'arn:aws:s3:::${RadarBucket}/radar/*'
+            - Sid: SendEmail
+              Effect: Allow
+              Action: [ses:SendEmail]
+              Resource: '*'
+      Events:
+        Daily:
+          Type: Schedule
+          Properties:
+            Schedule: !Ref ScheduleExpr
+            Name: nealon-radar-daily
+
+Outputs:
+  FunctionName:
+    Value: !Ref RadarFunction

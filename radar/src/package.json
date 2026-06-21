@@ -1,0 +1,10 @@
+{
+  "name": "nealon-radar",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Daily content radar — top topics across security/SD-WAN/SASE/AI/GitHub, synthesised into article seeds",
+  "dependencies": {
+    "rss-parser": "^3.13.0"
+  }
+}
