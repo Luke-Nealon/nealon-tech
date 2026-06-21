@@ -6,7 +6,7 @@
 
 import { BedrockRuntimeClient, ConverseCommand } from '@aws-sdk/client-bedrock-runtime'
 import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 import Parser from 'rss-parser'
 
 const REGION = process.env.AWS_REGION || 'ap-southeast-2'
@@ -72,14 +72,37 @@ async function publishedTitles() {
   try { const r = await fetch('https://nealon.tech/llms.txt'); return (await r.text()).slice(0, 6000) } catch { return '' }
 }
 
+// Cross-day dedup: remember the items we've already surfaced so the same article isn't
+// re-suggested day after day. Keyed by a normalised title, kept for SEEN_DAYS.
+const SEEN_DAYS = 21
+const normTitle = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().slice(0, 120)
+async function loadSeen() {
+  try {
+    const r = await s3.send(new GetObjectCommand({ Bucket: BUCKET, Key: `${PREFIX}/seen.json` }))
+    return JSON.parse(await r.Body.transformToString()) || {}
+  } catch { return {} }
+}
+async function saveSeen(seen) {
+  const cutoff = new Date(Date.now() - SEEN_DAYS * 864e5).toISOString().slice(0, 10)
+  const pruned = Object.fromEntries(Object.entries(seen).filter(([, d]) => d >= cutoff))
+  await s3.send(new PutObjectCommand({ Bucket: BUCKET, Key: `${PREFIX}/seen.json`, Body: JSON.stringify(pruned), ContentType: 'application/json' }))
+}
+
 async function synthesize(gathered, published) {
   const prompt = `You are a content-radar assistant for Luke Nealon, a technology executive who writes long-form at nealon.tech. Positioning: "fluent from boardroom to codebase" — plain, jargon-free voice; audience is senior executives and technical leaders. He writes about technology strategy, operating models & efficiency, security/risk/trust, AI & automation, and leadership.
 
-Below are recent items gathered today, grouped by category. Output one entry for EVERY category present in the gathered items, in the same order — never omit a category. For each category pick its 2–4 most significant, genuinely article-worthy items (skip pure product PR and noise); if a whole category is thin today, still include it with its single best item and say so plainly in that item's paragraph. For each selected item produce:
+Below are recent items gathered today, grouped by category. Output one entry for EVERY category present in the gathered items, in the same order — never omit a category. For each category pick its 2–3 most significant, genuinely article-worthy items (skip pure product PR and noise); if a whole category is thin today, still include it with its single best item and say so plainly in that item's paragraph. For each selected item produce:
 - "title": the cleaned-up headline,
 - "url": its link (copy exactly from the item),
 - "paragraph": 2–3 plain sentences — what happened and why it matters,
-- "angle": ONE sentence — an article angle Luke could write in his own voice (his take/hook, not a recap).
+- "angle": ONE sentence — an article angle Luke could write in his own voice (his take/hook, not a recap),
+- "tags": 1–3 short lowercase keywords (e.g. ["ransomware","identity"]),
+- "priority": "high" or "med" — mark only the 3–5 strongest, most article-worthy seeds overall as "high", the rest "med".
+
+ALSO produce, at the top level:
+- "throughline": ONE plain, jargon-free sentence (<=140 chars) in Luke's voice naming what today is about. Not a list, not "Today we see…".
+- "pick": the single best seed to write — { "title", "url" (both copied VERBATIM from the chosen item), "category" (its category name), "why" (one sentence on why it's THE one — audience fit + timeliness, not a recap) }.
+- "themes": 2–4 cross-cutting themes ranked most→least significant, each { "label" (2–4 words, e.g. "Identity is the new perimeter"), "summary" (one plain sentence — the cross-cutting so-what), "weight" (integer 1–5 significance), "relatedTitles" (array of the EXACT item titles it spans, copied verbatim), "categories" (array of category names it spans) }. Themes MUST be genuine syntheses ACROSS categories, never just a category name; if there's no real cross-cut, emit fewer (or []) rather than invent.
 
 Prefer items with a strategy, leadership, security, or AI-economics angle over deep tooling minutiae. Do NOT suggest angles that overlap what he has already published (listed below).
 
@@ -90,12 +113,12 @@ GATHERED ITEMS (JSON):
 ${JSON.stringify(gathered).slice(0, 60000)}
 
 Return ONLY valid JSON, no markdown fences, shaped exactly:
-{"categories":[{"name":"...","items":[{"title":"...","url":"...","paragraph":"...","angle":"..."}]}]}`
+{"throughline":"...","pick":{"title":"...","url":"...","category":"...","why":"..."},"themes":[{"label":"...","summary":"...","weight":3,"relatedTitles":["..."],"categories":["..."]}],"categories":[{"name":"...","items":[{"title":"...","url":"...","paragraph":"...","angle":"...","tags":["..."],"priority":"high"}]}]}`
 
   const out = await bedrock.send(new ConverseCommand({
     modelId: MODEL,
     messages: [{ role: 'user', content: [{ text: prompt }] }],
-    inferenceConfig: { maxTokens: 4500, temperature: 0.4 },
+    inferenceConfig: { maxTokens: 8000, temperature: 0.4 },
   }))
   const raw = out.output?.message?.content?.[0]?.text || ''
   const json = raw.replace(/^[\s\S]*?```(?:json)?/i, '').replace(/```[\s\S]*$/i, '').trim() || raw.trim()
@@ -134,17 +157,26 @@ export const handler = async () => {
     publishedTitles(),
   ])
   const gathered = [...cats, gh].filter((c) => c.items.length)
-  console.log('gathered:', gathered.map((c) => `${c.name}=${c.items.length}`).join(', '))
+  // drop anything we've already surfaced in the last SEEN_DAYS so the email is genuinely "new today"
+  const seen = BUCKET ? await loadSeen() : {}
+  const fresh = gathered
+    .map((c) => ({ name: c.name, items: c.items.filter((it) => !seen[normTitle(it.title)]) }))
+    .filter((c) => c.items.length)
+  console.log('gathered:', gathered.map((c) => `${c.name}=${c.items.length}`).join(', '), '| fresh:', fresh.map((c) => `${c.name}=${c.items.length}`).join(', '))
 
   let radar
   try {
-    radar = await synthesize(gathered, published)
+    radar = await synthesize(fresh, published)
   } catch (e) {
     // Fallback: still ship something useful — raw top items, no synthesis.
-    radar = { categories: gathered.map((c) => ({ name: c.name, items: c.items.slice(0, 4).map((it) => ({ title: it.title, url: it.url, paragraph: it.source || '', angle: '(synthesis unavailable today)' })) })) }
+    radar = { categories: fresh.map((c) => ({ name: c.name, items: c.items.slice(0, 4).map((it) => ({ title: it.title, url: it.url, paragraph: it.source || '', angle: '(synthesis unavailable today)' })) })) }
     console.error('synthesis failed:', e?.message || e)
   }
   radar.generatedAt = new Date().toISOString()
+
+  // remember what we surfaced today so it isn't repeated tomorrow
+  for (const c of radar.categories || []) for (const it of c.items || []) seen[normTitle(it.title)] = today
+  if (BUCKET) await saveSeen(seen)
 
   // store for the tools Radar tab (latest + dated archive)
   if (BUCKET) {

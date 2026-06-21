@@ -27,7 +27,7 @@ Globals:
   Function:
     Runtime: nodejs20.x
     MemorySize: 512
-    Timeout: 120
+    Timeout: 300   # RSS gather + the richer Bedrock synthesis (themes/pick/tags) can exceed 2 min
 
 Resources:
   RadarFunction:
@@ -50,7 +50,7 @@ Resources:
               Resource: '*'
             - Sid: RadarS3
               Effect: Allow
-              Action: [s3:PutObject]
+              Action: [s3:PutObject, s3:GetObject]   # GetObject: read seen.json for cross-day dedup
               Resource: !Sub 'arn:aws:s3:::${RadarBucket}/radar/*'
             - Sid: SendEmail
               Effect: Allow
