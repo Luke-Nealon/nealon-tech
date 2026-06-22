@@ -19,8 +19,10 @@ const EMBED_MODEL = 'amazon.titan-embed-text-v2:0'
 const SITE = 'https://nealon.tech'
 
 const MODELS = {
-  'haiku': { id: 'au.anthropic.claude-haiku-4-5-20251001-v1:0', label: 'Claude Haiku 4.5', in: 1.0, out: 5.0 },
-  'sonnet': { id: 'au.anthropic.claude-sonnet-4-6', label: 'Claude Sonnet 4.6', in: 3.0, out: 15.0 },
+  // Sonnet/Haiku invoke through tagged application inference profiles (project=nealon-assistant)
+  // so the public assistant's Bedrock spend is attributed to it on the bill.
+  'haiku': { id: 'arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/xgoblgc6oqvz', label: 'Claude Haiku 4.5', in: 1.0, out: 5.0 },
+  'sonnet': { id: 'arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/lf345u5t9mmi', label: 'Claude Sonnet 4.6', in: 3.0, out: 15.0 },
   'nova': { id: 'amazon.nova-lite-v1:0', label: 'Amazon Nova Lite', in: 0.06, out: 0.24 },
   'qwen': { id: 'qwen.qwen3-coder-30b-a3b-v1:0', label: 'Qwen3 Coder (Alibaba)', in: 0.5, out: 1.5 },
 }

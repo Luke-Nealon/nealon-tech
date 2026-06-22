@@ -12,7 +12,9 @@ Parameters:
     Default: luke@nealon.tech
   ModelId:
     Type: String
-    Default: au.anthropic.claude-sonnet-4-6
+    # Tagged application inference profile (project=nealon-radar) over Sonnet 4.6 — so Bedrock
+    # spend for this job shows under nealon-radar on the bill. Wraps au.anthropic.claude-sonnet-4-6.
+    Default: arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/uyta8qqzymol
     Description: Bedrock model / inference profile for the synthesis pass.
   RadarBucket:
     Type: String
