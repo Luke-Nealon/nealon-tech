@@ -35,6 +35,8 @@ Resources:
     Properties:
       CodeUri: src/
       Handler: handler.handler
+      Tags:
+        project: nealon-radar   # AWS cost-allocation tag (activate the key in Billing)
       Environment:
         Variables:
           MODEL_ID: !Ref ModelId

@@ -28,6 +28,8 @@ Resources:
     Properties:
       CodeUri: src/
       Handler: handler.handler
+      Tags:
+        project: nealon-analytics   # AWS cost-allocation tag (activate the key in Billing)
       Environment:
         Variables:
           ATHENA_DB: nealon_logs
