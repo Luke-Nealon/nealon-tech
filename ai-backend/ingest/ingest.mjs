@@ -33,7 +33,8 @@ function chunk(text, max = 900) {
 
 async function embed(text) {
   const res = await bedrock.send(new InvokeModelCommand({
-    modelId: 'amazon.titan-embed-text-v2:0',
+    // tagged profile (project=nealon-assistant) over Titan embed, so ingest embedding spend is attributed
+    modelId: 'arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/5z8k8vo3u0a4',
     contentType: 'application/json',
     accept: 'application/json',
     body: JSON.stringify({ inputText: text, dimensions: 1024, normalize: true }),

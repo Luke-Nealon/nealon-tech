@@ -15,7 +15,8 @@ const TABLE = process.env.TABLE_NAME
 const DAILY_BUDGET = Number(process.env.DAILY_BUDGET_USD || 5)
 const VECTOR_BUCKET = 'nealon-vectors'
 const VECTOR_INDEX = 'articles'
-const EMBED_MODEL = 'amazon.titan-embed-text-v2:0'
+// tagged profile (project=nealon-assistant) over Titan embed — so RAG embedding spend is attributed
+const EMBED_MODEL = 'arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/5z8k8vo3u0a4'
 const SITE = 'https://nealon.tech'
 
 const MODELS = {
@@ -23,7 +24,7 @@ const MODELS = {
   // so the public assistant's Bedrock spend is attributed to it on the bill.
   'haiku': { id: 'arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/xgoblgc6oqvz', label: 'Claude Haiku 4.5', in: 1.0, out: 5.0 },
   'sonnet': { id: 'arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/lf345u5t9mmi', label: 'Claude Sonnet 4.6', in: 3.0, out: 15.0 },
-  'nova': { id: 'amazon.nova-lite-v1:0', label: 'Amazon Nova Lite', in: 0.06, out: 0.24 },
+  'nova': { id: 'arn:aws:bedrock:ap-southeast-2:389901108572:application-inference-profile/bhtybmxrehf5', label: 'Amazon Nova Lite', in: 0.06, out: 0.24 },
   'qwen': { id: 'qwen.qwen3-coder-30b-a3b-v1:0', label: 'Qwen3 Coder (Alibaba)', in: 0.5, out: 1.5 },
 }
 const DEFAULT_MODEL = 'haiku' // Anthropic use-case form approved 2026-06-14
