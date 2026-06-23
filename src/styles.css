@@ -229,8 +229,17 @@ a {
   box-shadow: 0 0 0 6px rgba(92, 225, 198, 0.12);
 }
 @media (max-width: 680px) {
-  .about-head { grid-template-columns: 1fr; }
-  .headshot-about { grid-column: 1; justify-self: start; margin-top: 18px; }
+  /* keep the photo inline beside "Who I am" (don't stack), just smaller */
+  .about-head {
+    grid-template-columns: 1fr auto;
+    gap: clamp(16px, 5vw, 28px);
+  }
+  .headshot-about {
+    grid-column: 2;
+    justify-self: end;
+    width: clamp(84px, 23vw, 112px);
+    height: clamp(84px, 23vw, 112px);
+  }
 }
 
 .hero-links {
