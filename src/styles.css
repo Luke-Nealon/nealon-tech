@@ -212,21 +212,25 @@ a {
 /* Headshot — a real face for trust/E-E-A-T, matching the JSON-LD Person.image.
    Sits top-right beside the "Who I am" heading on /about. */
 .about-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: clamp(20px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr; /* match .about-grid so the photo sits over the facts column */
+  gap: clamp(40px, 6vw, 72px);
+  align-items: center; /* "Who I am" lines up with the vertical centre of the photo */
 }
 .headshot-about {
-  flex: none;
+  grid-column: 2;
+  justify-self: center;   /* centered above the facts list */
   width: clamp(112px, 14vw, 150px);
   height: clamp(112px, 14vw, 150px);
   border-radius: 50%;
   object-fit: cover;
   object-position: center top;
-  margin: 0;
   border: 3px solid var(--accent);
   box-shadow: 0 0 0 6px rgba(92, 225, 198, 0.12);
+}
+@media (max-width: 680px) {
+  .about-head { grid-template-columns: 1fr; }
+  .headshot-about { grid-column: 1; justify-self: start; margin-top: 18px; }
 }
 
 .hero-links {
