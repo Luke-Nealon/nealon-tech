@@ -27,6 +27,39 @@ function displayDate(a) {
   return a.updated ? `Updated ${year(a.updated)}` : year(a.date)
 }
 
+// "Related" links. Fallback = other pieces in the same category; the upgrade pulls the
+// nearest neighbours from public/graph.json (the same Titan embeddings that power the
+// assistant) so related reading is genuinely related, not just same-bucket.
+function sameCategoryRelated(article, slug) {
+  if (!article) return []
+  return publishedArticles()
+    .filter((a) => a.category === article.category && a.slug !== slug)
+    .slice(0, 3)
+}
+function graphRelated(article, edges) {
+  const slug = article.slug
+  const scored = new Map()
+  for (const e of edges) {
+    let other = null
+    if (e.source === slug) other = e.target
+    else if (e.target === slug) other = e.source
+    else continue
+    const w = e.type === 'link' ? 1 : e.weight || 0.5
+    scored.set(other, Math.max(scored.get(other) || 0, w))
+  }
+  let list = [...scored.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([s]) => getArticle(s))
+    .filter(Boolean)
+  if (list.length < 2) {
+    const more = publishedArticles().filter(
+      (a) => a.category === article.category && a.slug !== slug && !scored.has(a.slug)
+    )
+    list = [...list, ...more]
+  }
+  return list.slice(0, 3)
+}
+
 export function WritingIndex({ navigate }) {
   const [query, setQuery] = useState('')
   const [activeCat, setActiveCat] = useState('All')
@@ -160,6 +193,23 @@ export function Article({ slug, navigate }) {
     return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
   }, [article])
 
+  // Related: instant same-category fallback, upgraded to graph neighbours once loaded.
+  const [related, setRelated] = useState(() => sameCategoryRelated(article, slug))
+  useEffect(() => {
+    setRelated(sameCategoryRelated(article, slug))
+    if (!article) return
+    let alive = true
+    fetch('/graph.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((g) => {
+        if (!alive || !g || !Array.isArray(g.edges)) return
+        const next = graphRelated(article, g.edges)
+        if (next.length) setRelated(next)
+      })
+      .catch(() => {})
+    return () => { alive = false }
+  }, [slug])
+
   if (!article) {
     return (
       <section className="sec wrap">
@@ -169,11 +219,6 @@ export function Article({ slug, navigate }) {
       </section>
     )
   }
-
-  // self-maintaining "related": other published pieces in the same category
-  const related = publishedArticles()
-    .filter((a) => a.category === article.category && a.slug !== article.slug)
-    .slice(0, 3)
 
   return (
     <article className="article">
@@ -190,7 +235,7 @@ export function Article({ slug, navigate }) {
       </div>
       {related.length > 0 && (
         <div className="article-related">
-          <h3 className="article-related-h">More in {article.category}</h3>
+          <h3 className="article-related-h">Related reading</h3>
           {related.map((a) => (
             <a
               key={a.slug}

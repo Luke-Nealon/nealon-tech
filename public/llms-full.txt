@@ -1,0 +1,966 @@
+# Luke Nealon — nealon.tech (full text)
+
+> Full text of every published article on nealon.tech, for retrieval and citation.
+> Canonical home of this writing: https://nealon.tech/writing — please cite the per-article URL.
+
+## Treat data as a product, not exhaust
+URL: https://nealon.tech/writing/data-as-a-product
+Published: 2026-06-18 · Category: Technology Strategy
+
+Most organisations treat data as a byproduct of running systems — owned by no one, trusted by no one. The shift that unlocks both analytics and AI is treating it as a product, with an owner, a contract, and a quality bar.
+
+Every analytics project and every AI project I’ve watched up close pays the same tax first, and it’s a big one. Before anyone builds a model or a dashboard, weeks disappear into finding the data, working out what the columns actually mean, reconciling three systems that each claim to know the customer, and quietly fixing the parts that are wrong. Then the next project starts and pays the tax again, from scratch.
+
+The reason is almost always the same. The organisation treats its data as exhaust — a byproduct that comes out the back of running systems, gets piped into a lake, and sits there owned by no one and trusted by no one. Exhaust is cheap to produce and expensive to use. The fix isn’t a bigger lake or a better tool; it’s a change of stance: treat the data as a product.
+
+## Exhaust versus product
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">Data as exhaust</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Emitted, not made</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">A byproduct of running systems. No owner, no promised shape, no quality bar. To use it you first find the person who remembers what it means.</div>
+    <div style="color:#9aa6b2;font-size:11px;margin-top:8px">owned by no one · trusted by no one</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">Data as a product</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Made, and stood behind</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Shaped for the people who use it, with an owner, a contract and a measurable quality bar. You can build on it without reverse-engineering it.</div>
+    <div style="color:#5ce1c6;font-size:11px;margin-top:8px">an owner · a contract · a quality bar</div>
+  </div>
+</div>
+
+The difference isn’t technical, it’s about responsibility. Exhaust is emitted; a product is made. When data is exhaust, nobody promised it would look a certain way, nobody is on the hook when it breaks, and the only way to learn what a field means is to find the person who remembers. When data is a product, someone owns it, people depend on it, and it makes promises it is expected to keep.
+
+## What “data as a product” actually means
+
+It’s a stance, not a platform you buy. A dataset is being run as a product when it has, at a minimum:
+
+- **An owner** — a named person or team accountable for it, not “the data team” in the abstract.
+- **A contract** — the shape, what each field actually means, and what it promises: how fresh it is, how complete, how change gets handled. Consumers can build on it without reverse-engineering it.
+- **Consumers it’s built for** — it’s shaped around who uses it (an analyst, an AI system, an operations process), not around how the source system happened to store it.
+- **A quality bar you can measure** — not “we think it’s fine” but a checked, visible standard, so a break is caught at the source instead of surfacing three steps downstream as a wrong number in a board paper.
+
+
+
+None of that requires a re-platform. It requires deciding that a dataset is something you stand behind — the same way you’d stand behind any other product you ship.
+
+## Why this is the AI story, not just the reporting story
+
+Here’s the part that makes it urgent rather than tidy. Models are commoditising — you can [swap the one behind a product on a dropdown](/writing/model-provider-independence) and keep going. What you can’t swap is your data, and that is exactly what makes it the durable advantage. The organisations that get real value from AI won’t be the ones with the cleverest models; they’ll be the ones whose data is usable enough to point a model at.
+
+And AI is unforgiving about data in a way dashboards never were. A bad number in a report looks wrong, and someone questions it. Feed the same bad data to a model and it hands back a confident, fluent, wrong answer that reads exactly like a right one. Every retrieval system, every agent, every forecast is only as good as the data underneath it — [the assistant I built on this site](/writing/serverless-rag-for-cents) is only as sharp as the writing it reads, not the model doing the reading. That’s the whole reason “data” and “AI” belong in one sentence: the AI is the easy part now. The data is the moat.
+
+## Where to start — without boiling the ocean
+
+The trap is to hear “data as a product” and go buy a two-year mesh programme, a catalogue, and a roadmap. That’s the same mistake as [automating a process before you’ve fixed it](/writing/dont-automate-waste): you’d just be industrialising the exhaust.
+
+Start with one. Take the single dataset everyone already fights over — the one three teams each keep their own version of — and make it a product. Give it an owner. Write down its contract. Publish it where people can find it. Put one measurable quality check on it. Then point the next project at it instead of letting that project rebuild it from scratch.
+
+<div style="margin:24px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:12px">The data tax</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Exhaust — every project re-pays it</div>
+  <div style="display:flex;width:100%;height:28px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 75%;background:#1f2933;color:#76828e;display:flex;align-items:center;justify-content:center;font-size:11px">find · clean · reconcile</div>
+    <div style="flex:1;background:#5ce1c6;color:#0a0e13;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">build</div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin:5px 0 18px">Most of the effort, on every initiative, spent re-discovering and re-fixing the same data.</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Product — paid once, then amortised</div>
+  <div style="display:flex;width:45%;height:28px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 22%;background:#1f2933"></div>
+    <div style="flex:1;background:#5ce1c6"></div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin-top:5px">Fix it once at the source; every project after it starts at “build”.</div>
+</div>
+
+You’ve now paid the tax once instead of every time, and you have a template for the second dataset. One product, proven, then the next — the way every durable improvement compounds.
+
+## The job, for whoever’s running technology
+
+You don’t need to personally model the data. The executive move is narrower and harder to delegate: insist that data has owners and contracts, and make “whose data is this, and what does it promise?” a question that has an answer. In most places today it doesn’t — which is why every initiative re-pays the same tax and every AI pilot stalls in a data-cleaning quarter nobody budgeted for.
+
+Treat data as exhaust and you’ll keep buying tools to manage a mess you keep producing. Treat it as a product and the mess stops being produced. The lake was never the problem. The stance was.
+
+---
+
+## Go first, then get out of the way
+URL: https://nealon.tech/writing/go-first-then-get-out-of-the-way
+Published: 2026-06-18 · Category: Leadership & Operating Teams
+
+How I lead a team that out-innovates me: prove the risky idea myself, hand it over to scale, then amplify what the team brings back. The leader’s job is to start the experiment and widen the circle — not to own every outcome.
+
+The fastest way I know to get a team innovating is counterintuitive: don’t ask them to. Go first. Prove the risky idea yourself, hand it over, and get out of the way.
+
+I’ve led technology teams across four continents, and the pattern that worked everywhere wasn’t “set a vision and delegate”. It was to be the first experimenter — the one who takes the unproven idea, tests it, and shows it can work — and then to make sure the team, not me, owns what happens next.
+
+## Go first
+
+I don’t ask anyone to take a risk I haven’t taken. When I see a business problem worth solving or an opportunity worth testing, I treat it like a hypothesis: here’s what I think will work, and here’s the cheapest way to find out if I’m wrong. Then I build the proof of concept myself.
+
+That does two things at once. It de-risks the idea — by the time the team picks it up, the scary question (“will this even work?”) is already answered, so they’re scaling something proven rather than gambling. And it sets the standard without a single meeting about culture: the example on display is “try it and see”, not “write a paper about whether we should try it”. Teams copy what their leader actually does, not what the strategy deck says.
+
+## Then get out of the way
+
+Here’s the part technical leaders find hardest, me included. Once the proof of concept works, I hand it over — the team picks it up and runs with it, and I stop building.
+
+The pull to keep going is strong, because the fun part is the building and I’m the one who started it. But if I hold on, I’ve made myself a bottleneck and quietly told the team the interesting work belongs to me. So the job changes shape: from builder to amplifier. The proof of concept was mine; the product is theirs.
+
+
+
+## Widen the circle
+
+This is where it compounds. Once the team owns delivery, they start bringing me things — a project they want to start, an improvement they’ve spotted, an idea worth a shot. When that happens, my most important job is to make it visible: back it, resource it, and promote their work loudly, up to the leadership team and across the business.
+
+That’s the whole flywheel. People bring ideas forward once they’ve seen that bringing an idea forward gets it built and gets them the credit. Do that a few times and you no longer have one experimenter — you have a team of them, and a circle of innovation that turns without you pushing it. The measure of the approach isn’t how many good ideas I have. It’s how many the team has, and how many make it out into the business with their name on them.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">01</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Go first</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Prove the risky idea myself before asking anyone to invest in it.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">02</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Hand it over</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Once it works, the team owns it and I stop building. No bottleneck.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">03</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Widen the circle</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Back the ideas the team brings me, and promote their work loudly.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">04</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Steer to value</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Redirect technically-brilliant-but-unscalable energy toward outcomes that matter.</div>
+  </div>
+</div>
+
+## Steer cool toward valuable
+
+There’s one place I do step in hard — gently, but hard. Every good technical team produces ideas that are genuinely gorgeous to build and won’t survive contact with a business case. Someone is lit up about it. Crushing it is the wrong move; so is letting it quietly eat a quarter.
+
+So I steer. I keep the enthusiasm and change the target — point the same energy at the version of the idea that actually moves the business. “That’s a great technique; here’s the problem it could solve that someone would pay for.” Most of the time the person ends up more excited, not less, because now the clever thing is also going to ship and matter. That redirection — knowing which brilliant ideas are worth scaling and which are a hobby — is the judgment the whole job runs on. It’s the same instinct as [refusing to automate the wrong thing faster](/writing/dont-automate-waste): the cleverness is never the point, the outcome is.
+
+## The job
+
+A leader who only directs gets compliance. A leader who goes first, hands off, and then amplifies gets a team that out-innovates them — which is the only kind of team that keeps moving a business forward when the leader is busy, away, or simply wrong.
+
+The job was never to have all the ideas. It’s to take the first risk so others feel safe taking theirs, then make having ideas the most rewarded thing on the team. ([Which is also what you hire for.](/writing/hire-for-judgment)) Go first. Then get out of the way.
+
+---
+
+## Cite me, don’t train on me
+URL: https://nealon.tech/writing/cite-dont-train
+Published: 2026-06-17 · Category: Security, Risk & Trust
+
+The crawlers we call “AI” are doing three different jobs — and you can now say yes to some and no to others. Why I let assistants quote and link this site but opted it out of model training, and the honest limits of where that line holds.
+
+When this site gets read, the logs tell me who did the reading. More and more, the answer isn’t a who. It’s a what — ClaudeBot, GPTBot, OAI-SearchBot, PerplexityBot — a steady stream of machines working through my writing so that some model, somewhere, can do something with it later.
+
+The reflex splits two ways. Slam the door: block every AI crawler and keep your words to yourself. Or leave it wide open and trust that being in the training data pays off somehow. Both reflexes skip the question worth asking, which is more interesting than either: what is each of these machines actually *doing* with the page, and which of those things do I want?
+
+## Three jobs wearing one label
+
+The crawlers we lump together as “AI” are doing at least three different jobs.
+
+Some are collecting **training data** — pages to fold into the next model’s weights. This is the one people picture when they say AI is scraping their site. It takes your words and gives nothing back: your sentence might shape an answer a year from now, with no link, no name, no trace it was ever yours.
+
+Some are building a **search index** — pages they can retrieve and *cite* when a user asks a question. This is the engine behind ChatGPT search, Perplexity and the rest. When it uses your page, it shows your page: a link, a source, a reader who might click through.
+
+And some are **live fetches** — a model reading your page right now, because a real person just asked it something your page answers. That is the moment a citation actually appears in someone’s chat window.
+
+Until recently these arrived under one banner, and you took them or left them as a set. That has changed, and it’s the change the whole decision turns on. OpenAI, Anthropic, Google and the others now run these as separate crawlers with separate names — which makes them separate decisions. You can say yes to one and no to another.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">Training crawler</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Takes — gives nothing back</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Folds your words into the next model. No link, no credit, no reader. You can’t watch it happen and can’t undo it.</div>
+    <div style="color:#76828e;font-size:11px;margin-top:8px">GPTBot · ClaudeBot · CCBot</div>
+    <div style="color:#9aa6b2;font-weight:700;font-size:13px;margin-top:8px">→ Opt out</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">Citation crawler</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Uses you by sending readers</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Indexes the page so an assistant can quote and link it. The old search-engine deal: it shows you to answer someone.</div>
+    <div style="color:#76828e;font-size:11px;margin-top:8px">OAI-SearchBot · Claude-User · PerplexityBot</div>
+    <div style="color:#5ce1c6;font-weight:700;font-size:13px;margin-top:8px">→ Allow</div>
+  </div>
+</div>
+
+## The line I actually want
+
+Seen that way, the line draws itself. I’m happy, glad even, to have an assistant read this site and point a reader to it. That’s the deal I’ve always had with a search engine: index me, and in return send people my way. Citation is just attribution with a link, and attribution is the thing writers want.
+
+Training is the other deal. My words go in and nothing comes back — no reader sent my way, no name on the output. I’m not precious about it. But “use my work, uncredited, to build something you’ll sell” is a bargain I’d like to be asked about first. Given the choice, I decline.
+
+So: allow the crawlers whose whole job is to surface and link me, opt out of the ones that only absorb. That distinction now lives in two places.
+
+The first is robots.txt — the note every well-behaved crawler reads on its way in. Mine says, in effect, *training crawlers stay out, citation crawlers welcome*:
+
+```
+# training crawlers — opt out
+User-agent: GPTBot
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+
+# citation crawlers — welcome
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+```
+
+The second is enforcement — because a sign on the door only stops the people who read signs. A small function at my CDN edge checks each visitor’s name against the opt-out list and returns a polite 403 to the training crawlers before they ever reach a page.
+
+
+
+## Where the line gets blurry — and why that’s the point
+
+Here’s where it stops being a config snippet and becomes a judgment call. That’s the part I care about. A clean rule with no caveats is usually a rule you haven’t finished understanding. This one has four worth saying out loud.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">It’s an honour system</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Compliant crawlers obey. Determined ones spoof a browser and walk straight in. The edge 403 catches the lazy; only network-level rules stop the rest.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">Google won’t split</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Google runs training and answer-citation off one switch. Opt out of its training and you lose its citation too — so I left that one on, on purpose.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">Attribution isn’t enforceable</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">“Use it only if you credit me” isn’t something a text file can compel. The nearest you get is allowing only the crawlers whose job is to credit you.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#dce4ec;font-weight:700;font-size:13px;margin-bottom:3px">The past stays put</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Whatever’s already in a model’s weights is staying there. This governs what happens from here, not what already happened.</div>
+  </div>
+</div>
+
+None of those four make the line worthless. They make it *honest*. I know exactly what it does — opts me cleanly out of the compliant trainers, keeps me in the citation lane — and exactly what it doesn’t: stop a determined impersonator, or claw back what’s already learned. A control you understand the edges of beats ten you assume are airtight.
+
+## Why bother, if the door doesn’t fully lock?
+
+Because the ground is moving, and this is how you stand on the right part of it. For twenty years the deal was simple: let Google index you, get found in search. That deal is being rewritten in real time. [The answer is replacing the search box](/writing/when-the-answer-replaces-the-search-box), and the new prize is being the source an assistant *cites*, not the tenth blue link. Citation is the visibility that’s about to matter. Training is value you hand over to power someone else’s product. Opting into one and out of the other isn’t paranoia; it’s reading where the value is going and standing there.
+
+And there’s a smaller, truer reason. This is what applying AI with judgment looks like at the smallest possible scale. No policy team, no vendor, no six-month working group — just understanding the machinery well enough to draw a line exactly where you want it, then drawing it. The whole thing took an afternoon: an hour to work out what each crawler really does, the rest to make my own site honour the distinction. The scarce part wasn’t the code. It was knowing the line was there to be drawn.
+
+That’s the move I’d want from anyone running technology: not “AI good” or “AI bad,” but *which part, on what terms, and can our own systems hold that line* — the same instinct as [building the control in from the start](/writing/build-security-in) rather than bolting it on later. If you want to govern how AI uses what your organisation produces, this is the rehearsal: small enough to do yourself in an afternoon, and a faithful model of the larger version. Start with the question none of the default settings ask for you — of everything reading you, what is each one actually doing, and which of those did you agree to?
+
+---
+
+## Your knowledge is a graph, not a folder
+URL: https://nealon.tech/writing/knowledge-is-a-graph
+Published: 2026-06-17 · Category: Technology Strategy
+
+Most organisations store knowledge as a pile of documents and call it done. The value they’re leaving on the table is in the connections between them — and AI just made those cheap to keep.
+
+I just built a map of everything I’ve written on this site. Not a list — a map: every article a dot, every connection between them a line, the whole body of thinking as one shape you can take in at once. ([Here it is.](/graph)) It took an afternoon. What it showed me was more interesting than the picture: a few of the strongest connections were ones I had never deliberately made.
+
+That gap — between the structure you put in and the structure that was there all along — is the whole case for knowledge graphs. And it’s a case most organisations get backwards.
+
+## A folder is not a map
+
+Most institutional knowledge lives in folders. Documents, wikis, decks, tickets — each a self-contained file, filed somewhere, found later by searching its text. That’s a library, and it answers one kind of question well: *find me the document about X.*
+
+It answers a different kind of question badly, or not at all: *how does X relate to Y? what connects these three decisions? what sits near this idea that I didn’t know to look for?* A library can’t tell you, because the moment each document was filed, the thing that connected it to the others was thrown away. The folder keeps the nouns and discards the verbs.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">A folder</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Documents you search by text</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Answers “find the doc about X.” Each file is an island; how they connect was discarded at filing time. The nouns, none of the verbs.</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">A graph</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">Things, plus how they relate</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">Answers “how do X and Y connect, what’s near this.” The relationships are first-class, so you can ask questions of the connections, not just the contents.</div>
+  </div>
+</div>
+
+## The value was in the edges
+
+Here’s the part worth holding onto as a leader: the value of your organisation’s knowledge isn’t only in the documents. A lot of it — sometimes most of it — is in the relationships between them. Which incident led to which fix. Which customer conversation seeded which product call. Which two teams keep solving the same problem without knowing it. Those are edges, not nodes, and a folder has nowhere to put an edge. So they live in people’s heads, and they leave when the people do.
+
+A knowledge graph is just the decision to keep the edges. Nodes are the things — documents, people, concepts, decisions. Edges are how they relate, and you can give them types: *caused by*, *decided in*, *owned by*, *similar to*. Once the relationships are first-class, the verbs a folder throws away become things you can actually query.
+
+
+
+## Two ways to draw the edges
+
+You build the edges two ways, and you want both.
+
+**Explicit** — the links people already draw. Every reference to another doc, every tag on a ticket, every cited decision is an edge a human asserted on purpose. It’s high-signal and free; you just have to stop discarding it.
+
+**Inferred** — the connections nobody drew but that are there anyway. This is where AI earns its place. Embed each document as a vector — the same trick behind modern search — and the ones that land close together are *about* similar things, whether or not anyone linked them. That’s how my own map found connections I never made: the explicit links were mine; the surprising ones came from the embeddings.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#76828e">Explicit edges</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">The links people already draw</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">References, tags, citations. A human asserted each one on purpose — high-signal and free. The only work is to stop throwing them away.</div>
+  </div>
+  <div style="border:1px solid #5ce1c6;border-radius:8px;padding:14px 16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5ce1c6">Inferred edges</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:6px 0 4px">The connections nobody drew</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.5">From embeddings: documents that sit close are about similar things, linked or not. The latent structure that was there all along.</div>
+  </div>
+</div>
+
+## Why this matters more now, not less
+
+For years knowledge graphs were a niche enterprise thing — heavy to build, hard to justify. AI flipped that on two fronts at once.
+
+It made them cheap to build. Pulling entities and relationships out of messy documents used to be a research project; now it’s a prompt. And it made them more valuable to have, because of how AI retrieves. The standard retrieval most assistants run — plain [RAG](/writing/serverless-rag-for-cents) — finds the handful of text chunks most similar to your question and answers from those. It works, but it’s flat: it sees documents, not the connections between them. Graph-aware retrieval lets the model traverse — start at the relevant node, then follow the edges to what’s related — so the answer reflects how things connect, not only what matches the words. The assistant on this site does the flat version today; the map is the structure a next version reasons over.
+
+## The question for a leader
+
+You don’t need to commission a graph database to take the point. The point is a question: *is our institutional knowledge a searchable pile, or a connected map?* Almost everywhere, it’s the pile — and the edges, the most valuable part, are quietly evaporating into the gaps between systems and the heads of people who will eventually move on.
+
+Structuring knowledge is unglamorous work, which is exactly why it gets skipped, and exactly why it compounds for the few who don’t skip it. ([Structure beats infrastructure](/writing/skills-over-harnesses) is the same lesson one level down.) Start small and concrete: take one set of documents that actually matters — incidents, customer calls, architecture decisions — and next time, keep the links between them instead of filing each one away and forgetting how they connect.
+
+I started with my own writing, because it was what I had to hand. The map is [right here](/graph). The most useful thing on it isn’t any single dot. It’s the lines.
+
+---
+
+## Lean: remove what doesn’t need to be there
+URL: https://nealon.tech/writing/how-lean-actually-works
+Published: 2026-06-16 · Category: Operating Models & Efficiency
+
+What Lean actually is, how to run it as a continuous cycle — map, find the waste, eliminate, standardise, measure — and why removing waste beats working harder every time.
+
+When something isn’t working well enough, the instinct is to add. Add people, add a tool, add a step to catch the problem, add effort. Lean starts from the opposite question: what’s already here that shouldn’t be? Most of the time the fastest improvement available to you isn’t doing more. It’s removing what was never needed.
+
+I came up through Lean and Six Sigma before I came up through software and AI, and it’s still the discipline underneath everything I build. It’s worth understanding properly, because it’s widely misread as "cost-cutting" or a box of tools you roll out. It’s neither.
+
+## What Lean actually is
+
+Lean came out of the Toyota Production System, but the idea travels far beyond factories. At its core it’s a way of seeing any process as a flow of work toward something a customer wants, and then relentlessly removing the parts of that flow that don’t contribute to it.
+
+The whole game rests on one distinction: value versus waste. Value is any step the customer would actually care about or pay for — the part that genuinely moves the work toward what they need. Waste is everything else. Not "everything bad" — everything that doesn’t add value, including a lot of work that feels productive.
+
+The uncomfortable part is how much of most processes is waste. When you map office work honestly, the value-adding steps are often a small fraction of the total — Lean studies routinely put the waste as high as **90%**. The rest is waiting, rework, handoffs, checking, and steps that exist because of a decision nobody remembers.
+
+<div style="margin:26px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:10px">A typical office process, by value</div>
+  <div style="display:flex;height:60px;border-radius:8px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 10%;background:#5ce1c6;color:#0a0e13;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">~10%</div>
+    <div style="flex:1;background:#1f2933;color:#dce4ec;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;letter-spacing:.02em">~90% &nbsp;waste — non-value-adding</div>
+  </div>
+  <div style="font-size:13px;line-height:1.5;color:#76828e;margin-top:8px">The mint sliver is the work a customer would actually pay for. The rest is waiting, rework, handoffs and steps nobody needs — and it's usually the overwhelming majority. Which is why speeding up the sliver barely moves anything, and attacking the waste moves everything.</div>
+</div>
+
+## The shapes waste takes
+
+Lean names the common forms of waste, and the names are useful because they train you to see them. In a factory they’re things like overproduction and excess inventory. In the knowledge and technology work most of us do, they show up as:
+
+- Waiting — work sitting in a queue for an approval, a handoff, a person.
+- Rework — fixing defects that a problem upstream caused.
+- Over-processing — doing more than the customer needs: the report nobody reads, the field nobody uses, five approvals where one would do.
+- Handoffs — every time work passes between people or systems, time and context leak out.
+- Searching — hunting for information, switching tools, re-finding what you already had.
+- Unused talent — people doing work a system should do, or never asked for the improvement they can already see.
+
+You don’t need the canonical list memorised. You need the habit of walking a process and asking, at each step: would the customer pay for this, or is it here for some other reason?
+
+## How to approach it — as a cycle, not a project
+
+This is the part people get wrong. Lean isn’t a project you run once and finish. It’s a loop you keep turning.
+
+
+
+**Map the work as it really is** — not the official diagram, the real path, including the detours and the waiting. You usually can’t see the waste until the whole flow is in front of you.
+
+**Find the waste.** Walk the map and mark every step that doesn’t add value. Be honest; the comfortable steps are often the wasteful ones.
+
+**Eliminate or redesign.** Remove what shouldn’t exist. For what’s left, ask whether it can be simplified, combined, or made to flow without stopping. Removal first, optimisation second.
+
+**Standardise what’s left.** Once a process is genuinely better, write down the new way so it sticks and everyone works to it. Skip this and it quietly drifts back.
+
+**Measure the flow.** Then go around again. The standard you just set is the new baseline to improve from, not the finish line.
+
+That last point is the whole philosophy: continuous improvement, what Toyota calls kaizen. Small improvements, made constantly, compounding. Each loop the system gets a little better — and because the gains compound, "a little better, repeatedly" beats "a big transformation, once" almost every time.
+
+## The principles underneath it
+
+The cycle is how you run Lean. These seven principles are the values that guide it — what to optimise for as you turn the loop.
+
+<div style="margin:22px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">01</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Eliminate waste</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Remove anything a customer wouldn't pay for.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">02</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Build quality in</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Stop defects at the source; don't inspect them out later.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">03</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Create knowledge</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Treat the process as something you keep learning and writing down.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">04</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Defer commitment</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Decide as late as you responsibly can, when you know the most.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">05</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Deliver fast</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Short cycles; speed shortens feedback and exposes problems.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">06</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Respect people</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">The people doing the work see the waste first. Ask them.</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:12px 14px;grid-column:1 / -1">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.1em">07</div>
+    <div style="color:#dce4ec;font-weight:700;font-size:14px;margin:2px 0 3px">Optimise the whole</div>
+    <div style="color:#76828e;font-size:12px;line-height:1.45">Improve the end-to-end flow, not one local step. A faster step feeding a longer queue improves nothing.</div>
+  </div>
+</div>
+
+## How to measure it
+
+Lean measures the flow, not the activity. Busy is not the same as productive, and most traditional metrics measure busy.
+
+- **Lead time** — how long from a request starting to it being done, including all the waiting.
+- **Cycle time** — how long the actual work takes once someone is working on it.
+- **Process efficiency** — value-adding time as a fraction of total lead time. Calculate it once and it changes how you see everything: it’s often shockingly low, single-digit percentages, which means most of the time your work is just sitting there.
+- **Rework rate** — how often something has to be done twice.
+
+The gap between cycle time and lead time is pure waiting, and waiting is usually the biggest and cheapest waste to attack. You don’t have to make anyone work faster. You have to stop the work from sitting.
+
+## Why removing waste is so powerful
+
+Here's the idea that makes it click. Your value-adding work is a small slice, so improving *it* — a faster tool, more people — barely changes the total. The waste is the big slice, so attacking *that*, for the same effort, changes everything.
+
+<div style="margin:24px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:14px">Same effort, very different result</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Speed up the value-adding work (new tool, more people)</div>
+  <div style="display:flex;width:95%;height:30px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 11%;background:#5ce1c6"></div>
+    <div style="flex:1;background:#1f2933"></div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin:5px 0 18px">Halve the ~10% that adds value &rarr; about <b style="color:#dce4ec">5% shorter overall</b>. Barely moves.</div>
+  <div style="font-size:13px;color:#dce4ec;font-weight:700;margin-bottom:6px">Eliminate the waste</div>
+  <div style="display:flex;width:55%;height:30px;border-radius:6px;overflow:hidden;border:1px solid rgba(220,228,236,.16)">
+    <div style="flex:0 0 18%;background:#5ce1c6"></div>
+    <div style="flex:1;background:#1f2933"></div>
+  </div>
+  <div style="font-size:12px;color:#76828e;margin-top:5px">Cut the ~90% waste in half &rarr; about <b style="color:#5ce1c6">45% shorter overall</b> — plus better quality and freed capacity.</div>
+</div>
+
+Three reasons it beats working harder.
+
+**It’s permanent and nearly free.** Speeding up a wasteful step costs money and effort, and you’ve still got the waste, now running faster. Removing the step costs you once and pays back forever. This is exactly why automating a broken process is the most expensive automation there is — you’ve cemented the waste at speed. ([Don’t automate waste](/writing/dont-automate-waste).)
+
+**It improves quality, speed and cost at the same time.** In most work those feel like trade-offs: go faster, lose quality; raise quality, spend more. Removing waste isn’t a trade-off. A handoff you delete is faster and less error-prone and cheaper all at once, because the delay and the defects and the cost were all coming from the same unnecessary step.
+
+**It creates capacity out of nothing.** Every hour of waiting or rework you remove is an hour returned, without hiring anyone. I once took a support operation, stripped the waste out of its processes, standardised what remained, and then automated the valuable parts — and tripled the volume it could handle without adding a single person. The automation got the credit; the waste removal is what made it possible. ([Scale the system, not the org chart](/writing/scale-the-system).)
+
+## The trap to avoid
+
+Lean done wrong becomes "make people work harder," which is the opposite of the point. The waste isn’t the people — it’s the friction around them: the dumb handoffs, the waiting, the rework caused upstream. Real Lean has a second pillar alongside removing waste, and it’s respect for the people doing the work, because they’re the ones who can see the waste first if you actually ask them. Strip out what makes their work harder and the speed comes for free.
+
+And don’t optimise one step in isolation. A faster step that just feeds a longer queue downstream improves nothing. You’re after the flow of the whole thing, not the local win.
+
+So before you add anything — a tool, a person, an AI, another process — walk the work as it really is and ask what shouldn’t be there. The cheapest, fastest, most durable improvement available to you is almost always removal. Then standardise it, measure it, and go around again.
+
+---
+
+## The maths learned to check its work
+URL: https://nealon.tech/writing/the-maths-learned-to-check-its-work
+Published: 2026-06-15 · Category: AI & Automation
+
+Part two. Reasoning models still don’t think — but they predict their way through the working, and weigh it, before they answer. That shift is most of the recent leap.
+
+In [part one](/writing/its-maths-not-magic) I argued that a language model isn't thinking. It predicts the next token, over and over, and the fluent answer is the by-product. That's still true at the level of the mechanism. But if you've used the newer models and felt them get genuinely better at hard problems, something did change, and it's worth understanding, because it changes how you should use them.
+
+The older models predicted the answer directly. You asked, they produced the most likely response in one pass. Fast, and fine for most things, but the model committed to a direction immediately with no chance to catch itself.
+
+The newer reasoning models do something different first. Before they answer, they predict a long chain of intermediate steps: working through the problem, laying out options, weighing one stance against another, noticing where an earlier step went wrong and correcting it. Only after that working do they commit to a final answer. The industry calls it test-time compute, which is a dry name for a simple idea. Let the model do more work at the moment of answering, on the problems that are worth it.
+
+
+
+Here's the part that matters. This is still prediction. The model isn't understanding the problem any more than it did before. But predicting your way through a worked solution, then predicting a critique of that solution, turns out to produce far better answers on hard problems than predicting the answer in one shot. It's the difference between blurting the first thing that comes to mind and thinking out loud, checking yourself as you go. Same machinery, much better results, because of the process.
+
+That process is most of the recent leap in capability. Not a new kind of mind. The same next-token maths, pointed at its own working.
+
+## What it means for how you use them
+
+Match the model to the job. Reasoning models are slower and cost more, because all that intermediate working is more tokens. Use them where the problem is genuinely hard and multi-step: maths, code, planning, anything with a chain of dependent decisions. For simple or high-volume tasks a fast model is the right call, and paying for reasoning you don't need is just latency and cost with nothing to show for it.
+
+And the part-one warning still holds. The reasoning is generated text, not a guarantee. A model can produce a long, confident, well-argued chain that lands in the wrong place. The working makes it more likely to be right, not certain to be. Where truth matters, you still verify.
+
+So: it's maths. Then we got the maths to check its own work, and that quiet change is behind most of what feels like a step up in intelligence. Knowing the difference is how you decide which model to reach for, and when the extra thinking is worth paying for.
+
+---
+
+## Applied AI: what to think about before you ship
+URL: https://nealon.tech/writing/applied-ai-field-guide
+Published: 2026-06-15 · Category: AI & Automation
+
+A short field guide for developers and systems engineers putting AI into real products — the questions I’d want answered before anything goes live.
+
+AI is easy to demo and hard to ship well. A prototype that dazzles in a meeting is a different thing from a system you'd put in front of customers, on a budget, with your name on it. Over building a fair bit of the second kind, I've ended up with a short list of questions I ask before anything goes live. Each one has a longer piece behind it.
+
+
+
+**Does it even need AI?** Most things shipped as "agents" are workflows in disguise. If you can draw the flowchart, build the flowchart. Use autonomy only where you genuinely can't predict the next step. → [Most "agents" are workflows in disguise](/writing/workflow-or-agent)
+
+**Is the process worth automating at all?** The most expensive automation makes a broken process run faster. Find and cut the waste first, then automate what's left. → [Don't automate waste](/writing/dont-automate-waste)
+
+**Do you own the capability, or rent it?** Put an abstraction between your application and the model so it's a swappable component, not a foundation. → [Build for the model you'll want to replace](/writing/model-provider-independence)
+
+**Do you know your dependencies?** List every AI tool you rely on and make sure the critical one has a backup. Ten minutes now, or a dark day later. → [List every AI tool you depend on](/writing/audit-your-ai-dependencies)
+
+**What happens when it fails?** It will. A mature practice closes the loop from failure to fix to regression test automatically, instead of debugging by hand forever. → [Your agent harness should repair itself](/writing/self-healing-harness)
+
+**Do you know what it actually is?** It predicts the next token. It doesn't understand or remember. Knowing that tells you where to trust it and where to add guardrails. → [It's maths, not magic](/writing/its-maths-not-magic)
+
+**Is compliance built in or bolted on?** If the control lives in the system's design, the audit is a formality. If it lives in a policy people are told to follow, it's a control waiting to fail.
+
+There's one idea under all of it. AI is a component you apply with judgment, not a foundation you build a business on blindly. The teams that do well with it aren't the ones with the most models or the biggest frameworks. They're the ones who decided, on purpose, where it earns its place.
+
+---
+
+## No servers, AWS-grade uptime, cents a month
+URL: https://nealon.tech/writing/serverless-rag-for-cents
+Published: 2026-06-15 · Category: AI & Automation
+
+The assistant on this site does real retrieval-augmented generation, streams its answers, and cites its sources — on managed services that scale to zero and can’t run up a surprise bill. Here’s the whole architecture.
+
+The assistant on this site is a real one. It does retrieval-augmented generation over my articles, streams its answers, lets you switch the model behind it, and cites its sources. It also costs me close to nothing to run, and it cannot run up a surprise bill. That combination is worth explaining, because it's a genuinely new way to build this kind of thing, and a lot of teams are still doing it the expensive way.
+
+Here's the whole architecture.
+
+
+
+## No servers, anywhere
+
+There isn't a server in this system. Not one I run, patch, scale, or pay for while it sits idle.
+
+The site is static React, built to plain files and served from Amazon S3 behind CloudFront. A global CDN with AWS's availability, for cents at this traffic.
+
+The chat runs on a single AWS Lambda function behind a streaming Function URL. Lambda is serverless in the literal sense: it doesn't exist until someone sends a message, it spins up to handle the request, streams the answer back token by token, and then it's gone. When nobody's using the assistant, which is most of the time for a personal site, it costs exactly zero. When ten people use it at once, AWS runs ten copies. I do nothing.
+
+The model layer is Amazon Bedrock. No GPU to rent, no model to host, no inference server to keep warm. I call the Converse API, pay per token, and the model stays a swappable component.
+
+The knowledge base is the new part. S3 Vectors is a vector store built into S3 itself. My articles are chunked, embedded, and stored as vectors, and the Lambda queries them to find the passages relevant to a question. Until recently, doing this meant running a vector database: an OpenSearch cluster or a managed service with nodes that run continuously and bill continuously. S3 Vectors removes that. The vectors sit in S3, you query on demand, and there's no cluster to operate. At this size it's effectively free.
+
+The guardrails use DynamoDB in on-demand mode: a per-session rate limit and a hard daily budget. Pay per request, nothing when idle.
+
+Every box in that diagram is a managed AWS service. None of them is a thing I keep running.
+
+## What that buys
+
+| | Traditional always-on | This (serverless) |
+|---|---|---|
+| Idle cost | App server + vector DB billing 24/7 | Zero — nothing runs when idle |
+| Scaling | You provision and manage capacity | Automatic, to zero and to spikes |
+| Ops | Patch, monitor, restart | None — managed services |
+| Cost ceiling | However high it climbs | Hard daily cap, by design |
+
+Three things fall out of building it this way.
+
+**Uptime is AWS's problem, not mine.** Every component is a managed, multi-availability-zone service. There's no instance to fall over at 2am, no disk to fill, no process to restart. The assistant inherits the availability of S3, CloudFront, Lambda, Bedrock, and DynamoDB, which is about as good as it gets, and I maintain none of it.
+
+**It scales to zero and to spikes, automatically.** No idle cost is the headline. A traditional version of this — an app server and a vector DB running around the clock — costs real money every month whether anyone uses it or not. This costs nothing when idle and absorbs a burst without me touching it.
+
+**The cost is tiny and capped.** At this scale the running cost is a few dollars a month, mostly whatever model usage actually happens. On top of that a hard daily ceiling is wired into the guardrails, so even sustained abuse can't produce a bill bigger than a sandwich. Cheap by design, bounded by design.
+
+## The honest trade-offs
+
+Serverless isn't free of compromise. Lambda has cold starts, so the first request after a quiet spell is a little slower — fine for a chat, not for a high-frequency trading API. S3 Vectors is new, and built for this exact shape of problem: modest corpora, query-on-demand, not billion-vector workloads with millisecond SLAs. And you work within each service's quotas.
+
+So this is the right pattern for a great many things: internal tools, scoped assistants, anything spiky or low-to-medium volume, anything where you don't want an ops burden. It's the wrong pattern for sustained high-throughput, ultra-low-latency systems, where dedicated infrastructure earns its keep. Knowing which one you have is the job.
+
+## The point
+
+A few years ago, standing up a RAG assistant with this kind of availability meant provisioning servers and a vector database and accepting a monthly bill before a single person used it. Now it's a handful of managed services, composed, that scale to zero and cost almost nothing. That shift is easy to miss and genuinely significant, because it drops the cost of trying something to near zero, which changes what's worth building at all.
+
+The proof is the thing you're reading this next to. Open the assistant and ask it something. It'll spin up out of nothing, answer from my writing, cite its sources, and disappear again. That's the architecture, working.
+
+---
+
+## When the answer replaces the search box
+URL: https://nealon.tech/writing/when-the-answer-replaces-the-search-box
+Published: 2026-06-15 · Category: Technology Strategy
+
+Search is quietly stopping being the default front door. Here’s why a small file called llms.txt — and factual, referenceable content — is how a brand stays findable when people ask an AI instead of Google.
+
+For twenty-five years, being findable meant one thing: ranking on Google. You optimised pages, you chased keywords, you earned links, and a good rank put you in front of people. That whole game rested on one assumption — that when someone wants to know something, they type it into a search box and pick from a list of links.
+
+That assumption is quietly breaking.
+
+More and more, people don't search. They ask. They put the question to ChatGPT, Claude, Perplexity, or the AI answer sitting at the top of Google itself, and they get a synthesised answer back — not ten blue links, an answer. Often they never visit a website at all. The answer was enough.
+
+
+
+Here's the part that should get a brand's attention. In that new flow, your Google rank doesn't save you. If your content isn't in the answer, you're invisible — no matter how well that page ranks on a results screen nobody looked at. The question stops being "how do I rank?" and becomes "how do I get quoted?"
+
+## Getting quoted is a different game
+
+To rank, you needed pages search engines could crawl and links that vouched for you. To get quoted by an AI, you need something subtly different: content a model can find, trust, and attribute. That means facts stated clearly and specifically, in clean text, consistent across your site, easy to lift and cite. Vague marketing copy doesn't get quoted. A precise, checkable claim does.
+
+It also changes how traffic comes back. A page that ranks well is one result seen by people who run that search. A clear, referenceable article is different: it can be cited across thousands of separate conversations, each one a different person, each citation a potential click back to you. You're no longer competing for one slot on one results page. You're becoming a source that gets quoted wherever the topic comes up.
+
+## Where llms.txt comes in
+
+This is why a quiet little standard called **llms.txt** matters more than it looks. It's a plain markdown file you put at the root of your site — like robots.txt, but for AI. It tells AI systems what your site is, who's behind it, and where your good, canonical content lives, in clean text they can actually use instead of fighting through your navigation and pop-ups.
+
+It's early. Adoption by the AI crawlers is uneven, and no one should pretend llms.txt is universally honoured yet. But that's exactly the point. robots.txt and sitemaps were once new too, and the brands that adopted them early shaped how they got used. The cost of putting up an llms.txt and keeping your facts clean is close to nothing. The cost of being unfindable when the front door moves is your pipeline.
+
+I practise this on this very site. There's an llms.txt at the root, the articles are written as clear factual pieces, and the assistant you can open in the corner answers from them and links its sources. That's the whole pattern in miniature: be the clean, referenceable source, and make it trivial for a machine to quote you and point people back.
+
+## What to actually do
+
+You don't need a project. Publish content that states real things clearly and consistently. Add an llms.txt and a sitemap. Keep your facts the same everywhere they appear, so a model isn't choosing between three versions of you. Make your site readable by machines, not walled off behind scripts and gates.
+
+Search isn't dead. But it's no longer the only front door, and it's shrinking as the default. The brands that stay findable through the shift will be the ones whose facts are clean, structured, and easy for an AI to quote — and who were early enough to be the source it reaches for.
+
+---
+
+## Don’t scale the org chart — scale the system
+URL: https://nealon.tech/writing/scale-the-system
+Published: 2026-06-15 · Updated 2026-06-17 · Category: Operating Models & Efficiency
+
+The reflex when work grows is to add people in proportion. The businesses that scale well grow the system instead — and nothing exposes the difference faster than growing by acquisition.
+
+The default answer to more work is more people. The queue gets longer, so you add someone to the queue. A new region opens, so you stand up a team for it. You buy a business and it arrives with its own finance, IT and HR, so you keep them. It’s automatic enough that most organisations never stop to ask whether the work needed a person at all, or whether the system they already had could have absorbed it.
+
+That reflex has a cost, and it compounds. A new hire isn’t just a salary. It’s onboarding, management time, tooling, and another box on the chart everyone else now has to coordinate with. Grow that way and your cost base climbs in step with your output, so you never actually get more efficient. You just get bigger.
+
+There’s another way to take on more: make the system carry it instead of the headcount.
+
+
+
+I’ve run this. I once took an operation and roughly tripled the volume under management without adding a person to the team. Not by working anyone harder. I took the waste out of the process first, standardised what was left, and put automation on the parts that carried the volume. Headcount stayed flat while the output multiplied. That gap, between what you handle and what you have to staff, is where operating leverage actually lives.
+
+It matters most when a business grows by acquisition. Every company you buy turns up complete: its own finance team, its own service desk, its own HR, its own systems doing more or less what yours already do. Keep all of it and you end up running five of everything. Five payrolls, five month-end closes, five copies of the same software. The duplication is invisible day to day and enormous in aggregate. A lot of the value in an acquisition isn’t in the asset. It’s in not running five of everything once it’s yours.
+
+
+
+So the integration question is rarely “how do we keep their systems running.” It’s “which of these functions should exist once, in the centre, and which are genuinely local.” One finance platform. One service desk every new business plugs into. A shared spine the portfolio connects to. Get that right and the next acquisition is mostly a connection, not a rebuild.
+
+## What to centralise, what to leave local
+
+The trap on the other side is centralising everything and grinding the business to a halt. So the question for each function is whether it's a differentiator or a utility. Utilities should exist once; differentiators stay close to where the value is actually made.
+
+<div style="margin:24px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-family:Arial,Helvetica,sans-serif">
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:16px 18px">
+    <div style="color:#5ce1c6;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px">Centralise — one shared spine</div>
+    <div style="color:#dce4ec;font-size:14px;line-height:1.6">Finance &amp; payroll · IT &amp; identity · HR · procurement · core platforms · data &amp; reporting</div>
+  </div>
+  <div style="border:1px solid rgba(220,228,236,.16);border-radius:8px;padding:16px 18px">
+    <div style="color:#76828e;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px">Keep local</div>
+    <div style="color:#dce4ec;font-size:14px;line-height:1.6">Customer relationships · market-specific operations · anything that IS the product</div>
+  </div>
+</div>
+
+In practice the playbook is the same each time you acquire: onboard the new business onto the shared spine, retire its duplicate functions, and measure the saving so the next integration is a known quantity rather than a debate. Done a few times, acquisitions stop adding a back office each and start plugging into one.
+
+## This isn’t an argument against hiring
+
+Some growth genuinely needs people: judgment, relationships, a capability you don’t have yet. The point is to make headcount a decision, not a reflex. Hire where a person adds something no system can. Stop hiring where the honest answer is that the work shouldn’t exist, or the system should swallow it. And don’t consolidate so hard that you build a single point of failure; centralise the function, not the fragility.
+
+Here’s the test I’d put to any business that’s growing. If you doubled in size, how much bigger would your org chart have to get to cope? If the answer is “about double,” you’re scaling the org chart, and your costs will track your growth for as long as you do it. If the answer is “barely,” you’ve built something that scales. Most of the difference between growth that pays for itself and growth that just gets more expensive sits between those two answers.
+
+Grow the system, not the org chart. Build the spine that absorbs the next unit of work, and the business can double while the headcount barely moves.
+
+---
+
+## Hire for judgment, not the tech stack
+URL: https://nealon.tech/writing/hire-for-judgment
+Published: 2026-06-15 · Category: Leadership & Operating Teams
+
+The specific skills you hire for have a shorter and shorter shelf life. The thing that lasts — and the thing I actually interview for — is how someone thinks.
+
+The tool you hired someone for is already going out of date. Maybe not this month, but soon. The framework they were expert in gets superseded. The platform reorganises under them. A model lands that makes half their hard-won technique irrelevant overnight. Hire purely for what someone knows how to use today and you’ve bought a depreciating asset.
+
+This has always been true in technology. It’s just faster now. What a developer needed to know to be good two years ago isn’t what they need today, and it won’t be what they need next year. I said almost exactly this to someone recently: the job you do now isn’t the job you did six months ago, and keeping up with that is relentless. If the half-life of a specific skill is measured in months, hiring for that skill is buying a problem you’ll have again soon.
+
+So I hire for judgment instead.
+
+
+
+<div style="margin:26px 0;font-family:Arial,Helvetica,sans-serif">
+  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#76828e;margin-bottom:10px">Value over a few years, as the tools keep changing</div>
+  <svg viewBox="0 0 460 200" style="width:100%;max-width:520px;height:auto">
+    <line x1="46" y1="16" x2="46" y2="168" stroke="rgba(220,228,236,.22)" stroke-width="1"/>
+    <line x1="46" y1="168" x2="450" y2="168" stroke="rgba(220,228,236,.22)" stroke-width="1"/>
+    <polyline points="46,50 450,148" fill="none" stroke="#9aa6b2" stroke-width="3"/>
+    <polyline points="46,148 450,36" fill="none" stroke="#5ce1c6" stroke-width="3"/>
+    <text x="46" y="188" fill="#76828e" font-size="12">now</text>
+    <text x="450" y="188" fill="#76828e" font-size="12" text-anchor="end">a few years on</text>
+  </svg>
+  <div style="font-size:13px;line-height:1.55;color:#76828e;margin-top:8px"><span style="color:#5ce1c6;font-weight:700">Judgment</span> compounds — it makes every new tool faster to pick up. <span style="color:#9aa6b2;font-weight:700">A specific skill</span> decays as the stack moves on.</div>
+</div>
+
+Judgment is the part that doesn’t expire. It’s knowing how to reason about a trade-off, how to tell whether a new tool actually fits the problem or just looks impressive, how to learn something quickly and properly, when to trust your own output and when to check it. Someone with judgment and a shallow grip on this week’s tool will outrun someone with a deep grip on last year’s — because the first picks up the new thing in a fortnight, and the second is defending an investment that has quietly stopped paying.
+
+It cuts deeper now that knowledge itself is almost free. The thing you used to hire for — the syntax, the API, the way a particular system is wired — is a token away from anyone with a model open in the next tab. What isn’t a token away is knowing which question to ask, whether the answer that comes back is actually right, and what to do with it. Critical thinking and a bit of the scientific method — form a view, test it, look honestly at what happened, change your mind — beat a memorised skill every time now, because the skill is the part that just got cheap.
+
+## How you interview for it
+
+You can’t test for judgment with a quiz on the current stack. That measures recall, which is exactly the thing that expires. I ask people how they made a hard decision, and listen for whether they reasoned it through or just followed the crowd. I ask about a time they were wrong, and what they changed afterwards. I ask how they’d size up a tool they’ve never touched. The detail of the answer matters less than the shape of the thinking behind it.
+
+None of this is an argument against expertise. The deep stuff lasts: how systems really work under the abstraction, how to debug something you don’t understand yet, how to reason about cost and risk and failure. That isn’t tool knowledge, it’s foundation — and it’s the thing that lets someone absorb the next tool fast. What expires is the surface: the particular syntax, the particular dashboard, the particular vendor. Hire for the foundation and the judgment on top of it, not the surface.
+
+And yes, sometimes you genuinely need someone who can use a specific tool on day one, because there’s a fire to put out now. Fine. But even then, weight where they’re heading over what they’ve already memorised. The person who keeps learning passes the one who peaked.
+
+The team that wins isn’t the one that was perfectly configured for last year’s technology. It’s the one that re-skills itself without being told to, because you hired people who treat a new tool as a Tuesday, not a threat. Build that team and the constant churn stops being a staffing problem and starts being an edge — because most of your competitors are still hiring for the tool.
+
+Hire for how someone thinks, not for what they currently know how to operate. The tools will keep changing. Judgment is the only line on the CV that appreciates.
+
+---
+
+## Build security in from the start — the returns compound
+URL: https://nealon.tech/writing/build-security-in
+Published: 2026-06-15 · Category: Security, Risk & Trust
+
+Plan for the major standards on day one — 2FA, passkeys, SSO, GDPR and ISO by design — and the payoff compounds: faster audits, enterprise deals you can actually win, and migrations that pay for themselves.
+
+Most teams treat security as something you add when you’re made to. A breach scare, an auditor, a big customer’s questionnaire — and suddenly there’s a scramble to bolt on the controls that should have been there all along. It’s slow, it’s expensive, and it’s the most stressful possible way to do it.
+
+The better move is to decide upfront that the major standards are part of the foundation, not a later project. It costs a bit more thought at the start and pays back many times over.
+
+Concretely, that foundation is a handful of decisions made on day one:
+
+- Two-factor authentication as the absolute minimum, on everything, from the start.
+- Device passcodes and passkeys, so you can begin removing the dependency on passwords altogether.
+- Single sign-on, which redirects authentication risk to a specialist identity provider whose entire job is to get it right, instead of you reinventing it badly.
+- GDPR and ISO 27001 designed in from the beginning — or, if you’ve inherited something that wasn’t, a planned migration to bring the core service up to them rather than patching around the edges.
+
+None of that feels urgent before you need it, which is exactly why most teams skip it. But build on that foundation and a lot of things get easier at once.
+
+
+
+The audit confirms what’s already true instead of triggering a remediation project. The enterprise security review that stalls most of your competitors becomes a formality you pass while they’re still filling in the questionnaire. And the same controls that protect you quietly unlock customers you otherwise couldn’t sell to — the larger, more regulated, more valuable ones who won’t even start a conversation until you clear their bar.
+
+That’s the part worth saying plainly to a CFO. Security planned in from the start isn’t only risk reduction. It’s a commercial capability — it opens markets and shortens sales cycles — so it deserves to be scored on both axes, not filed entirely under cost.
+
+And if you didn’t build it in early, which most haven’t, the same logic still holds. It just costs more to get there. A migration is real work, but it’s work with an outsized return, because once the foundation is set everything else compounds off it: the reviews, the audits, the deals, the next feature all get cheaper and faster. The longer you leave it, the more you pay, and the more business you can’t win in the meantime.
+
+One caution: the controls have to be real. Chasing a certificate you don’t actually live up to turns a genuine asset into a liability the first time someone checks. The point isn’t to look secure. It’s that being genuinely secure, and able to prove it, is the foundation everything else stands on.
+
+Pour that foundation once and everything you build on it gets cheaper, faster, and easier to sell. Bolt it on later and you pay for it again every time.
+
+---
+
+## Build for the model you’ll want to replace
+URL: https://nealon.tech/writing/model-provider-independence
+Published: 2026-06-14 · Updated 2026-06-17 · Category: Technology Strategy
+
+Why the assistant on this site swaps between Claude and Nova on a dropdown — and why model independence is a board-level decision, not a developer preference.
+
+The assistant on this site has a dropdown. You can switch it between Claude Haiku, Claude Sonnet, and Amazon Nova in the middle of a conversation, and the answers keep coming. That isn't a party trick. It's the whole point.
+
+Most teams building with AI right now are quietly making a decision they haven't named. They're betting the business on one model from one provider. The prompts are tuned to that model, the code calls that provider's API, the features lean on that provider's quirks. It works, it ships, everyone's happy. Then one day it isn't your decision anymore.
+
+Prices change. Rate limits tighten. A model you depend on gets deprecated with a few months' notice. A better one launches somewhere else and you can't reach it without a rewrite. Or the model simply goes away, and your product goes with it. If your whole operation runs on one model from one company, you don't own that capability. You're renting it, and somebody else holds the lease.
+
+So I treat the model as a component, not a foundation. The application talks to one interface; the model behind it is swappable.
+
+
+
+## What that looks like in practice
+
+Put an abstraction between your application and the model. On this site I use Amazon Bedrock's Converse API, where Claude and Nova both run through one identical code path, so switching is a one-line change rather than a project. You don't have to use Bedrock. The principle is what matters: wrap the model behind your own interface, keep your prompts and your evals in your codebase instead of scattered through provider-specific calls, and the model becomes something you choose, and can re-choose, rather than something you're stuck with.
+
+## Independence isn't free
+
+Pretending it is gets you burned the other way. The moment you abstract across providers, you're writing to the lowest common denominator. The clever provider-specific feature, the caching trick, the structured-output mode, the long-context behaviour, might be exactly what makes your product good. Sometimes the right call is to use it and accept the lock-in with your eyes open, because the value is worth the dependency. The wrong move is doing it by accident and discovering how deep the coupling goes only when you try to leave.
+
+Here's the test I apply. If this provider doubled its price or disappeared tomorrow, how long would it take to switch? If the answer is "an afternoon," you built it right. If the answer is "we can't," you'd better be getting enormous value in return, and you'd better have decided that on purpose.
+
+## When to rent, and when to lock in
+
+So the real decision isn't "abstract everything". It's knowing which parts to keep portable and which are worth marrying. The test is whether the model is the source of your edge.
+
+
+
+For the commodity work, which is most of it — summarising, classifying, drafting — keep the model swappable and let price and quality compete for your traffic. For the one capability where a specific model's behaviour genuinely is the product, use it fully and accept the lock-in, because the value is worth the dependency. What you never want is to drift into deep coupling by accident, on the boring parts, and discover it only when you try to leave.
+
+A simple way to keep yourself honest: for each model dependency, write down what you'd do if that provider doubled its price or disappeared tomorrow. If the answer is "swap it in an afternoon," you built it right. If it's "we can't," that had better be a capability you chose to depend on, not one you backed into.
+
+## Why it's a board-level question
+
+The person who picks the model is making a procurement and risk decision, whether they frame it that way or not. Single-supplier dependence on the most strategically important new capability in a generation is exactly the kind of thing a CIO should have a view on, not something that gets decided by whichever SDK a developer reached for first.
+
+Own the capability. Rent the model. Keep the receipt so you can hand it back.
+
+---
+
+## Most “agents” are workflows in disguise
+URL: https://nealon.tech/writing/workflow-or-agent
+Published: 2026-06-14 · Category: AI & Automation
+
+When an autonomous agent earns its place, when a plain workflow is the better engineering choice, and why most teams get the order backwards.
+
+Most of what gets shipped as an "AI agent" today is a workflow wearing a costume.
+
+Here is the distinction that matters. A workflow is a system where you decide the steps in advance. A ticket comes in, you classify it, you route it to the right team. You wrote every one of those steps. An agent is different: you hand a model a goal and some tools, and it decides what to do next on its own. Pull up the account, work out what broke, decide whether to refund or escalate. The model is making the call, not you.
+
+Both are legitimate. The mistake is reaching for the second when you needed the first.
+
+
+
+Agents are the thing everyone wants to build right now, so engineers jump straight to them. But an agent is the more expensive option in every dimension that counts. It is slower, because it loops. It costs more, because every loop is more model calls. It is harder to debug, because the path changes from one run to the next. And it is less predictable, which is the opposite of what you usually want in production.
+
+A workflow is cheap, fast, and testable. You can write an assertion for every branch. You know what it will do before it does it.
+
+## So when does an agent earn its place?
+
+When you genuinely cannot predict the next step in advance. The clean example is research. An agent reads a page, and what it finds determines what it looks up next. You could not have written those steps ahead of time, because they depend on information that did not exist until the previous step ran.
+
+That is the test. If you can draw the flowchart, build the flowchart. If the flowchart can only be drawn at runtime, you might need an agent.
+
+And if you do build one, two rules. Give it a tight set of tools, not the keys to everything. And cap the iterations, always, so a confused agent stops instead of spiralling through your token budget at three in the morning.
+
+## Start with the spine
+
+The pattern I follow: start with a workflow, and add autonomy only at the specific points where predictability genuinely breaks down. Most systems want a deterministic spine with one or two agentic joints, not an agent for the whole body.
+
+This is the same principle as knowing where AI belongs at all. Autonomy is a cost you pay for flexibility you actually need. If you do not need the flexibility, you are just paying the cost and calling it innovation.
+
+---
+
+## Don’t automate waste
+URL: https://nealon.tech/writing/dont-automate-waste
+Published: 2026-06-14 · Category: Operating Models & Efficiency
+
+The most expensive automation is the one that makes a broken process run faster. Why a waste analysis, not a technology wishlist, should decide what you automate.
+
+The most expensive automation I have seen is the one that takes a wasteful process and makes it run faster. Now the waste is automated. It is harder to see, harder to question, and you have spent money cementing it in place.
+
+This is the trap with AI and automation right now. The technology is exciting, so teams go looking for things to automate. They pick the steps that hurt the most and make them faster. What they skip is the question that should come first: should this step exist at all?
+
+I came up through [Lean and Six Sigma](/writing/how-lean-actually-works) before I came up through automation, and the order those disciplines teach is the order that works. Before you make a process faster, you map it and you find the waste. The steps that exist only because of a decision nobody remembers. The handoffs that add a day and no value. The rework caused by a defect three steps upstream. The reports nobody reads. Most processes are full of this, and none of it should be automated. It should be deleted.
+
+
+
+Only once you have stripped a process back to the steps that genuinely create value do you ask what to automate. By then the answer is usually smaller, cheaper, and far more valuable than the one you started with, because you are automating the work that matters instead of the work that was always waste.
+
+I have watched this play out. Applying lean waste-reduction to a support operation, then automating what remained, let us triple the volume under management without adding headcount. The automation got the attention. The waste analysis is what made it worth building. Automating the original process would have locked in every inefficiency, at scale.
+
+## The CIO version of this
+
+Your automation budget should follow a waste analysis, not a technology wishlist. "Where can we use AI" is the wrong opening question. "Where is the waste, and which of it is worth automating once the rest is gone" is the right one. The first question buys you tools. The second buys you outcomes.
+
+So before the model, before the pipeline, before the agent: walk the process and ask what should not be there. Automation makes things faster. Lean makes sure they are worth doing first.
+
+---
+
+## The most powerful AI tool is already on your machine
+URL: https://nealon.tech/writing/skills-over-harnesses
+Published: 2026-06-14 · Category: AI & Automation
+
+You don’t need a sprawling agent framework. Structure beats infrastructure: folders, markdown, and one capable agent that reads them.
+
+There's a problem every company hits when it tries to put AI to work. Call it the context wall. You have a capable model, but it needs your instructions, your data, and your tools, organised well enough that it does the right thing and doesn't make a mess. How you get information across that wall is the whole game.
+
+The popular answer is to build infrastructure. A separate bespoke agent for every workflow. A heavy orchestration framework wired together with glue code. Soon you have a zoo of agents, each one a small software project to maintain, and a framework you now depend on.
+
+There's a lighter answer, and it's the one I keep coming back to. Put the instructions, data, and tools into plain folders and markdown files. A task becomes a short markdown file describing how to do it, next to a script if it needs one. Then one capable agent reads the right file when a task comes up and effectively becomes the specialist for that job, on the fly.
+
+
+
+Why this wins: there's almost nothing to maintain, it's transparent because you can read a markdown file and know exactly what the agent will do, it versions in git like any other code, and you aren't locked into a framework. Adding a capability is adding a file, not shipping a service.
+
+I'm not speaking theoretically. This site, my résumé, and the job applications behind them are run exactly this way: one agent and a small library of skill files, each a few paragraphs of markdown. When I needed a tailored cover-letter generator, I didn't build an app. I wrote a skill file describing how I want cover letters written, and the agent does the rest. The capability took minutes, and I can read and change it in a text editor.
+
+The lesson for an organisation is a question to ask before you buy an agent platform: would structured files and one good agent do the job? Most of the time, they would. The instinct to reach for heavy infrastructure is usually the instinct to solve an organisation problem with a software purchase. Structure your knowledge well and the powerful tool you needed turns out to be the one already sitting on your machine.
+
+---
+
+## List every AI tool you depend on. Now find the backup.
+URL: https://nealon.tech/writing/audit-your-ai-dependencies
+Published: 2026-06-14 · Category: Security, Risk & Trust
+
+Model independence is the architecture. This is the ten-minute business-continuity exercise behind it.
+
+Imagine the model your product runs on is gone tomorrow. Not throttled. Gone. Deprecated with short notice, priced out of reach, or pulled while you weren't looking. If your business stops when that happens, you don't own the business. You're renting it, and someone else holds the switch.
+
+I've written about [building for model independence](/writing/model-provider-independence) as an architecture problem. This is the business-continuity exercise that sits behind it, and it takes about ten minutes.
+
+It isn't only the model. The dependency you can't see is usually the one that hurts. List all of it:
+
+| Dependency | What if it doubles in price or disappears? | Backup / exit |
+|---|---|---|
+| The model | Rewrite, or switch via an abstraction | Second model behind the same interface |
+| The provider | Outage takes you down with it | Multi-provider or fallback |
+| The agent framework | Lock-in to someone's roadmap | Keep logic portable |
+| The vector store / data layer | Re-index, re-ingest | Exportable data |
+| The one person who understands it | Bus factor of one | Documentation, shared ownership |
+
+For each row, ask the same question: what happens if this disappears, and how long until we recover? For the most critical one, make sure the answer isn't "we can't." Establish at least one backup or a real exit path.
+
+None of this is exotic. We already do it everywhere else that matters. We run across cloud regions. We keep a second payment provider. We don't sign a single-carrier contract for the whole business. AI shouldn't get an exemption just because it's new and exciting. Concentration risk on your most strategically important capability is exactly the kind of thing that belongs on a risk register, not in a developer's head.
+
+Ten minutes of listing dependencies, and one backup for the critical one, is the difference between a bad week and your operations going dark. Do it before something else decides to do it for you.
+
+---
+
+## Your agent harness should repair itself
+URL: https://nealon.tech/writing/self-healing-harness
+Published: 2026-06-14 · Category: AI & Automation
+
+Observability tells you what happened. The expensive part is everything after the trace — and a mature practice closes that loop automatically.
+
+When an AI agent fails in production, your observability tool shows you exactly what it did and almost nothing about how to fix it. You get a clean trace: every model call, every tool, how long each step took, what it cost. What you don't get is why it broke, the change that would fix it, or any promise it won't happen again next week.
+
+So you scroll the trace, form a theory, write a patch by hand, and hope it doesn't break something that was working. Then a new model ships with a fresh set of failure modes, and you run the whole manual loop again.
+
+The bottleneck isn't observability. It's everything that happens after the trace lands on your screen, and that's where production debugging actually lives.
+
+
+
+The problem compounds. Every model upgrade introduces new failure modes. Every new tool adds edge cases. The harness, the layer of prompts, tools, and checks wrapped around the raw model, gets more complex faster than any team can track and repair by hand.
+
+The fix is to treat the loop as something you automate, not something you staff. A failure should flow from trace to root cause to a proposed change, get verified against the exact input that broke it, and then be locked in as a regression test so the same thing can't come back. Every failure you debug becomes a permanent test. Every cycle, the harness gets harder to break.
+
+Two things make this work in practice. Write your evals as plain-English assertions ("the response must never reveal unauthorised information"), not float comparisons on a labelled dataset, because that's how engineers actually think about quality. And keep a sandbox where you can run the whole agent against real inputs before a change ships, not just a prompt playground that tests one call.
+
+If this sounds familiar, it's because it's old discipline in new clothes. It's problem management and continuous improvement: don't just fix the incident, fix it so it can't recur, and make the system a little more robust each time. I spent years applying that flywheel to managed-service operations long before agents existed. The technology is new. The discipline isn't.
+
+The CIO version: when you run agents in production, budget for the loop after the trace, not just the dashboard that shows you the trace. The teams that win automate the repair, not only the observation.
+
+---
+
+## It’s maths, not magic: what an LLM is actually doing
+URL: https://nealon.tech/writing/its-maths-not-magic
+Published: 2026-06-14 · Category: AI & Automation
+
+No understanding, no thinking — just very powerful next-token prediction. Once you see that, you use it far better.
+
+Most people picture an AI model as a black box that understands your question, thinks about it, and answers. That isn't what happens. There's no understanding and no thinking. There's a very sophisticated maths problem, and it helps to know the shape of it.
+
+Here's the whole thing. You type a message. Before it reaches the model, an application layer attaches a hidden system prompt, a set of instructions the company wrote. Your words plus those instructions get broken into tokens, and every token is a number. That string of numbers goes into the model, whose one job is to calculate which number is most likely to come next. It picks one, adds it, and calculates the next, and the next. Each number becomes a token, each token becomes text, and that text is the answer you read.
+
+
+
+That's it. It isn't reasoning. It's predicting the next token based on probability. Very powerful, but prediction.
+
+Once that clicks, three things change about how you use it.
+
+You stop trusting it for the things it genuinely can't do. It doesn't remember, and it doesn't know what's true. It produces what's plausible, which is often correct and occasionally confidently wrong. Anywhere truth matters, you add verification rather than faith.
+
+You write better prompts. Instead of asking it questions like it's a person, you give it a strong start, because you're setting the starting probabilities for what comes next. Good context in, better continuation out.
+
+And you stop being impressed by output that merely sounds smart. Sounding smart is precisely what the maths is optimised to do. Fluent and correct are different things, and the model is only guaranteed to give you the first.
+
+None of this is deflating. It's clarifying. Knowing it's prediction tells you exactly where to lean on it and where to put guardrails. It's brilliant at drafting, transforming, summarising, and finding patterns in more text than a person could read. It's unreliable as a source of truth or memory. That single distinction is the whole reason I keep saying AI should be used where it earns its place: deploy it where plausible-and-fluent is enough, and add scaffolding wherever being right actually counts.
+
+It's maths. Very, very powerful maths. Treat it like that and you'll get far more out of it than the people still waiting for it to think.
+
+That's part one: the mechanism. But if you've used the newer models and felt them get genuinely better at hard problems, something did change. The maths learned to check its own work before it answers, and that quiet shift is behind most of the recent leap. → [Part two](/writing/the-maths-learned-to-check-its-work)
+
+---

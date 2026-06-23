@@ -14,6 +14,8 @@
       content="Technology, Data & AI executive in Sydney. Field notes on building AI that earns its place — and an assistant that explains its own architecture."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="nealon.tech" />
+    <meta property="og:locale" content="en_AU" />
     <meta property="og:url" content="https://nealon.tech" />
     <meta property="og:image" content="https://nealon.tech/og.png" />
     <meta property="og:image:width" content="1200" />
@@ -22,14 +24,52 @@
     <meta name="twitter:title" content="Luke Nealon — Applied AI, field notes & a live demo" />
     <meta name="twitter:description" content="Field notes on building AI that earns its place — and an assistant that explains its own architecture." />
     <meta name="twitter:image" content="https://nealon.tech/og.png" />
+    <meta name="author" content="Luke Nealon" />
     <meta name="theme-color" content="#0a0e13" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/atom+xml" title="Luke Nealon — Perspectives" href="/feed.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Schibsted+Grotesk:ital,wght@0,400..700;1,400..700&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://nealon.tech/#luke",
+            "name": "Luke Nealon",
+            "url": "https://nealon.tech",
+            "image": "https://nealon.tech/og.png",
+            "jobTitle": "Technology, Data & AI Executive",
+            "description": "Sydney-based technology executive — applied AI, automation, and cloud platforms for global networks.",
+            "address": { "@type": "PostalAddress", "addressLocality": "Sydney", "addressRegion": "NSW", "addressCountry": "AU" },
+            "knowsAbout": ["Applied AI", "Retrieval-augmented generation", "AI automation", "Cloud platforms", "Technology strategy", "Operating models", "Security and risk", "Leadership"],
+            "sameAs": ["https://www.linkedin.com/in/luke-nealon", "https://github.com/Luke-Nealon"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://nealon.tech/#website",
+            "url": "https://nealon.tech",
+            "name": "Luke Nealon",
+            "description": "Field notes on building AI that earns its place, and a live AI assistant that explains its own architecture.",
+            "publisher": { "@id": "https://nealon.tech/#luke" },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://nealon.tech/#org",
+            "name": "nealon.tech",
+            "url": "https://nealon.tech",
+            "logo": "https://nealon.tech/og.png",
+            "founder": { "@id": "https://nealon.tech/#luke" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

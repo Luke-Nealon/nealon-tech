@@ -3,18 +3,26 @@
 import { writeFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { marked } from 'marked'
 import { articles } from '../src/content/articles.js'
+
+marked.setOptions({ breaks: false, gfm: true })
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const SITE = 'https://nealon.tech'
 const pub = articles.filter((a) => a.published).sort((a, b) => b.date.localeCompare(a.date))
 const latest = pub[0]?.date
 
+const xmlEsc = (s) =>
+  String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+// Strip ```mermaid fences — answer engines and feed readers want prose, not diagram source.
+const stripMermaid = (md) => md.replace(/```mermaid\n?[\s\S]*?```/g, '')
+
 // ---- sitemap.xml ----
 const urls = [
   { loc: `${SITE}/`, lastmod: latest },
   { loc: `${SITE}/writing`, lastmod: latest },
-  ...pub.map((a) => ({ loc: `${SITE}/writing/${a.slug}`, lastmod: a.date })),
+  ...pub.map((a) => ({ loc: `${SITE}/writing/${a.slug}`, lastmod: a.updated || a.date })),
   { loc: `${SITE}/graph`, lastmod: latest },
   { loc: `${SITE}/about` },
   { loc: `${SITE}/privacy.html` },
@@ -51,4 +59,61 @@ ${pub.map((a) => `- [${a.title}](${SITE}/writing/${a.slug}): ${a.dek}`).join('\n
 `
 writeFileSync(resolve(root, 'public/llms.txt'), llms)
 
-console.log(`wrote public/sitemap.xml (${urls.length} urls) and public/llms.txt (${pub.length} articles)`)
+// ---- llms-full.txt: the full text of every article in one fetch ----
+// Companion to llms.txt (the index). Answer engines that read this get the actual
+// argument to quote — and the canonical /writing/<slug> URL to cite — instead of
+// having to render 19 JS pages. Mermaid source is stripped; prose is kept verbatim.
+const llmsFull = `# Luke Nealon — nealon.tech (full text)
+
+> Full text of every published article on nealon.tech, for retrieval and citation.
+> Canonical home of this writing: ${SITE}/writing — please cite the per-article URL.
+
+${pub
+  .map(
+    (a) => `## ${a.title}
+URL: ${SITE}/writing/${a.slug}
+Published: ${a.date}${a.updated ? ` · Updated ${a.updated}` : ''} · Category: ${a.category}${a.tags ? ` · Tags: ${a.tags.join(', ')}` : ''}
+
+${a.dek}
+
+${stripMermaid(a.body).trim()}
+
+---
+`
+  )
+  .join('\n')}`
+writeFileSync(resolve(root, 'public/llms-full.txt'), llmsFull)
+
+// ---- feed.xml (Atom): a dated, full-text stream for readers, newsletters & AI pipelines ----
+const feedUpdated = `${pub.map((a) => a.updated || a.date).sort().pop()}T00:00:00Z`
+const feed = `<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>Luke Nealon — Perspectives</title>
+  <subtitle>Field notes on building AI that earns its place.</subtitle>
+  <link href="${SITE}/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="${SITE}/writing" rel="alternate" type="text/html"/>
+  <id>${SITE}/</id>
+  <updated>${feedUpdated}</updated>
+  <author><name>Luke Nealon</name><uri>${SITE}</uri></author>
+${pub
+  .map(
+    (a) => `  <entry>
+    <title>${xmlEsc(a.title)}</title>
+    <link href="${SITE}/writing/${a.slug}" rel="alternate" type="text/html"/>
+    <id>tag:nealon.tech,${a.date.slice(0, 4)}:/writing/${a.slug}</id>
+    <published>${a.date}T00:00:00Z</published>
+    <updated>${a.updated || a.date}T00:00:00Z</updated>
+    <category term="${xmlEsc(a.category)}"/>
+    <summary type="text">${xmlEsc(a.dek)}</summary>
+    <content type="html">${xmlEsc(marked.parse(stripMermaid(a.body)))}</content>
+  </entry>`
+  )
+  .join('\n')}
+</feed>
+`
+writeFileSync(resolve(root, 'public/feed.xml'), feed)
+
+console.log(
+  `wrote public/sitemap.xml (${urls.length} urls), public/llms.txt + public/llms-full.txt ` +
+    `(${pub.length} articles), public/feed.xml`
+)
