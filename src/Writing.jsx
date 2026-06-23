@@ -65,7 +65,7 @@ export function WritingIndex({ navigate }) {
   const [activeCat, setActiveCat] = useState('All')
   useEffect(() => {
     document.title = 'Perspectives — Luke Nealon'
-    return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
+    return () => { document.title = 'Luke Nealon — Technology, Data & AI Executive' }
   }, [])
 
   const all = publishedArticles()
@@ -190,7 +190,7 @@ export function Article({ slug, navigate }) {
   useEffect(() => { window.scrollTo(0, 0) }, [slug])
   useEffect(() => {
     document.title = article ? `${article.title} — Luke Nealon` : 'Not found — Luke Nealon'
-    return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
+    return () => { document.title = 'Luke Nealon — Technology, Data & AI Executive' }
   }, [article])
 
   // Related: instant same-category fallback, upgraded to graph neighbours once loaded.

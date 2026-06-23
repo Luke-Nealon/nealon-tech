@@ -17,6 +17,9 @@ const xmlEsc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 // Strip ```mermaid fences — answer engines and feed readers want prose, not diagram source.
 const stripMermaid = (md) => md.replace(/```mermaid\n?[\s\S]*?```/g, '')
+// For llms-full.txt (plain text): also drop inline-HTML wrappers (keeping their text)
+// and collapse the blank lines that leaves behind.
+const cleanText = (md) => stripMermaid(md).replace(/<[^>]+>/g, '').replace(/\n{3,}/g, '\n\n').trim()
 
 // ---- sitemap.xml ----
 const urls = [
@@ -78,7 +81,7 @@ Published: ${a.date}${a.updated ? ` · Updated ${a.updated}` : ''} · Category: 
 
 ${a.dek}
 
-${stripMermaid(a.body).trim()}
+${cleanText(a.body)}
 
 ---
 `

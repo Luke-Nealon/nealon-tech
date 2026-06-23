@@ -8,6 +8,7 @@
 export const articles = [
   {
     slug: 'model-provider-independence',
+    tags: ['model independence', 'vendor lock-in', 'Amazon Bedrock'],
     category: 'Technology Strategy',
     featured: 3,
     title: 'Build for the model you’ll want to replace',
@@ -68,6 +69,7 @@ Own the capability. Rent the model. Keep the receipt so you can hand it back.`,
 
   {
     slug: 'workflow-or-agent',
+    tags: ['AI agents', 'workflows', 'automation design'],
     category: 'AI & Automation',
     title: 'Most “agents” are workflows in disguise',
     dek: 'When an autonomous agent earns its place, when a plain workflow is the better engineering choice, and why most teams get the order backwards.',
@@ -116,6 +118,7 @@ This is the same principle as knowing where AI belongs at all. Autonomy is a cos
 
   {
     slug: 'dont-automate-waste',
+    tags: ['process improvement', 'Lean', 'automation'],
     category: 'Operating Models & Efficiency',
     featured: 4,
     title: 'Don’t automate waste',
@@ -150,6 +153,7 @@ So before the model, before the pipeline, before the agent: walk the process and
 
   {
     slug: 'skills-over-harnesses',
+    tags: ['AI agents', 'simplicity', 'engineering'],
     category: 'AI & Automation',
     title: 'The most powerful AI tool is already on your machine',
     dek: 'You don’t need a sprawling agent framework. Structure beats infrastructure: folders, markdown, and one capable agent that reads them.',
@@ -179,6 +183,7 @@ The lesson for an organisation is a question to ask before you buy an agent plat
 
   {
     slug: 'audit-your-ai-dependencies',
+    tags: ['model independence', 'risk', 'business continuity'],
     category: 'Security, Risk & Trust',
     title: 'List every AI tool you depend on. Now find the backup.',
     dek: 'Model independence is the architecture. This is the ten-minute business-continuity exercise behind it.',
@@ -208,6 +213,7 @@ Ten minutes of listing dependencies, and one backup for the critical one, is the
 
   {
     slug: 'self-healing-harness',
+    tags: ['observability', 'automation', 'reliability'],
     category: 'AI & Automation',
     title: 'Your agent harness should repair itself',
     dek: 'Observability tells you what happened. The expensive part is everything after the trace — and a mature practice closes that loop automatically.',
@@ -242,6 +248,7 @@ The CIO version: when you run agents in production, budget for the loop after th
 
   {
     slug: 'its-maths-not-magic',
+    tags: ['how AI works', 'large language models', 'explainer'],
     category: 'AI & Automation',
     title: 'It’s maths, not magic: what an LLM is actually doing',
     dek: 'No understanding, no thinking — just very powerful next-token prediction. Once you see that, you use it far better.',
@@ -279,6 +286,7 @@ That's part one: the mechanism. But if you've used the newer models and felt the
 
   {
     slug: 'the-maths-learned-to-check-its-work',
+    tags: ['reasoning models', 'how AI works', 'explainer'],
     category: 'AI & Automation',
     title: 'The maths learned to check its work',
     dek: 'Part two. Reasoning models still don’t think — but they predict their way through the working, and weigh it, before they answer. That shift is most of the recent leap.',
@@ -320,6 +328,7 @@ So: it's maths. Then we got the maths to check its own work, and that quiet chan
 
   {
     slug: 'applied-ai-field-guide',
+    tags: ['applied AI', 'engineering', 'product'],
     category: 'AI & Automation',
     title: 'Applied AI: what to think about before you ship',
     dek: 'A short field guide for developers and systems engineers putting AI into real products — the questions I’d want answered before anything goes live.',
@@ -359,6 +368,7 @@ There's one idea under all of it. AI is a component you apply with judgment, not
 
   {
     slug: 'serverless-rag-for-cents',
+    tags: ['retrieval-augmented generation', 'serverless', 'AWS'],
     category: 'AI & Automation',
     featured: 2,
     title: 'No servers, AWS-grade uptime, cents a month',
@@ -429,6 +439,7 @@ The proof is the thing you're reading this next to. Open the assistant and ask i
 
   {
     slug: 'when-the-answer-replaces-the-search-box',
+    tags: ['AI search', 'answer engines', 'discoverability'],
     category: 'Technology Strategy',
     title: 'When the answer replaces the search box',
     dek: 'Search is quietly stopping being the default front door. Here’s why a small file called llms.txt — and factual, referenceable content — is how a brand stays findable when people ask an AI instead of Google.',
@@ -475,6 +486,7 @@ Search isn't dead. But it's no longer the only front door, and it's shrinking as
   },
   {
     slug: 'scale-the-system',
+    tags: ['scaling', 'operating models', 'efficiency'],
     category: 'Operating Models & Efficiency',
     title: 'Don’t scale the org chart — scale the system',
     dek: 'The reflex when work grows is to add people in proportion. The businesses that scale well grow the system instead — and nothing exposes the difference faster than growing by acquisition.',
@@ -547,6 +559,7 @@ Grow the system, not the org chart. Build the spine that absorbs the next unit o
   },
   {
     slug: 'hire-for-judgment',
+    tags: ['hiring', 'leadership', 'teams'],
     category: 'Leadership & Operating Teams',
     title: 'Hire for judgment, not the tech stack',
     dek: 'The specific skills you hire for have a shorter and shorter shelf life. The thing that lasts — and the thing I actually interview for — is how someone thinks.',
@@ -603,6 +616,7 @@ Hire for how someone thinks, not for what they currently know how to operate. Th
   },
   {
     slug: 'build-security-in',
+    tags: ['security', 'compliance', 'architecture'],
     category: 'Security, Risk & Trust',
     title: 'Build security in from the start — the returns compound',
     dek: 'Plan for the major standards on day one — 2FA, passkeys, SSO, GDPR and ISO by design — and the payoff compounds: faster audits, enterprise deals you can actually win, and migrations that pay for themselves.',
@@ -646,6 +660,7 @@ Pour that foundation once and everything you build on it gets cheaper, faster, a
   },
   {
     slug: 'how-lean-actually-works',
+    tags: ['Lean', 'continuous improvement', 'operating models'],
     category: 'Operating Models & Efficiency',
     title: 'Lean: remove what doesn’t need to be there',
     dek: 'What Lean actually is, how to run it as a continuous cycle — map, find the waste, eliminate, standardise, measure — and why removing waste beats working harder every time.',
@@ -802,6 +817,7 @@ So before you add anything — a tool, a person, an AI, another process — walk
   },
   {
     slug: 'cite-dont-train',
+    tags: ['AI crawlers', 'content strategy', 'discoverability'],
     category: 'Security, Risk & Trust',
     title: 'Cite me, don’t train on me',
     dek: 'The crawlers we call “AI” are doing three different jobs — and you can now say yes to some and no to others. Why I let assistants quote and link this site but opted it out of model training, and the honest limits of where that line holds.',
@@ -912,6 +928,7 @@ That’s the move I’d want from anyone running technology: not “AI good” o
   },
   {
     slug: 'knowledge-is-a-graph',
+    tags: ['knowledge graphs', 'data', 'AI'],
     category: 'Technology Strategy',
     title: 'Your knowledge is a graph, not a folder',
     dek: 'Most organisations store knowledge as a pile of documents and call it done. The value they’re leaving on the table is in the connections between them — and AI just made those cheap to keep.',
@@ -992,6 +1009,7 @@ I started with my own writing, because it was what I had to hand. The map is [ri
   },
   {
     slug: 'data-as-a-product',
+    tags: ['data products', 'data strategy', 'analytics'],
     category: 'Technology Strategy',
     featured: 1,
     title: 'Treat data as a product, not exhaust',
@@ -1079,6 +1097,7 @@ Treat data as exhaust and you’ll keep buying tools to manage a mess you keep p
   },
   {
     slug: 'go-first-then-get-out-of-the-way',
+    tags: ['leadership', 'innovation', 'teams'],
     category: 'Leadership & Operating Teams',
     title: 'Go first, then get out of the way',
     dek: 'How I lead a team that out-innovates me: prove the risky idea myself, hand it over to scale, then amplify what the team brings back. The leader’s job is to start the experiment and widen the circle — not to own every outcome.',

@@ -14,7 +14,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { marked } from 'marked'
 import { publishedArticles, CATEGORIES } from '../src/content/articles.js'
-import { hero, notes, firsts, about } from '../src/content.js'
+import { hero, notes, firsts, about, assistant } from '../src/content.js'
 
 marked.setOptions({ breaks: false, gfm: true })
 
@@ -352,6 +352,9 @@ const homeBody =
   `<section><h2>${esc(notes.title)}</h2><p>${esc(notes.lede)}</p>` +
   notes.items.map((it) => `<article><h3>${esc(it.title)}</h3><p>${esc(it.body)}</p></article>`).join('') +
   `</section>` +
+  `<section><h2>${esc(assistant.title)}</h2><p>${esc(assistant.body)}</p>` +
+  assistant.points.map((p) => `<article><h3>${esc(p.h)}</h3><p>${esc(p.t)}</p></article>`).join('') +
+  `</section>` +
   `<section><h2>${esc(firsts.title)}</h2><p>${esc(firsts.lede)}</p><ul>` +
   firsts.rows.map((r) => `<li><strong>${esc(r.year)} — ${esc(r.title)}.</strong> ${esc(r.detail)}</li>`).join('') +
   `</ul></section>` +
@@ -359,8 +362,43 @@ const homeBody =
   arts.map((a) => `<li><a href="/writing/${a.slug}">${esc(a.title)}</a> — ${esc(a.dek)}</li>`).join('') +
   `</ul></section>` +
   `</main>`
-const homeHtml = template.replace('<div id="root"></div>', `<div id="root">${homeBody}</div>`)
+// FAQPage built from content visible in the prerendered home body above (about + assistant).
+const faqLd = ldScript({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Who is Luke Nealon?', acceptedAnswer: { '@type': 'Answer', text: about.big } },
+    { '@type': 'Question', name: 'What does the AI assistant on nealon.tech do?', acceptedAnswer: { '@type': 'Answer', text: assistant.body } },
+    ...assistant.points.map((p) => ({ '@type': 'Question', name: p.h, acceptedAnswer: { '@type': 'Answer', text: p.t } })),
+  ],
+})
+const homeHtml = injectAfterTitle(template, faqLd).replace(
+  '<div id="root"></div>',
+  `<div id="root">${homeBody}</div>`
+)
 if (homeHtml === template) console.warn('  ! could not inject home body — <div id="root"></div> not found')
 writeFileSync(resolve(dist, 'index.html'), homeHtml)
 
-console.log(`prerendered home + ${n} article pages + writing index + about + graph (body + JSON-LD) → dist/`)
+// ---- 404.html — a real (noindex) not-found page; CloudFront serves it with a 404 status
+// for unknown paths instead of the home shell (closes the soft-404 hole). Self-contained
+// so it renders even though it doesn't load the SPA bundle.
+const notFound = `<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Page not found — Luke Nealon</title>
+<meta name="robots" content="noindex" />
+<link rel="canonical" href="${SITE}/" />
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0e13;
+    color:#e6edf0;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;text-align:center;padding:24px}
+  .w{max-width:460px}.m{color:#5ce1c6;font-weight:800;letter-spacing:3px;font-size:13px}
+  h1{font-size:40px;margin:10px 0 6px;letter-spacing:-.5px}
+  p{color:#9aa6ad;font-size:15px;line-height:1.5}
+  a{display:inline-block;margin-top:18px;color:#0a0e13;background:#5ce1c6;text-decoration:none;font-weight:700;padding:10px 18px;border-radius:8px}
+</style></head>
+<body><div class="w"><div class="m">404</div><h1>Page not found</h1>
+<p>That page doesn't exist — it may have moved, or the link was mistyped.</p>
+<a href="/">Back to nealon.tech</a></div></body></html>`
+writeFileSync(resolve(dist, '404.html'), notFound)
+
+console.log(`prerendered home (+FAQ) + ${n} article pages + writing/about/graph + 404 (body + JSON-LD) → dist/`)

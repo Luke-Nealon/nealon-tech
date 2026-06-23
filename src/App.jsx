@@ -251,7 +251,7 @@ function Facts() {
 function AboutPage() {
   useEffect(() => {
     document.title = 'About — Luke Nealon'
-    return () => { document.title = 'Luke Nealon — Technology & Digital Innovation Executive' }
+    return () => { document.title = 'Luke Nealon — Technology, Data & AI Executive' }
   }, [])
   return (
     <>
