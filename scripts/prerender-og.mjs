@@ -14,7 +14,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { marked } from 'marked'
 import { publishedArticles, CATEGORIES } from '../src/content/articles.js'
-import { about } from '../src/content.js'
+import { hero, notes, firsts, about } from '../src/content.js'
 
 marked.setOptions({ breaks: false, gfm: true })
 
@@ -22,6 +22,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = resolve(root, 'dist')
 const SITE = 'https://nealon.tech'
 const LUKE = 'https://nealon.tech/#luke' // the Person entity defined in index.html's JSON-LD
+const ORG = 'https://nealon.tech/#org'   // the Organization entity (article publisher)
 
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -44,6 +45,14 @@ function setTitle(html, value) {
 function injectAfterTitle(html, extra) {
   return html.replace(/(<\/title>)/i, `$1\n    ${extra}`)
 }
+// Replace the existing self-canonical (index.html ships one pointing at the home page)
+// with this page's canonical, rather than adding a second conflicting tag.
+function setCanonical(html, url) {
+  const tag = `<link rel="canonical" href="${esc(url)}" />`
+  return /<link rel="canonical"/i.test(html)
+    ? html.replace(/<link rel="canonical"[^>]*>/i, tag)
+    : injectAfterTitle(html, tag)
+}
 
 function pageHtml(
   template,
@@ -61,7 +70,8 @@ function pageHtml(
   h = setMeta(h, 'name="twitter:title"', title)
   h = setMeta(h, 'name="twitter:description"', description)
   h = setMeta(h, 'name="twitter:image"', image)
-  const extras = [`<link rel="canonical" href="${esc(canonical || url)}" />`]
+  h = setCanonical(h, canonical || url)
+  const extras = []
   if (type === 'article') {
     if (publishedTime) extras.push(`<meta property="article:published_time" content="${esc(publishedTime)}" />`)
     if (modifiedTime) extras.push(`<meta property="article:modified_time" content="${esc(modifiedTime)}" />`)
@@ -73,7 +83,7 @@ function pageHtml(
     extras.push(`<meta property="profile:last_name" content="${esc(profile.last)}" />`)
   }
   if (jsonld) extras.push(jsonld)
-  h = injectAfterTitle(h, extras.join('\n    '))
+  if (extras.length) h = injectAfterTitle(h, extras.join('\n    '))
   if (bodyHtml) {
     const replaced = h.replace('<div id="root"></div>', `<div id="root">${bodyHtml}</div>`)
     if (replaced === h) console.warn('  ! could not inject body — <div id="root"></div> not found')
@@ -160,7 +170,7 @@ function articleLd(a, url, image) {
     url,
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     author: { '@id': LUKE, name: 'Luke Nealon' },
-    publisher: { '@id': LUKE, name: 'Luke Nealon' },
+    publisher: { '@id': ORG, name: 'nealon.tech' },
   }
   const breadcrumb = {
     '@type': 'BreadcrumbList',
@@ -252,19 +262,14 @@ const aboutBody =
     )
     .join('') +
   `</dl></article>`
+// mainEntity references the canonical #luke node (defined in the page's entity graph)
+// by @id only — redefining it here with a different `url` would create a conflicting
+// duplicate of the same @id.
 const aboutLd = ldScript({
   '@context': 'https://schema.org',
   '@type': 'ProfilePage',
   url: `${SITE}/about`,
-  mainEntity: {
-    '@type': 'Person',
-    '@id': LUKE,
-    name: 'Luke Nealon',
-    url: `${SITE}/about`,
-    jobTitle: 'Technology, Data & AI Executive',
-    knowsAbout: ['Applied AI', 'Cloud platforms', 'Automation', 'Technology strategy', 'Security and risk', 'Leadership'],
-    sameAs: ['https://www.linkedin.com/in/luke-nealon', 'https://github.com/Luke-Nealon'],
-  },
+  mainEntity: { '@id': LUKE },
 })
 writeFileSync(
   resolve(dist, 'about.html'),
@@ -334,4 +339,28 @@ writeFileSync(
   })
 )
 
-console.log(`prerendered ${n} article pages + writing index + about + graph (body + JSON-LD) → dist/`)
+// ---- / (home) — inject the real home content into the SPA shell so a non-JS crawler
+// gets the bio, positions, career timeline and essay list instead of an 8-word shell
+// (React's createRoot replaces it on hydration → no visual change). index.html keeps its
+// own self-canonical (https://nealon.tech/), which also dedupes any unknown-path SPA
+// fallback shell back to the home page.
+const homeBody =
+  `<main class="home">` +
+  `<header><p class="home-kicker">${esc(hero.kicker)}</p><h1>Luke Nealon</h1>` +
+  `<p class="home-statement">${esc(hero.statement)}</p></header>` +
+  `<section><h2>${esc(about.title)}</h2><p>${esc(about.big)}</p></section>` +
+  `<section><h2>${esc(notes.title)}</h2><p>${esc(notes.lede)}</p>` +
+  notes.items.map((it) => `<article><h3>${esc(it.title)}</h3><p>${esc(it.body)}</p></article>`).join('') +
+  `</section>` +
+  `<section><h2>${esc(firsts.title)}</h2><p>${esc(firsts.lede)}</p><ul>` +
+  firsts.rows.map((r) => `<li><strong>${esc(r.year)} — ${esc(r.title)}.</strong> ${esc(r.detail)}</li>`).join('') +
+  `</ul></section>` +
+  `<section><h2>Perspectives</h2><ul>` +
+  arts.map((a) => `<li><a href="/writing/${a.slug}">${esc(a.title)}</a> — ${esc(a.dek)}</li>`).join('') +
+  `</ul></section>` +
+  `</main>`
+const homeHtml = template.replace('<div id="root"></div>', `<div id="root">${homeBody}</div>`)
+if (homeHtml === template) console.warn('  ! could not inject home body — <div id="root"></div> not found')
+writeFileSync(resolve(dist, 'index.html'), homeHtml)
+
+console.log(`prerendered home + ${n} article pages + writing index + about + graph (body + JSON-LD) → dist/`)

@@ -4,6 +4,8 @@
 
 This site holds field notes on building AI that earns its place, and a live AI assistant that runs retrieval-augmented generation over these articles and explains its own architecture.
 
+> Full text of every article in one file: https://nealon.tech/llms-full.txt · Atom feed: https://nealon.tech/feed.xml
+
 ## Field notes (articles)
 - [Treat data as a product, not exhaust](https://nealon.tech/writing/data-as-a-product): Most organisations treat data as a byproduct of running systems — owned by no one, trusted by no one. The shift that unlocks both analytics and AI is treating it as a product, with an owner, a contract, and a quality bar.
 - [Go first, then get out of the way](https://nealon.tech/writing/go-first-then-get-out-of-the-way): How I lead a team that out-innovates me: prove the risky idea myself, hand it over to scale, then amplify what the team brings back. The leader’s job is to start the experiment and widen the circle — not to own every outcome.

@@ -43,6 +43,8 @@ const llms = `# Luke Nealon — nealon.tech
 
 This site holds field notes on building AI that earns its place, and a live AI assistant that runs retrieval-augmented generation over these articles and explains its own architecture.
 
+> Full text of every article in one file: ${SITE}/llms-full.txt · Atom feed: ${SITE}/feed.xml
+
 ## Field notes (articles)
 ${pub.map((a) => `- [${a.title}](${SITE}/writing/${a.slug}): ${a.dek}`).join('\n')}
 
