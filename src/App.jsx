@@ -257,9 +257,12 @@ function AboutPage() {
     <>
       <section className="sec wrap" id="about">
         <span className="sec-ghost" aria-hidden="true">§</span>
-        <div className="sec-head reveal in">
-          <span className="idx">About</span>
-          <h1>Who I am</h1>
+        <div className="about-head">
+          <div className="sec-head reveal in">
+            <span className="idx">About</span>
+            <h1>Who I am</h1>
+          </div>
+          <img className="headshot-about reveal in" src="/luke.jpg" alt="Luke Nealon" width="150" height="150" />
         </div>
         <div className="about-grid">
           <Reveal as="p" className="about-big">

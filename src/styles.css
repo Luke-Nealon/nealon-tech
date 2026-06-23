@@ -209,6 +209,26 @@ a {
   color: var(--ink);
 }
 
+/* Headshot — a real face for trust/E-E-A-T, matching the JSON-LD Person.image.
+   Sits top-right beside the "Who I am" heading on /about. */
+.about-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(20px, 4vw, 48px);
+}
+.headshot-about {
+  flex: none;
+  width: clamp(112px, 14vw, 150px);
+  height: clamp(112px, 14vw, 150px);
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  margin: 0;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 0 6px rgba(92, 225, 198, 0.12);
+}
+
 .hero-links {
   display: flex;
   flex-wrap: wrap;
