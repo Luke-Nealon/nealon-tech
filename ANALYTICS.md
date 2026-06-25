@@ -83,6 +83,12 @@ SAM app in `analytics-report/` (stack `nealon-analytics-report`, ap-southeast-2,
   out.** No literal choropleth map (the free QuickChart choropleth was unreliable; a country bar
   chart is used instead). Refresh the DB monthly:
   `curl -fsSL https://download.db-ip.com/free/dbip-country-lite-YYYY-MM.mmdb.gz | gunzip > src/dbip-country.mmdb`
+- **Datacenter / cloud-bot filtering:** a second bundled DB, **DB-IP ASN Lite** (`src/dbip-asn.mmdb`,
+  CC BY 4.0), maps each human IP to its ASN. IPs on scraper compute-clouds (AWS/GCP/Azure/OVH/Hetzner/
+  DigitalOcean…) are dropped as browser-UA bots; privacy relays that carry **real humans** — Apple
+  iCloud Private Relay, Cloudflare WARP, Akamai/Fastly — are explicitly kept (`KEEP_ASN`). Big
+  correction: removed ~70% of inflated "visitors" (datacenter bots). Refresh monthly:
+  `curl -fsSL https://download.db-ip.com/free/dbip-asn-lite-YYYY-MM.mmdb.gz | gunzip > src/dbip-asn.mmdb`
 - **Delivery:** **SES** HTML email (no SNS). Sends from `FromEmail` (default `reports@nealon.tech`)
   to `ToEmail` (default `luke@nealon.tech`). The `nealon.tech` SES domain identity is already
   verified (Easy DKIM); domain verification also covers the `@nealon.tech` recipient in the SES
@@ -90,10 +96,13 @@ SAM app in `analytics-report/` (stack `nealon-analytics-report`, ap-southeast-2,
 - **Schedule:** `cron(0 22 * * ? *)` = 22:00 UTC ≈ 08:00 Sydney (AEST; 09:00 during AEDT).
 - **No engagement/interaction time** — request logs can't see it (would need a cookieless client
   script like Plausible/Cloudflare; deliberately not added, to honour the privacy page).
-- **Setup before deploy** (DB + deps are gitignored): `cd analytics-report/src && npm install` and
-  download the mmdb (command above).
+- **Setup before deploy** (DBs + deps are gitignored): `cd analytics-report/src && npm install` and
+  download **both** mmdbs (the two `curl … | gunzip` commands above — country + ASN).
 - **Redeploy:** `cd analytics-report && sam build && sam deploy --stack-name nealon-analytics-report
   --region ap-southeast-2 --profile personal --resolve-s3 --capabilities CAPABILITY_IAM
-  --no-confirm-changeset --parameter-overrides FromEmail=<addr> ToEmail=<addr> ScheduleExpr='cron(...)'`
+  --no-confirm-changeset` — the template **defaults already match prod** (`ScheduleExpr=cron(0 22 * * ? *)`,
+  `reports@`/`luke@`), so **do NOT pass `--parameter-overrides`**: SAM mangles the spaces in the cron
+  value, EventBridge rejects it (`ScheduleExpression is not valid`), and the whole stack rolls back.
+  Only override when a value actually changes — and verify the cron afterward.
 - **Send one now (test):** `aws lambda invoke --function-name <ReportFunction name>
   --region ap-southeast-2 --profile personal /tmp/out.json`
