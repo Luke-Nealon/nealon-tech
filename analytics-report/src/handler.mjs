@@ -160,6 +160,7 @@ async function runQuery(sql) {
 const n = (v) => Number(v || 0)
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
 const cleanUri = (u) => (u || '').replace(/\.html$/, '')
+const host = (u) => { try { return new URL(/^https?:\/\//.test(u) ? u : `https://${u}`).hostname.replace(/^www\./, '') } catch { return u } }
 
 // QuickChart image URL (renders on demand, stateless)
 function chart(cfg, w = 640, h = 280) {
@@ -232,7 +233,7 @@ export const handler = async () => {
     runQuery(human(W14, `l.date AS date, count(*) views`, '', `GROUP BY l.date ORDER BY l.date ASC`)),
     runQuery(human(W7, `l.uri AS uri, count(*) reads`, ` AND l.uri LIKE '/writing/%'`, `GROUP BY l.uri ORDER BY reads DESC LIMIT 8`)),
     runQuery(human(W7, `l.uri AS uri, count(*) hits`, '', `GROUP BY l.uri ORDER BY hits DESC LIMIT 8`)),
-    runQuery(human(W7, `url_decode(l.referrer) ref, count(*) hits`, ` AND l.referrer <> '-' AND l.referrer NOT LIKE '%nealon.tech%'`, `GROUP BY url_decode(l.referrer) ORDER BY hits DESC LIMIT 8`)),
+    runQuery(human(W7, `url_decode(l.referrer) ref, count(*) hits`, ` AND l.referrer <> '-' AND lower(l.referrer) NOT LIKE '%nealon.tech%'`, `GROUP BY url_decode(l.referrer) ORDER BY hits DESC LIMIT 8`)),
     runQuery(`SELECT CASE
         WHEN lower(user_agent) LIKE '%gptbot%' THEN 'GPTBot (OpenAI)'
         WHEN lower(user_agent) LIKE '%oai-searchbot%' THEN 'OAI-SearchBot'
@@ -271,6 +272,9 @@ export const handler = async () => {
   const ANSWER = { 'OAI-SearchBot': 'ChatGPT Search (OpenAI)', 'ChatGPT-User': 'ChatGPT (on-demand)', 'PerplexityBot': 'Perplexity', 'Anthropic': 'Claude (Anthropic)', 'Google-Extended': 'Google / Gemini' }
   const answerEngines = aiCrawlers.filter((c) => ANSWER[c.label]).map((c) => ({ label: ANSWER[c.label], hits: n(c.hits) })).sort((a, b) => b.hits - a.hits)
   const answerTotal = answerEngines.reduce((s, c) => s + c.hits, 0)
+
+  // external referrers, deduped by host (two google.com URLs → one row); self-referrals excluded in SQL
+  const refByHost = Object.values(referrers.reduce((m, r) => { const h = host(r.ref); (m[h] || (m[h] = { ref: h, hits: 0 })).hits += n(r.hits); return m }, {})).sort((a, b) => b.hits - a.hits)
 
   // geolocate human visitor IPs -> country
   const byCountry = {}
@@ -323,7 +327,7 @@ export const handler = async () => {
     <div style="font:12px Arial;color:${MUTE};margin:5px 2px 12px">${answerTotal > 0 ? `<b style="color:${TEAL_D}">${num(answerTotal)}</b> answer-engine reads this week, plus <b>${num(n(searchCrawlers[0]?.hits))}</b> classic search-crawler visits (Google / Bing / Apple).` : `No answer-engine reads yet this week. ${num(n(searchCrawlers[0]?.hits))} classic search-crawler visits.`}</div>
     ${tbl('Training crawlers turned away', rows(enfRows, ([bot, v]) => li(esc(bot), `${num(v.blocked)} blocked${v.served ? ` <span style="color:${MUTE};font-weight:400">· ${num(v.served)} slipped through</span>` : ''}`)), "you've opted out of AI training; these were blocked at the edge")}
     <div style="font:12px Arial;color:${MUTE};margin:5px 2px 0"><b style="color:#2b333a">${num(enfBlocked)}</b> blocked, ${num(enfServed)} served. Compliant bots stop trying once they re-read robots.txt, so both trend toward 0; the rest are non-compliant crawlers. (Spoofed browser-UAs can't be counted.)</div>
-    ${referrers.length ? tbl('Referrers', rows(referrers, (r) => li(esc(r.ref), num(r.hits)))) : ''}
+    ${refByHost.length ? tbl('Referrers', rows(refByHost, (r) => li(esc(r.ref), num(r.hits)))) : ''}
     ${assistant ? tbl('AI assistant', li('Sessions / messages', `${num(assistant.sessions)} / ${num(assistant.messages)}`) + li('Tokens used', num(assistant.tokens))) : ''}
     `
   }
