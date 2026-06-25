@@ -17,3 +17,6 @@ analytics-report/src/package-lock.json
 
 radar/.aws-sam/
 radar/src/node_modules/
+
+# SEO/AI review deliverables — kept local (Coevolve audit names the employer)
+review-docs/
