@@ -24,21 +24,23 @@ function PageNav({ showDots }) {
       const d = document.documentElement
       const max = d.scrollHeight - d.clientHeight
       setProgress(max > 0 ? Math.min(100, (d.scrollTop / max) * 100) : 0)
+      if (!showDots) return
+      // Deterministic scrollspy: the active dot is the last section whose top has scrolled above
+      // the 45% line. Force the last dot at the very bottom — the short contact footer never reaches
+      // that line, so it would otherwise never light. (Computed on scroll: no observer race.)
+      const line = d.clientHeight * 0.45
+      let current = NAV_SECTIONS[0].id
+      for (const s of NAV_SECTIONS) {
+        const el = document.getElementById(s.id)
+        if (el && el.getBoundingClientRect().top <= line) current = s.id
+      }
+      if (max > 0 && d.scrollTop >= max - 4) current = NAV_SECTIONS[NAV_SECTIONS.length - 1].id
+      setActive(current)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll) }
-  }, [])
-
-  useEffect(() => {
-    if (!showDots) return
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id) }),
-      { rootMargin: '-45% 0px -45% 0px' }
-    )
-    NAV_SECTIONS.forEach((s) => { const el = document.getElementById(s.id); if (el) obs.observe(el) })
-    return () => obs.disconnect()
   }, [showDots])
 
   const go = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
