@@ -241,7 +241,7 @@ writeFileSync(
   pageHtml(template, {
     title: 'Perspectives — Luke Nealon',
     description:
-      'Working notes on building AI that earns its place — model independence, agents vs. workflows, cutting waste before automating, and a live demo that explains its own architecture.',
+      'Working notes on building AI that earns its place — model independence, agents vs. workflows, cutting waste before automating, and treating data as a product.',
     url: `${SITE}/writing`,
     image: `${SITE}/og/perspectives.png`,
     type: 'website',
@@ -276,7 +276,7 @@ writeFileSync(
   pageHtml(template, {
     title: 'About — Luke Nealon',
     description:
-      'Luke Nealon — technology, data & AI executive in Sydney. Who I am, and a career of being early on purpose: twenty years turning emerging tech into measurable business value.',
+      'Luke Nealon — technology, data & AI executive in Sydney. A career of being early on purpose: twenty years turning emerging tech into measurable business value.',
     url: `${SITE}/about`,
     image: `${SITE}/og/about.png`,
     type: 'profile',
