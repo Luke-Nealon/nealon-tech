@@ -114,6 +114,9 @@ export default function GraphView({ navigate }) {
           { selector: 'edge[type="similar"]', style: { 'line-style': 'dashed', 'line-color': line, width: 1 } },
           { selector: '.dim', style: { opacity: 0.08 } },
           { selector: 'node.lit', style: { 'border-width': 3, 'border-color': accent, 'border-opacity': 1, 'text-opacity': 1 } },
+          // labels stay hidden while the graph assembles on load, then fade in once it rests (last
+          // rule so it overrides .hub/.near/.lit for the duration of the settle)
+          { selector: 'node.settling', style: { 'text-opacity': 0 } },
         ],
       })
       cyRef.current = cy
@@ -143,8 +146,24 @@ export default function GraphView({ navigate }) {
         cy.fit(undefined, 36)
         syncZoomLabels()
       }
+      // fcose settles synchronously (animate:false); we then replay that settle once as a one-time
+      // "assemble on load" — nodes ease from the seed ring into their resting spots while the labels
+      // hold back, then fade in once everything's in place. A touch of life on first view, then it
+      // rests (drag/zoom/hover stay fully interactive). prefers-reduced-motion snaps straight to rest.
+      const SETTLE_MS = 850
+      const settleIn = () => {
+        fitToCanvas() // stretch + fit to the final layout; nodes are now at their resting positions
+        const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (reduce) return
+        const targets = {}; cy.nodes().forEach((n) => { targets[n.id()] = { ...n.position() } })
+        const count = cy.nodes().length
+        cy.nodes().addClass('settling') // hold the labels until the dust settles
+        cy.batch(() => cy.nodes().forEach((n, i) => n.position({ x: 300 * Math.cos((2 * Math.PI * i) / count), y: 300 * Math.sin((2 * Math.PI * i) / count) })))
+        cy.nodes().forEach((n) => n.animate({ position: targets[n.id()] }, { duration: SETTLE_MS, easing: 'ease-out' }))
+        setTimeout(() => { if (cyRef.current === cy && !cy.destroyed()) { cy.nodes().removeClass('settling'); syncZoomLabels() } }, SETTLE_MS + 40)
+      }
       const lay = cy.layout({ name: 'fcose', quality: 'proof', randomize: false, animate: false, packComponents: false, nodeSeparation: 95, idealEdgeLength: 90, nodeRepulsion: 4500, gravity: 0.45, gravityRange: 3.5, padding: 38 })
-      lay.one('layoutstop', fitToCanvas)
+      lay.one('layoutstop', settleIn)
       lay.run()
 
       const box = boxRef.current
