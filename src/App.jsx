@@ -3,6 +3,7 @@ import useReveal from './hooks/useReveal.js'
 import Assistant from './Assistant.jsx'
 import { WritingIndex, Article } from './Writing.jsx'
 import GraphView from './Graph.jsx'
+import SignalPage from './Signal.jsx'
 import { hero, links, firsts, notes, about, assistant, perspectives, footer } from './content.js'
 import { featuredArticles, publishedArticles, CATEGORIES } from './content/articles.js'
 
@@ -108,6 +109,7 @@ function Header({ navigate, onHome }) {
         <a href="/writing" onClick={(e) => go(e, '/writing')}>Perspectives</a>
         <a href="/graph" onClick={(e) => go(e, '/graph')}>Knowledge map</a>
         <a href="/about" onClick={(e) => go(e, '/about')}>About</a>
+        <a href="/signal" onClick={(e) => go(e, '/signal')}>Signal</a>
         <a href="/#contact" onClick={onHome ? undefined : (e) => go(e, '/#contact')}>Contact</a>
       </nav>
     </header>
@@ -397,6 +399,7 @@ export default function App() {
   else if (path === '/writing') view = <main><WritingIndex navigate={navigate} /></main>
   else if (path === '/graph') view = <main><GraphView navigate={navigate} /></main>
   else if (path === '/about') view = <main><AboutPage /></main>
+  else if (path === '/signal') view = <main><SignalPage /></main>
   else view = <Home navigate={navigate} />
 
   return (
