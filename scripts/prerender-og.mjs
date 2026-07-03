@@ -14,7 +14,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { marked } from 'marked'
 import { publishedArticles, CATEGORIES } from '../src/content/articles.js'
-import { hero, notes, firsts, about, assistant } from '../src/content.js'
+import { hero, notes, firsts, about, assistant, signal } from '../src/content.js'
 
 marked.setOptions({ breaks: false, gfm: true })
 
@@ -336,6 +336,37 @@ writeFileSync(
     canonical: `${SITE}/graph`,
     jsonld: graphLd,
     bodyHtml: graphBody,
+  })
+)
+
+// ---- /signal — the weekly newsletter landing page (the interactive subscribe form is added by
+// React on hydration; this static body is what non-JS crawlers see) ----
+const signalBody =
+  `<section class="sec wrap"><span class="idx">Signal</span><h1 class="article-title">${esc(signal.title)}</h1>` +
+  `<p class="lede">${esc(signal.lede)}</p><ul>` +
+  signal.points.map((p) => `<li>${esc(p)}</li>`).join('') +
+  `</ul></section>`
+const signalLd = ldScript({
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${SITE}/signal#page`,
+  name: 'Signal — a weekly newsletter by Luke Nealon',
+  url: `${SITE}/signal`,
+  isPartOf: { '@id': 'https://nealon.tech/#website' },
+  about: { '@id': LUKE },
+})
+writeFileSync(
+  resolve(dist, 'signal.html'),
+  pageHtml(template, {
+    title: 'Signal — Luke Nealon',
+    description:
+      'A weekly email: the week in technology that actually matters — security, networks, AI — with my take on each. One email, Monday mornings.',
+    url: `${SITE}/signal`,
+    image: `${SITE}/og/perspectives.png`,
+    type: 'website',
+    canonical: `${SITE}/signal`,
+    jsonld: signalLd,
+    bodyHtml: signalBody,
   })
 )
 

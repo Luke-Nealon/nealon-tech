@@ -28,6 +28,7 @@ const urls = [
   ...pub.map((a) => ({ loc: `${SITE}/writing/${a.slug}`, lastmod: a.updated || a.date })),
   { loc: `${SITE}/graph`, lastmod: latest },
   { loc: `${SITE}/about` },
+  { loc: `${SITE}/signal` },
   { loc: `${SITE}/privacy.html` },
 ]
 const sitemap =

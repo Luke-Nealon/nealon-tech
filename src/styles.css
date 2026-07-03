@@ -1643,3 +1643,19 @@ footer {
   font-size: 13px;
   color: var(--ink);
 }
+
+/* ── Signal newsletter page ─────────────────────────────────────────────── */
+.signal-points { list-style: none; padding: 0; margin: 26px 0 0; max-width: 540px; }
+.signal-points li { position: relative; padding-left: 20px; margin: 0 0 10px; color: var(--ink-dim); font-size: 15.5px; line-height: 1.6; }
+.signal-points li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+.signal-form { display: flex; gap: 10px; max-width: 480px; margin-top: 42px; flex-wrap: wrap; }
+.signal-input { flex: 1; min-width: 220px; background: transparent; border: 1px solid var(--line); border-radius: 2px; padding: 12px 14px; color: var(--ink); font-family: var(--sans); font-size: 15px; outline: none; transition: border-color .25s ease; }
+.signal-input:focus { border-color: var(--accent); }
+.signal-input::placeholder { color: var(--muted); }
+.signal-form button { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--sel-fg); background: var(--accent); border: 0; border-radius: 2px; padding: 12px 22px; cursor: pointer; transition: opacity .2s ease; }
+.signal-form button:hover:not(:disabled) { opacity: .88; }
+.signal-form button:disabled { opacity: .4; cursor: default; }
+.signal-done { margin-top: 42px; max-width: 480px; color: var(--accent); font-size: 16px; line-height: 1.6; }
+.signal-error { margin-top: 16px; color: #ff8b8b; font-size: 14.5px; }
+.signal-error a { color: var(--accent); }
+@media (max-width: 520px) { .signal-form button { flex: 1; } }

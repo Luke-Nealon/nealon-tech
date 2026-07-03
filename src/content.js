@@ -137,3 +137,19 @@ export const footer = {
   colophon:
     'Designed and built by hand — React, no templates, no servers, on AWS.',
 }
+
+export const signal = {
+  title: 'Signal',
+  lede: 'The week in technology that actually matters — security, networks, AI — with my take on each. One email, Monday mornings.',
+  points: [
+    'What happened, in a line. Then what I’d do about it.',
+    'A point of view, not a summary. If it’s just news, it doesn’t make the cut.',
+    'One email a week. No noise, unsubscribe in a click.',
+  ],
+  placeholder: 'you@work.com',
+  submit: 'Subscribe',
+  submitting: 'Subscribing…',
+  success: 'Almost there — check your inbox and click the link to confirm.',
+  already: 'You’re already on the list.',
+  error: 'Something went wrong. Try again, or email me directly.',
+}
