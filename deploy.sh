@@ -29,7 +29,7 @@ aws s3 sync dist/ "s3://$BUCKET" --delete \
   --exclude index.html --exclude robots.txt --exclude sitemap.xml \
   --exclude llms.txt --exclude llms-full.txt --exclude feed.xml \
   --exclude privacy.html --exclude graph.json --exclude 404.html \
-  --exclude "writing.html" --exclude "writing/*.html" --exclude "about.html" --exclude "graph.html" \
+  --exclude "writing.html" --exclude "writing/*.html" --exclude "about.html" --exclude "graph.html" --exclude "signal.html" \
   --profile "$PROFILE"
 
 put() { aws s3 cp "dist/$1" "s3://$BUCKET/$1" --cache-control "no-cache" --content-type "$2" --profile "$PROFILE"; }
@@ -46,12 +46,13 @@ put graph.json     application/json
 put writing.html text/html
 put about.html   text/html
 put graph.html   text/html
+put signal.html  text/html
 put 404.html     text/html
 for f in dist/writing/*.html; do put "writing/$(basename "$f")" text/html; done
 
 aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION" \
   --paths "/index.html" "/robots.txt" "/sitemap.xml" "/llms.txt" "/llms-full.txt" "/feed.xml" "/privacy.html" \
-          "/writing" "/writing.html" "/writing/*" "/graph" "/graph.html" "/graph.json" "/about" "/about.html" "/404.html" "/og/*" \
+          "/writing" "/writing.html" "/writing/*" "/graph" "/graph.html" "/graph.json" "/about" "/about.html" "/signal" "/signal.html" "/404.html" "/og/*" \
   --profile "$PROFILE" --output text --query 'Invalidation.Id'
 
 echo "✓ deployed → https://nealon.tech"

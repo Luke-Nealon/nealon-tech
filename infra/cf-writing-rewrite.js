@@ -64,5 +64,13 @@ function handler(event) {
     return request;
   }
 
+  // Newsletter landing page. EXACT match only — the /signal/* API paths (subscribe/confirm/
+  // unsubscribe) are served by a separate CloudFront behavior that routes to the Signal Lambda,
+  // so this function never sees them.
+  if (uri === '/signal' || uri === '/signal/') {
+    request.uri = '/signal.html';
+    return request;
+  }
+
   return request;
 }

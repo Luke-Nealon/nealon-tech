@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { signal, links } from './content.js'
 
-// Public subscribe endpoint (nealon-signal stack Function URL, CORS-locked to nealon.tech).
-// Double opt-in: this only creates a pending row + sends a confirmation email; nothing is added
-// to the list until the recipient clicks the link in that email.
-const SUBSCRIBE_URL = 'https://xanlq6junsnrxyvjoopwylyjiy0rhhei.lambda-url.ap-southeast-2.on.aws/subscribe'
+// Same-origin path — CloudFront routes /signal/* to the nealon-signal Function URL. Double opt-in:
+// this only creates a pending row + sends a confirmation email; nothing is added to the list until
+// the recipient clicks the link in that email.
+const SUBSCRIBE_URL = '/signal/subscribe'
 
 export default function SignalPage() {
   const [email, setEmail] = useState('')
